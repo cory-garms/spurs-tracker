@@ -2,7 +2,7 @@ name: Daily Data Refresh
 
 on:
   schedule:
-    - cron: "0 12 * * *"   # 8 AM ET (noon UTC) — after overnight games are final
+    - cron: "0 12 * * *"
   workflow_dispatch:
 
 jobs:
@@ -28,18 +28,14 @@ jobs:
             --team ${{ vars.TEAM_ABBR || 'SAS' }} \
             --season ${{ vars.SEASON || '2025' }} \
             --refresh
-        continue-on-error: true
 
       - name: Build dashboard
-        run: |
-          python viz_report.py \
-            --team ${{ vars.TEAM_ABBR || 'SAS' }} \
-            --season ${{ vars.SEASON || '2025' }}
+        run: python viz_report.py --team SAS --season 2025
 
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/cache/ docs/
+          git add docs/
           git diff --cached --quiet || git commit -m "chore: auto-refresh data $(date -u +%Y-%m-%d)"
           git push
