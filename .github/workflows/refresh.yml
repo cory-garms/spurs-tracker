@@ -28,6 +28,7 @@ jobs:
             --team ${{ vars.TEAM_ABBR || 'SAS' }} \
             --season ${{ vars.SEASON || '2025' }} \
             --refresh
+        continue-on-error: true
 
       - name: Build dashboard
         run: |

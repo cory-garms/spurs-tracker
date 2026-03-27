@@ -10,9 +10,6 @@ env/
 # Jupyter
 .ipynb_checkpoints/
 
-# Cache (parquet files are large and regeneratable)
-data/cache/*.parquet
-
 # PNG exports (too large for git)
 docs/img/
 output/
