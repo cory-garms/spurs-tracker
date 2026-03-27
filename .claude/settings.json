@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/bin/python -c \":*)",
+      "Bash(.venv/bin/python -c \"from plotly.io._utils import plotly_cdn_url; print\\(plotly_cdn_url\\(\\)\\)\")",
+      "Bash(.venv/bin/python fetch.py --team SAS --season 2025 --refresh)",
+      "Bash(.venv/bin/python viz_report.py --team SAS --season 2025)"
+    ]
+  }
+}
