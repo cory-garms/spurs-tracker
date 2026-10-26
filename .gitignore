@@ -17,3 +17,9 @@ output/
 # OS
 .DS_Store
 Thumbs.db
+
+# Environment & Testing
+.spursEnv/
+.pytest_cache/
+.coverage
+htmlcov/

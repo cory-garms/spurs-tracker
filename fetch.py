@@ -62,6 +62,15 @@ def main() -> None:
                         help=f"Team abbreviation (default: {config.TEAM_ABBR})")
     parser.add_argument("--season",     type=int, default=config.SEASON,
                         help=f"Season start year (default: {config.SEASON})")
+    parser.add_argument("--season-type", default=config.SEASON_TYPE,
+                        choices=["Regular Season", "Pre Season", "Playoffs"],
+                        help=f"Season type (default: {config.SEASON_TYPE})")
+    parser.add_argument("--preseason",   action="store_const", const="Pre Season", dest="season_type",
+                        help="Shorthand for --season-type 'Pre Season'")
+    parser.add_argument("--playoffs",    action="store_const", const="Playoffs", dest="season_type",
+                        help="Shorthand for --season-type 'Playoffs'")
+    parser.add_argument("--league",      action="store_true",
+                        help="Also fetch and cache 30-team league standings & ratings")
     parser.add_argument("--refresh",    action="store_true",
                         help="Force re-fetch, ignoring cached data")
     parser.add_argument("--list-teams", action="store_true",
@@ -82,20 +91,33 @@ def main() -> None:
         console.print(f"[red]Unknown team '{abbr}'. Run with --list-teams to see options.[/red]")
         sys.exit(1)
 
-    team_info = TEAMS[abbr]
-    team_id   = team_info["id"]
-    season    = args.season
-    season_s  = config.season_str(season)
+    team_info   = TEAMS[abbr]
+    team_id     = team_info["id"]
+    season      = args.season
+    season_s    = config.season_str(season)
+    season_type = args.season_type
 
-    console.rule(f"[bold cyan]{team_info['name']} — {season_s} Season[/bold cyan]")
-    console.print(f"  Team ID : [yellow]{team_id}[/yellow]")
-    console.print(f"  Season  : [yellow]{season_s}[/yellow]")
-    console.print(f"  Cache   : [dim]{config.CACHE_DIR}[/dim]\n")
+    console.rule(f"[bold cyan]{team_info['name']} — {season_s} ({season_type})[/bold cyan]")
+    console.print(f"  Team ID     : [yellow]{team_id}[/yellow]")
+    console.print(f"  Season      : [yellow]{season_s}[/yellow]")
+    console.print(f"  Season Type : [yellow]{season_type}[/yellow]")
+    console.print(f"  Cache       : [dim]{config.CACHE_DIR}[/dim]\n")
 
-    fetcher = Fetcher(team_id=team_id, season=season, force_refresh=args.refresh)
+    fetcher = Fetcher(
+        team_id=team_id,
+        season=season,
+        force_refresh=args.refresh,
+        season_type=season_type,
+    )
 
-    with console.status("[bold green]Fetching data… (this takes ~2 min for a full season)[/bold green]"):
-        tables = fetcher.fetch_all()
+    with console.status("[bold green]Fetching data (incremental check)...[/bold green]"):
+        tables = fetcher.fetch_all(incremental=not args.refresh)
+
+    if args.league:
+        from data.league import fetch_league_standings
+        with console.status("[bold green]Fetching 30-team league standings...[/bold green]"):
+            league_df = fetch_league_standings(season=season, force_refresh=args.refresh)
+            tables["league_standings"] = league_df
 
     summary = Table(title="Fetch Summary", show_lines=False)
     summary.add_column("Table",   style="cyan")
@@ -108,7 +130,7 @@ def main() -> None:
     console.print(summary)
     console.print(
         "\n[bold green]Done.[/bold green] "
-        "Run [cyan]python report.py[/cyan] to see the terminal dashboard."
+        "Run [cyan]python report.py[/cyan] or [cyan]python viz_report.py[/cyan]."
     )
 
 

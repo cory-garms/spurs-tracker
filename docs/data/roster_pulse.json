@@ -1,0 +1,628 @@
+{
+  "season": "2026-27",
+  "key_pairings": [
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Vassell + Wembanyama",
+      "games_together": 3,
+      "est_shared_min_pg": 30.6,
+      "net_pm_pg": 9.17,
+      "combined_pts_pg": 29.3
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Harper + Wembanyama",
+      "games_together": 3,
+      "est_shared_min_pg": 30.7,
+      "net_pm_pg": 8.17,
+      "combined_pts_pg": 40.0
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Fox + Wembanyama",
+      "games_together": 3,
+      "est_shared_min_pg": 30.5,
+      "net_pm_pg": 7.5,
+      "combined_pts_pg": 37.3
+    },
+    {
+      "player_1": "Tarris Reed Jr.",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Jr. + Wembanyama",
+      "games_together": 2,
+      "est_shared_min_pg": 3.9,
+      "net_pm_pg": 7.25,
+      "combined_pts_pg": 18.5
+    },
+    {
+      "player_1": "Stephon Castle",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Castle + Wembanyama",
+      "games_together": 3,
+      "est_shared_min_pg": 29.5,
+      "net_pm_pg": 6.67,
+      "combined_pts_pg": 39.3
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Dylan Harper",
+      "pairing": "Vassell + Harper",
+      "games_together": 3,
+      "est_shared_min_pg": 31.6,
+      "net_pm_pg": 6.33,
+      "combined_pts_pg": 29.3
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Fox + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 3.9,
+      "net_pm_pg": 6.25,
+      "combined_pts_pg": 17.5
+    },
+    {
+      "player_1": "Ja'Kobi Gillespie",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Gillespie + Wembanyama",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": 5.75,
+      "combined_pts_pg": 20.0
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Devin Vassell",
+      "pairing": "Fox + Vassell",
+      "games_together": 3,
+      "est_shared_min_pg": 30.7,
+      "net_pm_pg": 5.67,
+      "combined_pts_pg": 26.7
+    },
+    {
+      "player_1": "Julian Champagnie",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Champagnie + Wembanyama",
+      "games_together": 3,
+      "est_shared_min_pg": 27.8,
+      "net_pm_pg": 5.33,
+      "combined_pts_pg": 28.7
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Vassell + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 3.9,
+      "net_pm_pg": 5.0,
+      "combined_pts_pg": 10.0
+    },
+    {
+      "player_1": "Keldon Johnson",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Johnson + Wembanyama",
+      "games_together": 3,
+      "est_shared_min_pg": 21.7,
+      "net_pm_pg": 4.83,
+      "combined_pts_pg": 28.3
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Stephon Castle",
+      "pairing": "Vassell + Castle",
+      "games_together": 3,
+      "est_shared_min_pg": 29.9,
+      "net_pm_pg": 4.83,
+      "combined_pts_pg": 28.7
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Ja'Kobi Gillespie",
+      "pairing": "Fox + Gillespie",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": 4.75,
+      "combined_pts_pg": 19.0
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Dylan Harper",
+      "pairing": "Fox + Harper",
+      "games_together": 3,
+      "est_shared_min_pg": 31.0,
+      "net_pm_pg": 4.67,
+      "combined_pts_pg": 37.3
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Stephon Castle",
+      "pairing": "Harper + Castle",
+      "games_together": 3,
+      "est_shared_min_pg": 29.9,
+      "net_pm_pg": 3.83,
+      "combined_pts_pg": 39.3
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Ja'Kobi Gillespie",
+      "pairing": "Vassell + Gillespie",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": 3.5,
+      "combined_pts_pg": 11.5
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Julian Champagnie",
+      "pairing": "Vassell + Champagnie",
+      "games_together": 3,
+      "est_shared_min_pg": 27.8,
+      "net_pm_pg": 3.5,
+      "combined_pts_pg": 18.0
+    },
+    {
+      "player_1": "Harrison Barnes",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Barnes + Wembanyama",
+      "games_together": 3,
+      "est_shared_min_pg": 6.1,
+      "net_pm_pg": 3.33,
+      "combined_pts_pg": 21.0
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Stephon Castle",
+      "pairing": "Fox + Castle",
+      "games_together": 3,
+      "est_shared_min_pg": 29.7,
+      "net_pm_pg": 3.17,
+      "combined_pts_pg": 36.7
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Keldon Johnson",
+      "pairing": "Vassell + Johnson",
+      "games_together": 3,
+      "est_shared_min_pg": 21.7,
+      "net_pm_pg": 3.0,
+      "combined_pts_pg": 17.7
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Harper + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 3.9,
+      "net_pm_pg": 2.75,
+      "combined_pts_pg": 21.0
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Julian Champagnie",
+      "pairing": "Harper + Champagnie",
+      "games_together": 3,
+      "est_shared_min_pg": 27.8,
+      "net_pm_pg": 2.5,
+      "combined_pts_pg": 28.7
+    },
+    {
+      "player_1": "Stephon Castle",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Castle + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 3.9,
+      "net_pm_pg": 2.25,
+      "combined_pts_pg": 22.5
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Keldon Johnson",
+      "pairing": "Harper + Johnson",
+      "games_together": 3,
+      "est_shared_min_pg": 21.7,
+      "net_pm_pg": 2.0,
+      "combined_pts_pg": 28.3
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Bryant + Wembanyama",
+      "games_together": 3,
+      "est_shared_min_pg": 7.0,
+      "net_pm_pg": 1.83,
+      "combined_pts_pg": 21.3
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Julian Champagnie",
+      "pairing": "Fox + Champagnie",
+      "games_together": 3,
+      "est_shared_min_pg": 27.6,
+      "net_pm_pg": 1.83,
+      "combined_pts_pg": 26.0
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Harrison Barnes",
+      "pairing": "Vassell + Barnes",
+      "games_together": 3,
+      "est_shared_min_pg": 6.1,
+      "net_pm_pg": 1.5,
+      "combined_pts_pg": 10.3
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Keldon Johnson",
+      "pairing": "Fox + Johnson",
+      "games_together": 3,
+      "est_shared_min_pg": 21.7,
+      "net_pm_pg": 1.33,
+      "combined_pts_pg": 25.7
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Ja'Kobi Gillespie",
+      "pairing": "Harper + Gillespie",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": 1.25,
+      "combined_pts_pg": 22.5
+    },
+    {
+      "player_1": "Julian Champagnie",
+      "player_2": "Stephon Castle",
+      "pairing": "Champagnie + Castle",
+      "games_together": 3,
+      "est_shared_min_pg": 27.3,
+      "net_pm_pg": 1.0,
+      "combined_pts_pg": 28.0
+    },
+    {
+      "player_1": "Ja'Kobi Gillespie",
+      "player_2": "Stephon Castle",
+      "pairing": "Gillespie + Castle",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": 0.75,
+      "combined_pts_pg": 24.0
+    },
+    {
+      "player_1": "Keldon Johnson",
+      "player_2": "Stephon Castle",
+      "pairing": "Johnson + Castle",
+      "games_together": 3,
+      "est_shared_min_pg": 21.7,
+      "net_pm_pg": 0.5,
+      "combined_pts_pg": 27.7
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Harrison Barnes",
+      "pairing": "Harper + Barnes",
+      "games_together": 3,
+      "est_shared_min_pg": 6.1,
+      "net_pm_pg": 0.5,
+      "combined_pts_pg": 21.0
+    },
+    {
+      "player_1": "Keldon Johnson",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Johnson + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 3.9,
+      "net_pm_pg": 0.25,
+      "combined_pts_pg": 9.5
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Devin Vassell",
+      "pairing": "Bryant + Vassell",
+      "games_together": 3,
+      "est_shared_min_pg": 7.0,
+      "net_pm_pg": 0.0,
+      "combined_pts_pg": 10.7
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Harrison Barnes",
+      "pairing": "Fox + Barnes",
+      "games_together": 3,
+      "est_shared_min_pg": 6.1,
+      "net_pm_pg": -0.17,
+      "combined_pts_pg": 18.3
+    },
+    {
+      "player_1": "Luke Kornet",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Kornet + Wembanyama",
+      "games_together": 3,
+      "est_shared_min_pg": 14.2,
+      "net_pm_pg": -0.33,
+      "combined_pts_pg": 23.7
+    },
+    {
+      "player_1": "Julian Champagnie",
+      "player_2": "Keldon Johnson",
+      "pairing": "Champagnie + Johnson",
+      "games_together": 3,
+      "est_shared_min_pg": 21.7,
+      "net_pm_pg": -0.83,
+      "combined_pts_pg": 17.0
+    },
+    {
+      "player_1": "Harrison Barnes",
+      "player_2": "Stephon Castle",
+      "pairing": "Barnes + Castle",
+      "games_together": 3,
+      "est_shared_min_pg": 6.1,
+      "net_pm_pg": -1.0,
+      "combined_pts_pg": 20.3
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Dylan Harper",
+      "pairing": "Bryant + Harper",
+      "games_together": 3,
+      "est_shared_min_pg": 7.0,
+      "net_pm_pg": -1.0,
+      "combined_pts_pg": 21.3
+    },
+    {
+      "player_1": "Ja'Kobi Gillespie",
+      "player_2": "Keldon Johnson",
+      "pairing": "Gillespie + Johnson",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": -1.25,
+      "combined_pts_pg": 11.0
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "De'Aaron Fox",
+      "pairing": "Bryant + Fox",
+      "games_together": 3,
+      "est_shared_min_pg": 7.0,
+      "net_pm_pg": -1.67,
+      "combined_pts_pg": 18.7
+    },
+    {
+      "player_1": "Ja'Kobi Gillespie",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Gillespie + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": -2.0,
+      "combined_pts_pg": 3.5
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Luke Kornet",
+      "pairing": "Vassell + Kornet",
+      "games_together": 3,
+      "est_shared_min_pg": 14.2,
+      "net_pm_pg": -2.17,
+      "combined_pts_pg": 13.0
+    },
+    {
+      "player_1": "Julian Champagnie",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Champagnie + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 3.9,
+      "net_pm_pg": -2.25,
+      "combined_pts_pg": 11.0
+    },
+    {
+      "player_1": "Harrison Barnes",
+      "player_2": "Julian Champagnie",
+      "pairing": "Barnes + Champagnie",
+      "games_together": 3,
+      "est_shared_min_pg": 6.1,
+      "net_pm_pg": -2.33,
+      "combined_pts_pg": 9.7
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Stephon Castle",
+      "pairing": "Bryant + Castle",
+      "games_together": 3,
+      "est_shared_min_pg": 7.0,
+      "net_pm_pg": -2.5,
+      "combined_pts_pg": 20.7
+    },
+    {
+      "player_1": "Harrison Barnes",
+      "player_2": "Keldon Johnson",
+      "pairing": "Barnes + Johnson",
+      "games_together": 3,
+      "est_shared_min_pg": 6.1,
+      "net_pm_pg": -2.83,
+      "combined_pts_pg": 9.3
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Luke Kornet",
+      "pairing": "Harper + Kornet",
+      "games_together": 3,
+      "est_shared_min_pg": 14.2,
+      "net_pm_pg": -3.17,
+      "combined_pts_pg": 23.7
+    },
+    {
+      "player_1": "Harrison Barnes",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Barnes + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 2.6,
+      "net_pm_pg": -3.5,
+      "combined_pts_pg": 2.5
+    },
+    {
+      "player_1": "Ja'Kobi Gillespie",
+      "player_2": "Julian Champagnie",
+      "pairing": "Gillespie + Champagnie",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": -3.75,
+      "combined_pts_pg": 12.5
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Julian Champagnie",
+      "pairing": "Bryant + Champagnie",
+      "games_together": 3,
+      "est_shared_min_pg": 7.0,
+      "net_pm_pg": -3.83,
+      "combined_pts_pg": 10.0
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Luke Kornet",
+      "pairing": "Fox + Kornet",
+      "games_together": 3,
+      "est_shared_min_pg": 14.2,
+      "net_pm_pg": -3.83,
+      "combined_pts_pg": 21.0
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Keldon Johnson",
+      "pairing": "Bryant + Johnson",
+      "games_together": 3,
+      "est_shared_min_pg": 7.0,
+      "net_pm_pg": -4.33,
+      "combined_pts_pg": 9.7
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Bryant + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 3.9,
+      "net_pm_pg": -4.5,
+      "combined_pts_pg": 3.0
+    },
+    {
+      "player_1": "Luke Kornet",
+      "player_2": "Stephon Castle",
+      "pairing": "Kornet + Castle",
+      "games_together": 3,
+      "est_shared_min_pg": 14.2,
+      "net_pm_pg": -4.67,
+      "combined_pts_pg": 23.0
+    },
+    {
+      "player_1": "Harrison Barnes",
+      "player_2": "Ja'Kobi Gillespie",
+      "pairing": "Barnes + Gillespie",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": -5.0,
+      "combined_pts_pg": 4.0
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Harrison Barnes",
+      "pairing": "Bryant + Barnes",
+      "games_together": 3,
+      "est_shared_min_pg": 4.9,
+      "net_pm_pg": -5.83,
+      "combined_pts_pg": 2.3
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Ja'Kobi Gillespie",
+      "pairing": "Bryant + Gillespie",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": -6.0,
+      "combined_pts_pg": 4.5
+    },
+    {
+      "player_1": "Julian Champagnie",
+      "player_2": "Luke Kornet",
+      "pairing": "Champagnie + Kornet",
+      "games_together": 3,
+      "est_shared_min_pg": 14.2,
+      "net_pm_pg": -6.0,
+      "combined_pts_pg": 12.3
+    },
+    {
+      "player_1": "Keldon Johnson",
+      "player_2": "Luke Kornet",
+      "pairing": "Johnson + Kornet",
+      "games_together": 3,
+      "est_shared_min_pg": 14.2,
+      "net_pm_pg": -6.5,
+      "combined_pts_pg": 12.0
+    },
+    {
+      "player_1": "Luke Kornet",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Kornet + Jr.",
+      "games_together": 2,
+      "est_shared_min_pg": 3.9,
+      "net_pm_pg": -7.25,
+      "combined_pts_pg": 3.0
+    },
+    {
+      "player_1": "Harrison Barnes",
+      "player_2": "Luke Kornet",
+      "pairing": "Barnes + Kornet",
+      "games_together": 3,
+      "est_shared_min_pg": 6.1,
+      "net_pm_pg": -8.0,
+      "combined_pts_pg": 4.7
+    },
+    {
+      "player_1": "Ja'Kobi Gillespie",
+      "player_2": "Luke Kornet",
+      "pairing": "Gillespie + Kornet",
+      "games_together": 2,
+      "est_shared_min_pg": 2.1,
+      "net_pm_pg": -8.75,
+      "combined_pts_pg": 4.5
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Luke Kornet",
+      "pairing": "Bryant + Kornet",
+      "games_together": 3,
+      "est_shared_min_pg": 7.0,
+      "net_pm_pg": -9.5,
+      "combined_pts_pg": 5.0
+    }
+  ],
+  "starter_bench_split": {
+    "starter_names": [
+      "De'Aaron Fox",
+      "Devin Vassell",
+      "Victor Wembanyama",
+      "Stephon Castle",
+      "Dylan Harper"
+    ],
+    "bench_names": [
+      "Harrison Barnes",
+      "Luke Kornet",
+      "Jordan McLaughlin",
+      "Keldon Johnson",
+      "Julian Champagnie",
+      "David Jones Garcia",
+      "Carter Bryant",
+      "Tarris Reed Jr.",
+      "Ja'Kobi Gillespie",
+      "Maliq Brown"
+    ],
+    "starter_avg_pts": 86.0,
+    "bench_avg_pts": 26.0,
+    "starter_avg_pm": 6.0,
+    "bench_avg_pm": -3.6,
+    "starter_ts_pct": 0.549,
+    "bench_ts_pct": 0.382,
+    "starter_scoring_share_pct": 76.8,
+    "bench_scoring_share_pct": 23.2
+  }
+}

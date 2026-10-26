@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spurs Notebook — San Antonio Spurs Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Graduate&family=Share+Tech+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(196, 206, 212, 0.04) 0%, transparent 70%),
+        #0B0E11;
+      color: #F6F8FA;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+    body { padding: clamp(12px, 3vw, 28px); }
+
+    /* ---- Navigation ---- */
+    .nav-bar { margin-bottom: 24px; }
+    .mode-switch {
+      display: flex; width: 100%;
+      border: 1px solid #28313A; border-radius: 4px;
+      overflow: hidden; margin-bottom: 12px;
+      background: #0B0E11;
+    }
+    .mode-seg {
+      flex: 1 1 50%; text-align: center;
+      padding: 10px 8px;
+      font-family: "Barlow Condensed", sans-serif; font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+      font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #9DA7B0; text-decoration: none;
+      background: #0B0E11;
+      transition: background 0.18s ease, color 0.18s ease;
+      min-height: 44px; display: flex; align-items: center; justify-content: center;
+    }
+    .mode-seg + .mode-seg { border-left: 1px solid #28313A; }
+    .mode-seg.active {
+      background: #1D232A; color: #F6F8FA;
+      box-shadow: inset 0 -3px 0 #C4CED4;
+    }
+    a.mode-seg:hover { background: #161A1F; color: #F6F8FA; }
+
+    .nav-pages { display: flex; flex-wrap: wrap; gap: 8px; }
+    .nav-page {
+      color: #F6F8FA; text-decoration: none;
+      font-family: "Barlow Condensed", sans-serif; font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 8px 14px;
+      background: #161A1F;
+      border: 1px solid #28313A;
+      border-radius: 4px;
+      transition: all 0.18s ease;
+    }
+    a.nav-page:hover { background: #1D232A; border-color: #C4CED4; color: #C4CED4; }
+    .nav-page.current {
+      background: #1D232A; border-color: #C4CED4; color: #C4CED4;
+      box-shadow: inset 0 0 0 1px #C4CED4;
+      cursor: default;
+    }
+    .nav-page.index-link { color: #9DA7B0; background: transparent; border-color: transparent; }
+    .nav-page.index-link:hover { color: #F6F8FA; background: #161A1F; }
+
+    /* ---- Alamo Heritage & Architecture ---- */
+    .alamo-header-wrap {
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .alamo-roofline-crown {
+      width: clamp(140px, 30vw, 240px);
+      height: 18px;
+      margin: 0 auto -1px;
+      display: block;
+      position: relative;
+      z-index: 2;
+    }
+    .alamo-roofline-crown svg {
+      width: 100%; height: 100%; display: block;
+    }
+    .alamo-meta-banner {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: "Share Tech Mono", monospace; font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #C9B097; margin-bottom: 10px;
+      padding: 4px 10px; background: rgba(201, 176, 151, 0.08);
+      border: 1px solid rgba(201, 176, 151, 0.25); border-radius: 4px;
+    }
+    .alamo-icon-svg {
+      width: 22px; height: 12px; display: inline-block; vertical-align: middle;
+      color: #C9B097; flex-shrink: 0;
+    }
+    .alamo-footer-seal {
+      display: flex; justify-content: center; align-items: center; margin-bottom: 14px;
+      opacity: 0.75;
+    }
+    .alamo-footer-seal .alamo-icon-svg {
+      width: 44px; height: 22px; color: #8A9399;
+    }
+
+    /* ---- Header ---- */
+    header {
+      background:
+        radial-gradient(ellipse at 90% 10%, rgba(201, 176, 151, 0.06) 0%, transparent 60%),
+        linear-gradient(180deg, #161A1F 0%, #1D232A 100%);
+      border: 1px solid #28313A;
+      border-top: 3px solid #C4CED4;
+      border-radius: 6px;
+      padding: clamp(16px, 3vw, 24px);
+      position: relative;
+    }
+    header::after {
+      content: "";
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #00B2A9 0%, #00B2A9 33.3%, #EF426F 33.3%, #EF426F 66.6%, #FF8200 66.6%, #FF8200 100%);
+    }
+    header h1 {
+      font-family: "Teko", sans-serif;
+      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #F6F8FA;
+      display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    header p {
+      color: #9DA7B0; margin-top: 6px;
+      font-size: clamp(0.85rem, 2vw, 1.0rem); line-height: 1.5;
+    }
+
+    /* ---- Cards ---- */
+    .chart-section, .card {
+      background: #161A1F;
+      border: 1px solid #28313A;
+      border-radius: 6px;
+      padding: clamp(14px, 3vw, 22px);
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .chart-title, .card h2 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #C4CED4;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #28313A;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* ---- Badges ---- */
+    .badge {
+      display: inline-block;
+      font-family: "Share Tech Mono", monospace;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 3px;
+      background: #1D232A;
+      border: 1px solid #8A9399;
+      color: #F6F8FA;
+      text-transform: uppercase;
+    }
+    .badge.teal { background: rgba(0, 178, 169, 0.15); border-color: #00B2A9; color: #00B2A9; }
+    .badge.fuschia { background: rgba(239, 66, 111, 0.15); border-color: #EF426F; color: #EF426F; }
+    .badge.orange { background: rgba(255, 130, 0, 0.15); border-color: #FF8200; color: #FF8200; }
+
+    /* ---- Footer ---- */
+    footer {
+      text-align: center; color: #9DA7B0;
+      font-size: 0.85rem; margin-top: 48px; padding-top: 24px;
+      border-top: 1px solid #28313A;
+    }
+    footer .stonecutter {
+      max-width: 680px; margin: 0 auto 16px;
+      font-style: italic; font-size: 0.8rem; line-height: 1.5; color: #8A9399;
+    }
+    footer a { color: #C4CED4; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    
+  </style>
+</head>
+<body>
+  <nav class="nav-bar"><div class="mode-switch"><span class="mode-seg active">🏀 Court Intelligence</span><a href="matchup_SAS_2025.html" class="mode-seg">🎲 Props & Market</a></div><div class="nav-pages"><a href="index.html" class="nav-page index-link">← Spurs HQ</a> <a href="dashboard_SAS_2025.html" class="nav-page">Season Dashboard</a> <a href="wemby_lab_SAS_2025.html" class="nav-page">Wemby Lab</a> <a href="rodeo_road_trip_SAS_2025.html" class="nav-page">Rodeo Road Trip</a> <span class="nav-page current">Spurs Notebook</span></div></nav>
+  <div class="alamo-header-wrap">
+    <div class="alamo-roofline-crown">
+      <svg class="alamo-roofline-svg" viewBox="0 0 120 18" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18 Z" fill="#161A1F"/><path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18" stroke="#28313A" stroke-width="1" fill="none"/></svg>
+    </div>
+    <header>
+      <div class="alamo-meta-banner">
+        <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon"><path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/><path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/><path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/></svg>
+        <span>The Alamo City &bull; Mission San Antonio</span>
+      </div>
+      <h1>Spurs Notebook <span class="badge">2025-26 Essays</span></h1>
+      <p>Living Essays in Silver & Black Performance Analytics &mdash; Computed Dynamically at Build Time</p>
+    </header>
+  </div>
+  <main>
+    
+    
+    <div class="card" style="background: linear-gradient(180deg, #161A1F 0%, #1D232A 100%); border-top: 3px solid #00B2A9; margin-bottom: 32px;">
+      <h2 style="border-bottom: none; font-size: 1.3rem; margin-bottom: 8px;">The Living Notebook &bull; Computed at Build Time</h2>
+      <p style="color: #9DA7B0; line-height: 1.6; font-size: 0.95rem;">
+        Every essay in this ledger adheres to the immutable Spurs Tracker rule: <strong>zero hand-typed numbers</strong>.
+        Every metric, defensive rating delta, and win percentage cited is evaluated directly against the underlying
+        Parquet cache at page build time. As the season evolves, the narrative shifts with the data.
+      </p>
+    </div>
+    
+    <div class="articles-container">
+      
+        <article class="card" id="french-horizon" style="padding: clamp(20px, 4vw, 36px); margin-bottom: 32px; border-left: 4px solid #C4CED4;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+            <span class="badge teal">Defensive Gravity</span>
+            <span style="font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #9DA7B0;">2025-26 Season Analysis</span>
+          </div>
+
+          <h2 style="font-family: "Barlow Condensed", sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
+            The French Horizon: Victor Wembanyama and the Outer Boundary of Defense
+          </h2>
+
+          <div class="essay-body" style="color: #C4CED4; font-size: 1.05rem; line-height: 1.75;">
+            
+    <p class="essay-lead">
+      Basketball defense has traditionally been measured in proximity: contesting hands, planted feet,
+      and charges absorbed at the circle. With <strong>Victor Wembanyama</strong>, the geometry alters before
+      the shot ever leaves the hand. In <strong>58 tracked appearances</strong> this season,
+      the French prodigy is turning the interior into a structural no-fly zone, averaging
+      <strong>3.10 blocks</strong> and <strong>1.05 steals</strong>
+      for a combined <strong>4.16 stocks per game</strong>
+      (<strong>5.12 per 36 minutes</strong>).
+    </p>
+
+    <h3>The Anatomy of Deterrence</h3>
+    <p>
+      Counting stats fail to describe the <em>reluctant pass</em> &mdash; the instant an opposing guard penetrates
+      the lane, registers Wemby’s 8-foot wingspan hovering at the rim, and executes a frantic pivot back toward
+      the perimeter. The impact reveals itself in the splits: in games where Wembanyama records <strong>5 or more stocks</strong>
+      (24 games), the Spurs allow just <strong>109.3 points per game</strong>
+      with a stifling defensive rating of <strong>107.8</strong>.
+      That represents a defensive swing of <strong>+1.2 DRtg points</strong> compared to
+      baseline contests.
+    </p>
+
+    <blockquote>
+      &ldquo;When Wemby operates as an active eraser (24 nights with 5+ stocks),
+      San Antonio has compiled a 22-2 (0.917) record, suppressing opponent scoring by
+      0.3 points per night.&rdquo;
+    </blockquote>
+
+    <h3>Milestone Ledger</h3>
+    <p>
+      Wembanyama has recorded 3 or more blocks in <strong>32 of his 58 games (55.2%)</strong>,
+      eclipsing 5 blocks in <strong>16 contests</strong>. On the offensive side of the floor, his
+      perimeter gravity commands attention: he is launching <strong>5.5 three-pointers per night</strong>
+      (a <strong>33.3% 3P attempt rate</strong>), finishing with an effective field goal percentage
+      of <strong>0.567</strong> and true shooting percentage of <strong>0.619</strong>.
+      He is not simply a shot-blocker; he is a dual-hemisphere spatial anomaly.
+    </p>
+    
+          </div>
+        </article>
+        
+        <article class="card" id="stonecutters-ledger" style="padding: clamp(20px, 4vw, 36px); margin-bottom: 32px; border-left: 4px solid #C4CED4;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+            <span class="badge silver">Culture & Development</span>
+            <span style="font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #9DA7B0;">2025-26 Season Analysis</span>
+          </div>
+
+          <h2 style="font-family: "Barlow Condensed", sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
+            The Stonecutter's Ledger: Tracking the Incremental Fractures of Growth
+          </h2>
+
+          <div class="essay-body" style="color: #C4CED4; font-size: 1.05rem; line-height: 1.75;">
+            
+    <p class="essay-lead">
+      Patience in modern professional sports is typically an endangered virtue. Hanging above the Spurs locker room
+      for three decades is the Jacob Riis quote honoring the stonecutter hammering a hundred times without a visible crack.
+      Through <strong>73 games</strong> of the 2025-26 campaign, San Antonio sits at
+      <strong>55-18 (0.753)</strong> with an average point differential of
+      <strong>+7.81 per contest</strong>.
+    </p>
+
+    <h3>The Heavy Blows of Young Development</h3>
+    <p>
+      Championship culture is built in the aggregate. The offensive load is carried by a surging collective led by
+      <strong>Victor Wembanyama</strong> (24.2 PPG), <strong>De'Aaron Fox</strong> (18.9 PPG), <strong>Stephon Castle</strong> (16.5 PPG), <strong>Devin Vassell</strong> (13.9 PPG). Night after night, the repetition of defensive rotations, off-ball screens, and secondary rim protection
+      are accumulating silent equity.
+    </p>
+
+    <p>
+      At home in the Frost Bank Center, the Spurs are <strong>28-7</strong>,
+      protecting their floor with energetic pace. In their last 10 contests, they have logged a
+      <strong>9-1 stretch</strong>.
+      The stone has not split yet, but the fractures are widening across the Western Conference hierarchy.
+    </p>
+    
+          </div>
+        </article>
+        
+        <article class="card" id="rodeo-gauntlet" style="padding: clamp(20px, 4vw, 36px); margin-bottom: 32px; border-left: 4px solid #C4CED4;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+            <span class="badge orange">Road Gauntlet</span>
+            <span style="font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #9DA7B0;">February 2026 Split Analysis</span>
+          </div>
+
+          <h2 style="font-family: "Barlow Condensed", sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
+            The Rodeo Gauntlet: Highway Fatigue and the Crucible of Champions
+          </h2>
+
+          <div class="essay-body" style="color: #C4CED4; font-size: 1.05rem; line-height: 1.75;">
+            
+    <p class="essay-lead">
+      For twenty-three years, the arrival of February in Bexar County has carried a singular meaning: the livestock show
+      moves into the Frost Bank Center, and the Silver & Black are banished to the highway. From 2003 through the five
+      championship runs, the Rodeo Road Trip served as Gregg Popovich’s crucible &mdash; a multi-week endurance test
+      where championship contenders were hardened.
+    </p>
+
+    <h3>The 2025-26 Gauntlet Ledger</h3>
+    <p>
+      In this season's Active Rodeo stretch, the Spurs navigated <strong>6 consecutive road tests</strong>,
+      posting a <strong>6-0 (1.000) mark</strong> with an average point differential of
+      <strong>+13.8 points</strong>. Compared to their Pre-RRT differential of
+      <strong>+5.3 points</strong>, the road marathon test reveals how effectively the young roster absorbs
+      travel fatigue and crowd hostility.
+    </p>
+
+    <blockquote>
+      &ldquo;Tim Duncan went 8-1 on the inaugural 2003 trip en route to the title; the 2014 Beautiful Game squad went 6-3
+      before obliterating Miami in June. In San Antonio, February records are not just dates on a calendar &mdash; they are
+      the barometer of playoff steel.&rdquo;
+    </blockquote>
+    
+          </div>
+        </article>
+        
+        <article class="card" id="pass-first" style="padding: clamp(20px, 4vw, 36px); margin-bottom: 32px; border-left: 4px solid #C4CED4;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+            <span class="badge silver">Motion Offense</span>
+            <span style="font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #9DA7B0;">2025-26 Season Analysis</span>
+          </div>
+
+          <h2 style="font-family: "Barlow Condensed", sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
+            Pass First, Ask Questions Later: The Revival of Spurs Motion Basketball
+          </h2>
+
+          <div class="essay-body" style="color: #C4CED4; font-size: 1.05rem; line-height: 1.75;">
+            
+    <p class="essay-lead">
+      The 2014 San Antonio Spurs dismantled the Miami Heat with a brand of basketball so pristine that sportswriters
+      labeled it an art form: touch passes, paint penetrations that yielded corner threes, and an absolute refusal to let
+      the ball stick. Over a decade later, the foundational principles of motion offense are finding new life.
+    </p>
+
+    <h3>The Passing Index</h3>
+    <p>
+      This season, San Antonio is posting a <strong>Beautiful Game Index of 99.5 / 100</strong>, distributing
+      <strong>27.8 assists per game</strong> against <strong>12.8 turnovers</strong> for a stellar
+      <strong>2.17 assist-to-turnover ratio</strong>. Over <strong>64.5% of all made field goals</strong>
+      originate from an assist, generating an estimated <strong>66.7 Assist Points Created (APC)</strong> per night.
+    </p>
+
+    <p>
+      The passing hub is anchored by <strong>Stephon Castle</strong> (7.1 APG, 2.25 AST/TOV), <strong>De'Aaron Fox</strong> (6.3 APG, 2.72 AST/TOV), <strong>Dylan Harper</strong> (3.9 APG, 2.81 AST/TOV), finding cutters and kicking out to open shooters as defenses
+      collapse toward Wembanyama's gravity. When the ball moves with conviction, the Spurs offense operates at its highest
+      expressive ceiling.
+    </p>
+    
+          </div>
+        </article>
+        
+    </div>
+    
+  </main>
+  
+    <footer>
+      <div class="alamo-footer-seal" aria-hidden="true">
+        <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon"><path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/><path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/><path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/></svg>
+      </div>
+      <p class="stonecutter">
+        &ldquo;When nothing seems to help, I go and look at a stonecutter hammering away at his rock,
+        perhaps a hundred times without as much as a crack showing in it. Yet at the hundred and first blow
+        it will split in two, and I know it was not that last blow that did it, but all that had gone before.&rdquo;
+        <br>&mdash; Jacob Riis / San Antonio Spurs Creed
+      </p>
+      <p>The Alamo City &bull; San Antonio Spurs Analytics Suite &bull; Silver &amp; Black Performance Intelligence</p>
+    </footer>
+    
+</body>
+</html>

@@ -29,7 +29,10 @@ from data.fetcher import Fetcher
 
 console = Console()
 
-SECTIONS = ("overview", "offense", "defense", "players", "streaks", "standings")
+SECTIONS = (
+    "overview", "four_factors", "lineups", "clutch", "offense", "defense", "players", "streaks",
+    "standings", "wemby", "rodeo", "ball_movement",
+)
 
 
 def _setup_logging() -> None:
@@ -80,6 +83,18 @@ def main() -> None:
             print_overview(console, games, team_info,
                            team_id=team_id, player_logs=player_logs)
 
+        elif section == "four_factors":
+            from analysis.four_factors import print_four_factors
+            print_four_factors(console, player_logs, games)
+
+        elif section == "lineups":
+            from analysis.lineups import print_lineup_synergies
+            print_lineup_synergies(console, player_logs)
+
+        elif section == "clutch":
+            from analysis.clutch import print_clutch_report
+            print_clutch_report(console, games, player_logs)
+
         elif section == "standings":
             from analysis.standings import print_standings
             print_standings(console, team_id, season)
@@ -99,6 +114,18 @@ def main() -> None:
         elif section == "streaks":
             from analysis.streaks import print_streaks
             print_streaks(console, games, player_logs)
+
+        elif section == "wemby":
+            from analysis.wemby import print_wemby_lab
+            print_wemby_lab(console, player_logs, games)
+
+        elif section == "rodeo":
+            from analysis.rodeo import print_rodeo_report
+            print_rodeo_report(console, games)
+
+        elif section == "ball_movement":
+            from analysis.beautiful_game import print_ball_movement
+            print_ball_movement(console, player_logs, games)
 
 
 if __name__ == "__main__":

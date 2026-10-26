@@ -90,6 +90,43 @@ def main() -> None:
     output_files.append(str(dash_path))
 
     # -----------------------------------------------------------------------
+    # Spurs Intelligence Portals
+    # -----------------------------------------------------------------------
+    if abbr == "SAS":
+        try:
+            roster = fetcher.load("roster")
+        except Exception:
+            roster = pd.DataFrame()
+
+        from viz.wemby_viz import build_wemby_lab_page
+        from viz.rodeo_viz import build_rodeo_page
+        from viz.notebook_viz import build_notebook_page
+        from viz.props_viz import build_props_board_page, build_matchup_page
+
+        with console.status("[bold green]Building Wemby Lab…[/bold green]"):
+            wemby_path = build_wemby_lab_page(games, player_logs, season=season, team_abbr=abbr)
+            console.print(f"[green]Wemby Lab[/green] → [cyan]{wemby_path}[/cyan]")
+            output_files.append(str(wemby_path))
+
+        with console.status("[bold green]Building Rodeo Road Trip…[/bold green]"):
+            rodeo_path = build_rodeo_page(games, season=season, team_abbr=abbr)
+            console.print(f"[green]Rodeo Road Trip[/green] → [cyan]{rodeo_path}[/cyan]")
+            output_files.append(str(rodeo_path))
+
+        with console.status("[bold green]Building Living Notebook…[/bold green]"):
+            nb_path = build_notebook_page(games, player_logs, roster, season=season, team_abbr=abbr)
+            console.print(f"[green]Notebook[/green] → [cyan]{nb_path}[/cyan]")
+            output_files.append(str(nb_path))
+
+        with console.status("[bold green]Building Props & Matchup Intel…[/bold green]"):
+            props_path = build_props_board_page(games, player_logs, season=season, team_abbr=abbr)
+            matchup_path = build_matchup_page(games, season=season, team_abbr=abbr)
+            console.print(f"[green]Player Props[/green] → [cyan]{props_path}[/cyan]")
+            console.print(f"[green]Matchup Intel[/green] → [cyan]{matchup_path}[/cyan]")
+            output_files.append(str(props_path))
+            output_files.append(str(matchup_path))
+
+    # -----------------------------------------------------------------------
     # Historical win% chart
     # -----------------------------------------------------------------------
     if args.history:

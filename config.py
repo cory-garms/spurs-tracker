@@ -1,7 +1,7 @@
 from pathlib import Path
 
 TEAM_ABBR   = "SAS"
-SEASON      = 2025          # pass to season_str() → "2025-26"
+SEASON      = 2026          # pass to season_str() → "2026-27"
 SEASON_TYPE = "Regular Season"
 
 BASE_DIR   = Path(__file__).parent

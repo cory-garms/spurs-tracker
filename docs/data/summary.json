@@ -1,0 +1,38 @@
+{
+  "team": "SAS",
+  "franchise": "San Antonio Spurs",
+  "motto": "Pound the Rock",
+  "heritage": "Mission San Antonio & The Alamo",
+  "season": "2026-27",
+  "record": {
+    "wins": 1,
+    "losses": 2,
+    "games_played": 3,
+    "win_pct": 0.3333333333333333,
+    "net_rtg": -0.83,
+    "avg_margin": 0.0,
+    "pts_per_game": 112.0,
+    "opp_pts_per_game": 112.0,
+    "pyth_wins": 2,
+    "pyth_losses": 1,
+    "home_w": 0,
+    "home_l": 2,
+    "away_w": 1,
+    "away_l": 0,
+    "last_10_w": 1,
+    "last_10_l": 2,
+    "last_20_w": 1,
+    "last_20_l": 2
+  },
+  "beautiful_game": {
+    "games": 3,
+    "assists_per_game": 25.3,
+    "turnovers_per_game": 13.3,
+    "ast_tov_ratio": 1.9,
+    "assisted_fg_pct": 0.613,
+    "assist_points_created_total": 182,
+    "assist_points_created_pg": 60.7,
+    "apc_scoring_share_pct": 54.2,
+    "beautiful_game_index": 97.5
+  }
+}

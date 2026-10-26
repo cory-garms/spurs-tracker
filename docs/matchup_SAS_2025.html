@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matchup & Beatdown Predictor — San Antonio Spurs Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Graduate&family=Share+Tech+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(196, 206, 212, 0.04) 0%, transparent 70%),
+        #0B0E11;
+      color: #F6F8FA;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+    body { padding: clamp(12px, 3vw, 28px); }
+
+    /* ---- Navigation ---- */
+    .nav-bar { margin-bottom: 24px; }
+    .mode-switch {
+      display: flex; width: 100%;
+      border: 1px solid #28313A; border-radius: 4px;
+      overflow: hidden; margin-bottom: 12px;
+      background: #0B0E11;
+    }
+    .mode-seg {
+      flex: 1 1 50%; text-align: center;
+      padding: 10px 8px;
+      font-family: "Barlow Condensed", sans-serif; font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+      font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #9DA7B0; text-decoration: none;
+      background: #0B0E11;
+      transition: background 0.18s ease, color 0.18s ease;
+      min-height: 44px; display: flex; align-items: center; justify-content: center;
+    }
+    .mode-seg + .mode-seg { border-left: 1px solid #28313A; }
+    .mode-seg.active {
+      background: #1D232A; color: #F6F8FA;
+      box-shadow: inset 0 -3px 0 #C4CED4;
+    }
+    a.mode-seg:hover { background: #161A1F; color: #F6F8FA; }
+
+    .nav-pages { display: flex; flex-wrap: wrap; gap: 8px; }
+    .nav-page {
+      color: #F6F8FA; text-decoration: none;
+      font-family: "Barlow Condensed", sans-serif; font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 8px 14px;
+      background: #161A1F;
+      border: 1px solid #28313A;
+      border-radius: 4px;
+      transition: all 0.18s ease;
+    }
+    a.nav-page:hover { background: #1D232A; border-color: #C4CED4; color: #C4CED4; }
+    .nav-page.current {
+      background: #1D232A; border-color: #C4CED4; color: #C4CED4;
+      box-shadow: inset 0 0 0 1px #C4CED4;
+      cursor: default;
+    }
+    .nav-page.index-link { color: #9DA7B0; background: transparent; border-color: transparent; }
+    .nav-page.index-link:hover { color: #F6F8FA; background: #161A1F; }
+
+    /* ---- Alamo Heritage & Architecture ---- */
+    .alamo-header-wrap {
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .alamo-roofline-crown {
+      width: clamp(140px, 30vw, 240px);
+      height: 18px;
+      margin: 0 auto -1px;
+      display: block;
+      position: relative;
+      z-index: 2;
+    }
+    .alamo-roofline-crown svg {
+      width: 100%; height: 100%; display: block;
+    }
+    .alamo-meta-banner {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: "Share Tech Mono", monospace; font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #C9B097; margin-bottom: 10px;
+      padding: 4px 10px; background: rgba(201, 176, 151, 0.08);
+      border: 1px solid rgba(201, 176, 151, 0.25); border-radius: 4px;
+    }
+    .alamo-icon-svg {
+      width: 22px; height: 12px; display: inline-block; vertical-align: middle;
+      color: #C9B097; flex-shrink: 0;
+    }
+    .alamo-footer-seal {
+      display: flex; justify-content: center; align-items: center; margin-bottom: 14px;
+      opacity: 0.75;
+    }
+    .alamo-footer-seal .alamo-icon-svg {
+      width: 44px; height: 22px; color: #8A9399;
+    }
+
+    /* ---- Header ---- */
+    header {
+      background:
+        radial-gradient(ellipse at 90% 10%, rgba(201, 176, 151, 0.06) 0%, transparent 60%),
+        linear-gradient(180deg, #161A1F 0%, #1D232A 100%);
+      border: 1px solid #28313A;
+      border-top: 3px solid #C4CED4;
+      border-radius: 6px;
+      padding: clamp(16px, 3vw, 24px);
+      position: relative;
+    }
+    header::after {
+      content: "";
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #00B2A9 0%, #00B2A9 33.3%, #EF426F 33.3%, #EF426F 66.6%, #FF8200 66.6%, #FF8200 100%);
+    }
+    header h1 {
+      font-family: "Teko", sans-serif;
+      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #F6F8FA;
+      display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    header p {
+      color: #9DA7B0; margin-top: 6px;
+      font-size: clamp(0.85rem, 2vw, 1.0rem); line-height: 1.5;
+    }
+
+    /* ---- Cards ---- */
+    .chart-section, .card {
+      background: #161A1F;
+      border: 1px solid #28313A;
+      border-radius: 6px;
+      padding: clamp(14px, 3vw, 22px);
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .chart-title, .card h2 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #C4CED4;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #28313A;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* ---- Badges ---- */
+    .badge {
+      display: inline-block;
+      font-family: "Share Tech Mono", monospace;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 3px;
+      background: #1D232A;
+      border: 1px solid #8A9399;
+      color: #F6F8FA;
+      text-transform: uppercase;
+    }
+    .badge.teal { background: rgba(0, 178, 169, 0.15); border-color: #00B2A9; color: #00B2A9; }
+    .badge.fuschia { background: rgba(239, 66, 111, 0.15); border-color: #EF426F; color: #EF426F; }
+    .badge.orange { background: rgba(255, 130, 0, 0.15); border-color: #FF8200; color: #FF8200; }
+
+    /* ---- Footer ---- */
+    footer {
+      text-align: center; color: #9DA7B0;
+      font-size: 0.85rem; margin-top: 48px; padding-top: 24px;
+      border-top: 1px solid #28313A;
+    }
+    footer .stonecutter {
+      max-width: 680px; margin: 0 auto 16px;
+      font-style: italic; font-size: 0.8rem; line-height: 1.5; color: #8A9399;
+    }
+    footer a { color: #C4CED4; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    
+  </style>
+</head>
+<body>
+  <nav class="nav-bar"><div class="mode-switch"><a href="dashboard_SAS_2025.html" class="mode-seg">🏀 Court Intelligence</a><span class="mode-seg active">🎲 Props & Market</span></div><div class="nav-pages"><a href="index.html" class="nav-page index-link">← Spurs HQ</a> <span class="nav-page current">Matchup Intel</span> <a href="props_board_SAS_2025.html" class="nav-page">Player Props</a></div></nav>
+  <div class="alamo-header-wrap">
+    <div class="alamo-roofline-crown">
+      <svg class="alamo-roofline-svg" viewBox="0 0 120 18" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18 Z" fill="#161A1F"/><path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18" stroke="#28313A" stroke-width="1" fill="none"/></svg>
+    </div>
+    <header>
+      <div class="alamo-meta-banner">
+        <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon"><path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/><path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/><path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/></svg>
+        <span>The Alamo City &bull; Mission San Antonio</span>
+      </div>
+      <h1>Matchup & Beatdown Predictor <span class="badge">2025-26 Predictor</span></h1>
+      <p>Empirical Opponent Scoring Margin Simulations & Blowout Likelihood Matrices</p>
+    </header>
+  </div>
+  <main>
+    
+    <!-- Interactive Beatdown Simulator Console -->
+    <div class="card" style="border-top: 3px solid #00B2A9; margin-bottom: 28px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        <div>
+          <div style="font-family: "Share Tech Mono", monospace; font-size: 0.75rem; letter-spacing: 0.1em; color: #00B2A9; text-transform: uppercase;">Real-Time Simulation Lab</div>
+          <h2 style="font-size: 1.55rem; margin-bottom: 4px;">🎮 Interactive Matchup &amp; Beatdown Simulator</h2>
+        </div>
+        <span style="font-family: "Share Tech Mono", monospace; font-size: 0.72rem; padding: 4px 10px; border-radius: 4px; background: rgba(0, 178, 169, 0.12); color: #00B2A9; border: 1px solid rgba(0, 178, 169, 0.3);">CALIBRATED V2 ENGINE</span>
+      </div>
+      <p style="color: #9DA7B0; font-size: 0.92rem; line-height: 1.6; margin-bottom: 20px;">
+        Test game outcomes, score margins, and blowout probabilities against any NBA opponent. Adjust court venue and rest fatigue days to see live analytical swings based on actual 30-team Net Ratings and pace factors.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: stretch;">
+        <!-- Controls Column -->
+        <div style="background: #1D232A; padding: 20px; border-radius: 6px; border: 1px solid #28313A; display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <label style="display: block; font-family: "Share Tech Mono", monospace; font-size: 0.75rem; color: #8A9399; text-transform: uppercase; margin-bottom: 6px;">Select Opponent</label>
+            <select id="simOpponent" onchange="recalculateSim()" style="width: 100%; background: #161A1F; border: 1px solid #28313A; color: #F6F8FA; padding: 10px; border-radius: 4px; font-family: "Share Tech Mono", monospace; font-size: 0.9rem;">
+              <option value="ATL">Atlanta Hawks (ATL) — East</option>
+<option value="BOS">Boston Celtics (BOS) — East</option>
+<option value="BKN">Brooklyn Nets (BKN) — East</option>
+<option value="CHA">Charlotte Hornets (CHA) — East</option>
+<option value="CHI">Chicago Bulls (CHI) — East</option>
+<option value="CLE">Cleveland Cavaliers (CLE) — East</option>
+<option value="DAL">Dallas Mavericks (DAL) — West</option>
+<option value="DEN">Denver Nuggets (DEN) — West</option>
+<option value="DET">Detroit Pistons (DET) — East</option>
+<option value="GSW">Golden State Warriors (GSW) — West</option>
+<option value="HOU" selected="selected">Houston Rockets (HOU) — West</option>
+<option value="IND">Indiana Pacers (IND) — East</option>
+<option value="LAC">LA Clippers (LAC) — West</option>
+<option value="LAL">Los Angeles Lakers (LAL) — West</option>
+<option value="MEM">Memphis Grizzlies (MEM) — West</option>
+<option value="MIA">Miami Heat (MIA) — East</option>
+<option value="MIL">Milwaukee Bucks (MIL) — East</option>
+<option value="MIN">Minnesota Timberwolves (MIN) — West</option>
+<option value="NOP">New Orleans Pelicans (NOP) — West</option>
+<option value="NYK">New York Knicks (NYK) — East</option>
+<option value="OKC">Oklahoma City Thunder (OKC) — West</option>
+<option value="ORL">Orlando Magic (ORL) — East</option>
+<option value="PHI">Philadelphia 76ers (PHI) — East</option>
+<option value="PHX">Phoenix Suns (PHX) — West</option>
+<option value="POR">Portland Trail Blazers (POR) — West</option>
+<option value="SAC">Sacramento Kings (SAC) — West</option>
+<option value="TOR">Toronto Raptors (TOR) — East</option>
+<option value="UTA">Utah Jazz (UTA) — West</option>
+<option value="WAS">Washington Wizards (WAS) — East</option>
+
+            </select>
+          </div>
+
+          <div>
+            <label style="display: block; font-family: "Share Tech Mono", monospace; font-size: 0.75rem; color: #8A9399; text-transform: uppercase; margin-bottom: 6px;">Game Venue / Location</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <button type="button" id="btnVenueHome" onclick="setVenue(true)" style="padding: 10px; border-radius: 4px; font-family: "Barlow Condensed", sans-serif; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; border: 1px solid #00B2A9; background: rgba(0, 178, 169, 0.18); color: #F6F8FA; cursor: pointer;">
+                🏠 Frost Bank (Home +2.8)
+              </button>
+              <button type="button" id="btnVenueAway" onclick="setVenue(false)" style="padding: 10px; border-radius: 4px; font-family: "Barlow Condensed", sans-serif; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; border: 1px solid #28313A; background: #161A1F; color: #9DA7B0; cursor: pointer;">
+                ✈️ On the Road (Away -2.8)
+              </button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="display: block; font-family: "Share Tech Mono", monospace; font-size: 0.72rem; color: #8A9399; text-transform: uppercase; margin-bottom: 6px;">Spurs Rest Days</label>
+              <select id="simSpursRest" onchange="recalculateSim()" style="width: 100%; background: #161A1F; border: 1px solid #28313A; color: #F6F8FA; padding: 8px; border-radius: 4px; font-family: "Share Tech Mono", monospace; font-size: 0.82rem;">
+                <option value="0">0 Days (Back-to-Back: -2.4 pts)</option>
+                <option value="1" selected="selected">1 Day (Normal Rest: 0.0 pts)</option>
+                <option value="2">2+ Days (Well-Rested: +1.5 pts)</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-family: "Share Tech Mono", monospace; font-size: 0.72rem; color: #8A9399; text-transform: uppercase; margin-bottom: 6px;">Opponent Rest Days</label>
+              <select id="simOppRest" onchange="recalculateSim()" style="width: 100%; background: #161A1F; border: 1px solid #28313A; color: #F6F8FA; padding: 8px; border-radius: 4px; font-family: "Share Tech Mono", monospace; font-size: 0.82rem;">
+                <option value="0">0 Days (Opp B2B Fatigue: +2.4 pts)</option>
+                <option value="1" selected="selected">1 Day (Normal Rest: 0.0 pts)</option>
+                <option value="2">2+ Days (Opp Well-Rested: -1.5 pts)</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid #28313A; padding-top: 12px; display: flex; justify-content: space-between; font-size: 0.75rem; font-family: "Share Tech Mono", monospace; color: #9DA7B0;">
+            <span>Model Spread Std Dev: &sigma; = 11.5</span>
+            <span id="simNetRtgDelta">Spread: +0.0 Net</span>
+          </div>
+        </div>
+
+        <!-- Live Scoreboard Display -->
+        <div id="simBoard" style="background: #1D232A; padding: 22px; border-radius: 6px; border: 1px solid #28313A; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span id="simVenueLabel" style="font-family: "Share Tech Mono", monospace; font-size: 0.75rem; color: #8A9399; text-transform: uppercase;">HOME CONTEST</span>
+              <span id="simTierBadge" style="font-family: "Share Tech Mono", monospace; font-size: 0.75rem; padding: 3px 10px; border-radius: 4px; background: rgba(0, 178, 169, 0.15); color: #00B2A9; border: 1px solid #00B2A9; font-weight: 700;">
+                🔨 Decisive Beatdown
+              </span>
+            </div>
+
+            <!-- Big LED Scoreboard -->
+            <div style="background: #0B0E11; border: 1px solid #28313A; border-radius: 6px; padding: 16px; margin-bottom: 16px;">
+              <div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; text-align: center; gap: 8px;">
+                <div>
+                  <div style="font-family: "Barlow Condensed", sans-serif; font-size: 0.85rem; color: #C4CED4; letter-spacing: 0.08em; text-transform: uppercase;">SPURS</div>
+                  <div id="simSpursScore" style="font-family: "Teko", sans-serif; font-size: 3.2rem; font-weight: 700; color: #F6F8FA; line-height: 1.0;">116</div>
+                </div>
+                <div style="font-family: "Share Tech Mono", monospace; font-size: 1.2rem; color: #28313A;">VS</div>
+                <div>
+                  <div id="simOppNameShort" style="font-family: "Barlow Condensed", sans-serif; font-size: 0.85rem; color: #9DA7B0; letter-spacing: 0.08em; text-transform: uppercase;">ROCKETS</div>
+                  <div id="simOppScore" style="font-family: "Teko", sans-serif; font-size: 3.2rem; font-weight: 700; color: #9DA7B0; line-height: 1.0;">108</div>
+                </div>
+              </div>
+              <div style="margin-top: 10px; text-align: center; font-family: "Share Tech Mono", monospace; font-size: 0.95rem; font-weight: 700;">
+                PROJECTED SPREAD: <span id="simMarginVal" style="color: #00B2A9;">+8.0 PTS</span>
+              </div>
+            </div>
+
+            <!-- Win Probability Meter -->
+            <div style="margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-family: "Share Tech Mono", monospace; margin-bottom: 5px;">
+                <span style="color: #C4CED4;">Win Probability</span>
+                <span id="simWinPct" style="font-weight: 700; color: #F6F8FA;">75.6%</span>
+              </div>
+              <div style="background: rgba(0,0,0,0.6); border-radius: 4px; height: 10px; overflow: hidden; border: 1px solid #28313A;">
+                <div id="simWinBar" style="background: linear-gradient(90deg, #00B2A9, #FF8200); width: 75.6%; height: 100%; transition: width 0.3s ease;"></div>
+              </div>
+            </div>
+
+            <!-- Beatdown Probability Multi-Gauge -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; text-align: center; background: #161A1F; padding: 10px; border-radius: 4px; border: 1px solid #28313A; margin-bottom: 12px;">
+              <div>
+                <div style="font-size: 0.68rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">+10 WIN</div>
+                <div id="simDoubleDigitPct" style="font-size: 1.05rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">44.8%</div>
+              </div>
+              <div>
+                <div style="font-size: 0.68rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">+15 BLOWOUT</div>
+                <div id="simBlowoutPct" style="font-size: 1.05rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #FF8200;">28.4%</div>
+              </div>
+              <div>
+                <div style="font-size: 0.68rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">+20 ROUT</div>
+                <div id="simDemolitionPct" style="font-size: 1.05rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #EF426F;">15.9%</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="simTierDesc" style="font-size: 0.82rem; color: #9DA7B0; font-style: italic; border-left: 2px solid #00B2A9; padding-left: 10px;">
+            Spurs strongly favored to pull away by double-digits in the second half.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Rivalries Section -->
+    <div style="margin-bottom: 28px;">
+      <h2 style="font-family: "Barlow Condensed", sans-serif; font-size: 1.5rem; text-transform: uppercase; color: #C4CED4; margin-bottom: 14px;">
+        ⚔️ Key Western &amp; Texas Rivalry Forecasts
+      </h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
+        
+        <div style="background: #161A1F; border: 1px solid #28313A; border-top: 3px solid #C4CED4; border-radius: 6px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-family: "Share Tech Mono", monospace; font-size: 0.75rem; color: #8A9399; text-transform: uppercase;">Home Matchup</span>
+              <span style="font-family: "Share Tech Mono", monospace; font-size: 0.72rem; padding: 2px 8px; border-radius: 3px; background: rgba(0,0,0,0.4); color: #C4CED4; border: 1px solid #C4CED4;">🔨 Decisive Beatdown</span>
+            </div>
+            <h3 style="font-family: "Barlow Condensed", sans-serif; font-size: 1.4rem; color: #F6F8FA; margin-bottom: 4px;">Spurs vs. Houston Rockets (HOU)</h3>
+            <p style="font-size: 0.85rem; color: #9DA7B0; margin-bottom: 16px;">Spurs strongly favored to pull away by double-digits in the second half.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; background: #1D232A; padding: 12px; border-radius: 4px; border: 1px solid #28313A;">
+              <div>
+                <div style="font-size: 0.72rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">PROJECTED SCORE</div>
+                <div style="font-size: 1.15rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">SAS 117 - 110</div>
+              </div>
+              <div>
+                <div style="font-size: 0.72rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">EXPECTED MARGIN</div>
+                <div style="font-size: 1.15rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #00B2A9;">+8.0 PTS</div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: "Share Tech Mono", monospace; margin-bottom: 4px;">
+                <span style="color: #C4CED4;">Win Probability</span>
+                <span style="font-weight: 700; color: #F6F8FA;">75.5%</span>
+              </div>
+              <div style="background: rgba(0,0,0,0.5); border-radius: 3px; height: 8px; overflow: hidden; border: 1px solid #28313A;">
+                <div style="background: linear-gradient(90deg, #00B2A9, #FF8200); width: 75.5%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-family: "Share Tech Mono", monospace; color: #9DA7B0;">
+              <span>+10 Double-Digit: <strong style="color: #F6F8FA;">44.6%</strong></span>
+              <span>+15 Blowout: <strong style="color: #F6F8FA;">28.5%</strong></span>
+              <span>+20 Rout: <strong style="color: #F6F8FA;">15.8%</strong></span>
+            </div>
+          </div>
+        </div>
+        
+        <div style="background: #161A1F; border: 1px solid #28313A; border-top: 3px solid #C4CED4; border-radius: 6px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-family: "Share Tech Mono", monospace; font-size: 0.75rem; color: #8A9399; text-transform: uppercase;">Home Matchup</span>
+              <span style="font-family: "Share Tech Mono", monospace; font-size: 0.72rem; padding: 2px 8px; border-radius: 3px; background: rgba(0,0,0,0.4); color: #C4CED4; border: 1px solid #C4CED4;">🔨 Decisive Beatdown</span>
+            </div>
+            <h3 style="font-family: "Barlow Condensed", sans-serif; font-size: 1.4rem; color: #F6F8FA; margin-bottom: 4px;">Spurs vs. Dallas Mavericks (DAL)</h3>
+            <p style="font-size: 0.85rem; color: #9DA7B0; margin-bottom: 16px;">Spurs strongly favored to pull away by double-digits in the second half.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; background: #1D232A; padding: 12px; border-radius: 4px; border: 1px solid #28313A;">
+              <div>
+                <div style="font-size: 0.72rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">PROJECTED SCORE</div>
+                <div style="font-size: 1.15rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">SAS 117 - 110</div>
+              </div>
+              <div>
+                <div style="font-size: 0.72rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">EXPECTED MARGIN</div>
+                <div style="font-size: 1.15rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #00B2A9;">+10.5 PTS</div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: "Share Tech Mono", monospace; margin-bottom: 4px;">
+                <span style="color: #C4CED4;">Win Probability</span>
+                <span style="font-weight: 700; color: #F6F8FA;">82.0%</span>
+              </div>
+              <div style="background: rgba(0,0,0,0.5); border-radius: 3px; height: 8px; overflow: hidden; border: 1px solid #28313A;">
+                <div style="background: linear-gradient(90deg, #00B2A9, #FF8200); width: 82.0%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-family: "Share Tech Mono", monospace; color: #9DA7B0;">
+              <span>+10 Double-Digit: <strong style="color: #F6F8FA;">53.6%</strong></span>
+              <span>+15 Blowout: <strong style="color: #F6F8FA;">36.5%</strong></span>
+              <span>+20 Rout: <strong style="color: #F6F8FA;">21.8%</strong></span>
+            </div>
+          </div>
+        </div>
+        
+        <div style="background: #161A1F; border: 1px solid #28313A; border-top: 3px solid #C4CED4; border-radius: 6px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-family: "Share Tech Mono", monospace; font-size: 0.75rem; color: #8A9399; text-transform: uppercase;">Home Matchup</span>
+              <span style="font-family: "Share Tech Mono", monospace; font-size: 0.72rem; padding: 2px 8px; border-radius: 3px; background: rgba(0,0,0,0.4); color: #C4CED4; border: 1px solid #C4CED4;">🔨 Decisive Beatdown</span>
+            </div>
+            <h3 style="font-family: "Barlow Condensed", sans-serif; font-size: 1.4rem; color: #F6F8FA; margin-bottom: 4px;">Spurs vs. Los Angeles Lakers (LAL)</h3>
+            <p style="font-size: 0.85rem; color: #9DA7B0; margin-bottom: 16px;">Spurs strongly favored to pull away by double-digits in the second half.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; background: #1D232A; padding: 12px; border-radius: 4px; border: 1px solid #28313A;">
+              <div>
+                <div style="font-size: 0.72rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">PROJECTED SCORE</div>
+                <div style="font-size: 1.15rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">SAS 117 - 110</div>
+              </div>
+              <div>
+                <div style="font-size: 0.72rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">EXPECTED MARGIN</div>
+                <div style="font-size: 1.15rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #00B2A9;">+8.9 PTS</div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: "Share Tech Mono", monospace; margin-bottom: 4px;">
+                <span style="color: #C4CED4;">Win Probability</span>
+                <span style="font-weight: 700; color: #F6F8FA;">77.9%</span>
+              </div>
+              <div style="background: rgba(0,0,0,0.5); border-radius: 3px; height: 8px; overflow: hidden; border: 1px solid #28313A;">
+                <div style="background: linear-gradient(90deg, #00B2A9, #FF8200); width: 77.9%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-family: "Share Tech Mono", monospace; color: #9DA7B0;">
+              <span>+10 Double-Digit: <strong style="color: #F6F8FA;">47.8%</strong></span>
+              <span>+15 Blowout: <strong style="color: #F6F8FA;">31.2%</strong></span>
+              <span>+20 Rout: <strong style="color: #F6F8FA;">17.7%</strong></span>
+            </div>
+          </div>
+        </div>
+        
+        <div style="background: #161A1F; border: 1px solid #28313A; border-top: 3px solid #C4CED4; border-radius: 6px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-family: "Share Tech Mono", monospace; font-size: 0.75rem; color: #8A9399; text-transform: uppercase;">Home Matchup</span>
+              <span style="font-family: "Share Tech Mono", monospace; font-size: 0.72rem; padding: 2px 8px; border-radius: 3px; background: rgba(0,0,0,0.4); color: #C4CED4; border: 1px solid #C4CED4;">🔨 Decisive Beatdown</span>
+            </div>
+            <h3 style="font-family: "Barlow Condensed", sans-serif; font-size: 1.4rem; color: #F6F8FA; margin-bottom: 4px;">Spurs vs. Golden State Warriors (GSW)</h3>
+            <p style="font-size: 0.85rem; color: #9DA7B0; margin-bottom: 16px;">Spurs strongly favored to pull away by double-digits in the second half.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; background: #1D232A; padding: 12px; border-radius: 4px; border: 1px solid #28313A;">
+              <div>
+                <div style="font-size: 0.72rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">PROJECTED SCORE</div>
+                <div style="font-size: 1.15rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">SAS 117 - 110</div>
+              </div>
+              <div>
+                <div style="font-size: 0.72rem; font-family: "Share Tech Mono", monospace; color: #8A9399;">EXPECTED MARGIN</div>
+                <div style="font-size: 1.15rem; font-weight: 700; font-family: "Share Tech Mono", monospace; color: #00B2A9;">+5.4 PTS</div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: "Share Tech Mono", monospace; margin-bottom: 4px;">
+                <span style="color: #C4CED4;">Win Probability</span>
+                <span style="font-weight: 700; color: #F6F8FA;">68.2%</span>
+              </div>
+              <div style="background: rgba(0,0,0,0.5); border-radius: 3px; height: 8px; overflow: hidden; border: 1px solid #28313A;">
+                <div style="background: linear-gradient(90deg, #00B2A9, #FF8200); width: 68.2%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-family: "Share Tech Mono", monospace; color: #9DA7B0;">
+              <span>+10 Double-Digit: <strong style="color: #F6F8FA;">36.2%</strong></span>
+              <span>+15 Blowout: <strong style="color: #F6F8FA;">21.5%</strong></span>
+              <span>+20 Rout: <strong style="color: #F6F8FA;">11.1%</strong></span>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- 29-Team Complete Table -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 16px;">
+        <h2 style="margin-bottom: 0;">📊 Complete 29-Team Opponent Beatdown Radar</h2>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="oppSearch" placeholder="Search opponent..." style="background: #1D232A; border: 1px solid #28313A; color: #F6F8FA; padding: 6px 12px; border-radius: 4px; font-family: "Share Tech Mono", monospace; font-size: 0.85rem;" onkeyup="filterOpponents()">
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;" id="oppTable">
+          <thead>
+            <tr style="border-bottom: 2px solid #28313A; color: #C4CED4; font-family: "Barlow Condensed", sans-serif; text-transform: uppercase;">
+              <th style="padding: 10px 12px;">Opponent</th>
+              <th style="padding: 10px 12px;">Conf</th>
+              <th style="padding: 10px 12px;">H2H Rec</th>
+              <th style="padding: 10px 12px;">Proj Score</th>
+              <th style="padding: 10px 12px;">Proj Margin</th>
+              <th style="padding: 10px 12px;">Win Prob</th>
+              <th style="padding: 10px 12px;">+10 Pt Win %</th>
+              <th style="padding: 10px 12px;">+15 Blowout %</th>
+              <th style="padding: 10px 12px;">Outlook Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            PHI <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Philadelphia 76ers)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">1-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+16.7</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">92.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">73.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">57.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">💥 Complete Demolition</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            SAC <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Sacramento Kings)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">3-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+10.5</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">82.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">53.6%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">36.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            DAL <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Dallas Mavericks)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">3-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+10.5</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">82.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">53.6%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">36.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            ATL <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Atlanta Hawks)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+10.3</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">81.4%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">52.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">35.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            MIL <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Milwaukee Bucks)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">1-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+10.1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">81.1%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">52.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">35.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            WAS <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Washington Wizards)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+10.1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">81.1%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">52.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">35.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            MIA <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Miami Heat)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+9.4</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">79.3%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">49.6%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">32.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            LAL <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Los Angeles Lakers)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">3-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+8.9</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">77.9%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">47.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">31.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            BKN <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Brooklyn Nets)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+8.8</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">77.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">47.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">30.9%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            DET <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Detroit Pistons)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+8.6</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">77.3%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">47.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">30.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            IND <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Indiana Pacers)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+8.5</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">76.9%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">46.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">30.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            HOU <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Houston Rockets)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">3-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+8.0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">75.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">44.6%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">28.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            TOR <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Toronto Raptors)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+7.9</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">75.3%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">44.4%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">28.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            MEM <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Memphis Grizzlies)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">3-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+7.8</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">75.1%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">44.1%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">28.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            BOS <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Boston Celtics)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+6.8</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">72.4%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">40.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">25.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            ORL <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Orlando Magic)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+6.4</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">71.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">39.3%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">24.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            UTA <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Utah Jazz)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+6.4</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">71.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">39.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">24.1%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            OKC <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Oklahoma City Thunder)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">4-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+6.3</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">70.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">39.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">23.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            CHI <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Chicago Bulls)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">1-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+5.9</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">69.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">37.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">22.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            CHA <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Charlotte Hornets)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">1-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+5.9</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">69.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">37.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">22.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            LAC <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(LA Clippers)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+5.9</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">69.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">37.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">22.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            POR <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Portland Trail Blazers)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">1-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+5.9</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">69.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">37.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">22.8%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            GSW <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Golden State Warriors)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">1-2</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+5.4</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">68.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">36.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">21.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            PHX <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Phoenix Suns)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">2-2</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+5.3</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">67.6%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">35.6%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">21.1%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            NOP <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(New Orleans Pelicans)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">3-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+5.1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">67.1%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">35.1%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">20.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">🔨 Decisive Beatdown</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            DEN <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Denver Nuggets)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">1-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+4.4</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">65.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">33.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">19.1%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">⏱️ Crunch-Time Battle</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="West" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            MIN <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Minnesota Timberwolves)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">West</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">1-2</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+3.6</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">62.4%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">30.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">17.2%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">⏱️ Crunch-Time Battle</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            NYK <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(New York Knicks)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">1-1</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+1.3</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">54.4%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">23.7%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">12.5%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">⏱️ Crunch-Time Battle</td>
+        </tr>
+        
+        <tr class="opp-row" data-conf="East" style="border-bottom: 1px solid #28313A;">
+          <td style="padding: 12px; font-weight: 700; color: #F6F8FA; font-family: "Share Tech Mono", monospace;">
+            CLE <span style="font-weight: normal; color: #9DA7B0; font-size: 0.8rem;">(Cleveland Cavaliers)</span>
+          </td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #8A9399;">East</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">0-2</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #F6F8FA;">117 - 110</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #00B2A9;">+1.0</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-weight: 700; color: #F6F8FA;">53.4%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #C4CED4;">22.9%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; color: #FF8200; font-weight: 700;">12.0%</td>
+          <td style="padding: 12px; font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #F6F8FA;">⏱️ Crunch-Time Battle</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const TEAMS_DATA = {"ATL": {"abbr": "ATL", "name": "Atlanta Hawks", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 18.5}, "BKN": {"abbr": "BKN", "name": "Brooklyn Nets", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 13.5}, "BOS": {"abbr": "BOS", "name": "Boston Celtics", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 7.0}, "CHA": {"abbr": "CHA", "name": "Charlotte Hornets", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 1, "h2h_margin": 4.0}, "CHI": {"abbr": "CHI", "name": "Chicago Bulls", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 1, "h2h_w": 1, "h2h_margin": 4.0}, "CLE": {"abbr": "CLE", "name": "Cleveland Cavaliers", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 0, "h2h_margin": -12.5}, "DAL": {"abbr": "DAL", "name": "Dallas Mavericks", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 3, "h2h_w": 3, "h2h_margin": 19.3}, "DEN": {"abbr": "DEN", "name": "Denver Nuggets", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 1, "h2h_margin": -1.0}, "DET": {"abbr": "DET", "name": "Detroit Pistons", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 13.0}, "GSW": {"abbr": "GSW", "name": "Golden State Warriors", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 3, "h2h_w": 1, "h2h_margin": 2.3}, "HOU": {"abbr": "HOU", "name": "Houston Rockets", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 4, "h2h_w": 3, "h2h_margin": 10.8}, "IND": {"abbr": "IND", "name": "Indiana Pacers", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 12.5}, "LAC": {"abbr": "LAC", "name": "LA Clippers", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 4.0}, "LAL": {"abbr": "LAL", "name": "Los Angeles Lakers", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 4, "h2h_w": 3, "h2h_margin": 13.8}, "MEM": {"abbr": "MEM", "name": "Memphis Grizzlies", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 4, "h2h_w": 3, "h2h_margin": 10.2}, "MIA": {"abbr": "MIA", "name": "Miami Heat", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 15.5}, "MIL": {"abbr": "MIL", "name": "Milwaukee Bucks", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 1, "h2h_w": 1, "h2h_margin": 18.0}, "MIN": {"abbr": "MIN", "name": "Minnesota Timberwolves", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 3, "h2h_w": 1, "h2h_margin": -3.7}, "NOP": {"abbr": "NOP", "name": "New Orleans Pelicans", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 4, "h2h_w": 3, "h2h_margin": 1.2}, "NYK": {"abbr": "NYK", "name": "New York Knicks", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 1, "h2h_margin": -11.5}, "OKC": {"abbr": "OKC", "name": "Oklahoma City Thunder", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 5, "h2h_w": 4, "h2h_margin": 5.2}, "ORL": {"abbr": "ORL", "name": "Orlando Magic", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 5.5}, "PHI": {"abbr": "PHI", "name": "Philadelphia 76ers", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 1, "h2h_w": 1, "h2h_margin": 40.0}, "PHX": {"abbr": "PHX", "name": "Phoenix Suns", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 4, "h2h_w": 2, "h2h_margin": 1.8}, "POR": {"abbr": "POR", "name": "Portland Trail Blazers", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 1, "h2h_margin": 4.0}, "SAC": {"abbr": "SAC", "name": "Sacramento Kings", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 3, "h2h_w": 3, "h2h_margin": 19.3}, "TOR": {"abbr": "TOR", "name": "Toronto Raptors", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 10.5}, "UTA": {"abbr": "UTA", "name": "Utah Jazz", "conf": "West", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 3, "h2h_w": 2, "h2h_margin": 5.7}, "WAS": {"abbr": "WAS", "name": "Washington Wizards", "conf": "East", "ortg": 112.0, "drtg": 112.0, "pace": 99.5, "wins": 0, "losses": 0, "h2h_g": 2, "h2h_w": 2, "h2h_margin": 18.0}};
+      const SPURS_BASE = {"ortg": 118.2, "drtg": 110.3, "pace": 100.9};
+      let isHomeGame = true;
+
+      function erf(x) {
+        const a1 =  0.254829592;
+        const a2 = -0.284496736;
+        const a3 =  1.421413741;
+        const a4 = -1.453152027;
+        const a5 =  1.061405429;
+        const p  =  0.3275911;
+        const sign = (x < 0) ? -1 : 1;
+        const ax = Math.abs(x);
+        const t = 1.0 / (1.0 + p * ax);
+        const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-ax * ax);
+        return sign * y;
+      }
+
+      function normCdf(x) {
+        return 0.5 * (1.0 + erf(x / Math.SQRT2));
+      }
+
+      function restAdj(days) {
+        if (days === 0) return -2.4;
+        if (days >= 2) return 1.5;
+        return 0.0;
+      }
+
+      function setVenue(isHome) {
+        isHomeGame = isHome;
+        const btnHome = document.getElementById("btnVenueHome");
+        const btnAway = document.getElementById("btnVenueAway");
+        if (isHome) {
+          btnHome.style.borderColor = "#00B2A9";
+          btnHome.style.background = "rgba(0, 178, 169, 0.18)";
+          btnHome.style.color = "#F6F8FA";
+          btnAway.style.borderColor = "#28313A";
+          btnAway.style.background = "#161A1F";
+          btnAway.style.color = "#9DA7B0";
+        } else {
+          btnAway.style.borderColor = "#00B2A9";
+          btnAway.style.background = "rgba(0, 178, 169, 0.18)";
+          btnAway.style.color = "#F6F8FA";
+          btnHome.style.borderColor = "#28313A";
+          btnHome.style.background = "#161A1F";
+          btnHome.style.color = "#9DA7B0";
+        }
+        recalculateSim();
+      }
+
+      function recalculateSim() {
+        const oppSelect = document.getElementById("simOpponent");
+        const oppAbbr = oppSelect.value;
+        const opp = TEAMS_DATA[oppAbbr];
+        if (!opp) return;
+
+        const spursRestDays = parseInt(document.getElementById("simSpursRest").value, 10);
+        const oppRestDays = parseInt(document.getElementById("simOppRest").value, 10);
+
+        const homeBoost = isHomeGame ? 2.8 : -2.8;
+        const restBoost = restAdj(spursRestDays) - restAdj(oppRestDays);
+        const gamePace = (SPURS_BASE.pace + opp.pace) / 2.0;
+
+        const spursExpRtg = (SPURS_BASE.ortg + opp.drtg) / 2.0 + (homeBoost / 2.0) + (restBoost / 2.0);
+        const oppExpRtg   = (opp.ortg + SPURS_BASE.drtg) / 2.0 - (homeBoost / 2.0) - (restBoost / 2.0);
+
+        const spursPts = (spursExpRtg * gamePace) / 100.0;
+        const oppPts = (oppExpRtg * gamePace) / 100.0;
+
+        let projMargin = spursPts - oppPts;
+        if (opp.h2h_g > 0) {
+          projMargin = (projMargin * 0.70) + (opp.h2h_margin * 0.30);
+        }
+
+        const stdDev = 11.5;
+        const zWin = projMargin / stdDev;
+        const winProb = (normCdf(zWin) * 100).toFixed(1);
+
+        const z10 = (projMargin - 9.5) / stdDev;
+        const doubleDigit = (normCdf(z10) * 100).toFixed(1);
+
+        const z15 = (projMargin - 14.5) / stdDev;
+        const blowout = (normCdf(z15) * 100).toFixed(1);
+
+        const z20 = (projMargin - 19.5) / stdDev;
+        const demo = (normCdf(z20) * 100).toFixed(1);
+
+        // Update DOM
+        document.getElementById("simVenueLabel").innerText = isHomeGame ? "FROST BANK CENTER (HOME)" : "ROAD CONTEST (AWAY)";
+        document.getElementById("simSpursScore").innerText = Math.round(spursPts);
+        document.getElementById("simOppScore").innerText = Math.round(oppPts);
+        document.getElementById("simOppNameShort").innerText = opp.name.toUpperCase();
+
+        const marginEl = document.getElementById("simMarginVal");
+        marginEl.innerText = (projMargin >= 0 ? "+" : "") + projMargin.toFixed(1) + " PTS";
+        marginEl.style.color = projMargin >= 0 ? "#00B2A9" : "#EF426F";
+
+        document.getElementById("simWinPct").innerText = winProb + "%";
+        document.getElementById("simWinBar").style.width = winProb + "%";
+
+        document.getElementById("simDoubleDigitPct").innerText = doubleDigit + "%";
+        document.getElementById("simBlowoutPct").innerText = blowout + "%";
+        document.getElementById("simDemolitionPct").innerText = demo + "%";
+
+        const badgeEl = document.getElementById("simTierBadge");
+        const descEl = document.getElementById("simTierDesc");
+        const boardEl = document.getElementById("simBoard");
+
+        let tier = "";
+        let desc = "";
+        let color = "";
+
+        if (projMargin >= 12.0 || blowout >= 40.0) {
+          tier = "💥 Complete Demolition";
+          desc = "Spurs hold overwhelming statistical matchup advantages across paint and pace.";
+          color = "#00B2A9";
+        } else if (projMargin >= 5.0 || doubleDigit >= 45.0) {
+          tier = "🔨 Decisive Beatdown";
+          desc = "Spurs strongly favored to pull away by double-digits in the second half.";
+          color = "#C4CED4";
+        } else if (projMargin >= -1.0) {
+          tier = "⏱️ Crunch-Time Battle";
+          desc = "Projected 4th-quarter nail-biter decided by clutch execution and free throws.";
+          color = "#FF8200";
+        } else {
+          tier = "⚠️ High-Stakes Dogfight";
+          desc = "Upset alert required: Spurs must dominate rim protection and turnover margins.";
+          color = "#EF426F";
+        }
+
+        badgeEl.innerText = tier;
+        badgeEl.style.color = color;
+        badgeEl.style.borderColor = color;
+        descEl.innerText = desc;
+        descEl.style.borderLeftColor = color;
+        boardEl.style.borderTop = "3px solid " + color;
+
+        document.getElementById("simNetRtgDelta").innerText = "Rest Diff: " + (restBoost >= 0 ? "+" : "") + restBoost.toFixed(1) + " pts";
+      }
+
+      function filterOpponents() {
+        var input = document.getElementById("oppSearch");
+        var filter = input.value.toUpperCase();
+        var rows = document.getElementsByClassName("opp-row");
+        for (var i = 0; i < rows.length; i++) {
+          var txt = rows[i].textContent || rows[i].innerText;
+          rows[i].style.display = txt.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+        }
+      }
+
+      // Initialize on page load
+      document.addEventListener("DOMContentLoaded", function() {
+        recalculateSim();
+      });
+      // Also execute immediately in case DOM is already ready
+      setTimeout(recalculateSim, 50);
+    </script>
+    
+  </main>
+  
+    <footer>
+      <div class="alamo-footer-seal" aria-hidden="true">
+        <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon"><path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/><path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/><path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/></svg>
+      </div>
+      <p class="stonecutter">
+        &ldquo;When nothing seems to help, I go and look at a stonecutter hammering away at his rock,
+        perhaps a hundred times without as much as a crack showing in it. Yet at the hundred and first blow
+        it will split in two, and I know it was not that last blow that did it, but all that had gone before.&rdquo;
+        <br>&mdash; Jacob Riis / San Antonio Spurs Creed
+      </p>
+      <p>The Alamo City &bull; San Antonio Spurs Analytics Suite &bull; Silver &amp; Black Performance Intelligence</p>
+    </footer>
+    
+</body>
+</html>

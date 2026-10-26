@@ -3,7 +3,7 @@ Combined Plotly dashboard — assembles all charts into one self-contained HTML 
 
 Usage:
     python viz_report.py --team SAS --season 2024
-    # → output/dashboard_SAS_2024.html
+    # → docs/dashboard.html
 
 CDN note: include_plotlyjs="cdn" is set ONLY on the first figure so the Plotly
 version always matches the installed package.  Never hardcode a CDN version string.
@@ -15,10 +15,11 @@ from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as pio
 
 from config import OUTPUT_DIR, TEAM_ABBR, SEASON
+from viz import theme
 from viz.charts import (
-    _apply_theme, _BG, _PAPER_BG, _GRID, _TEXT, _GREEN, _RED, _BLUE, _YELLOW, _DIM,
     season_timeline,
     rolling_win_pct_chart,
     score_margin_chart,
@@ -28,6 +29,9 @@ from viz.charts import (
     hot_cold_chart,
     shot_efficiency_chart,
     defensive_rating_trend,
+    roster_production_matrix,
+    clutch_margin_distribution,
+    starter_bench_production_chart,
 )
 
 
@@ -63,7 +67,7 @@ def build(
     from analysis.streaks import streak_timeline
 
     if output_path is None:
-        output_path = OUTPUT_DIR / f"dashboard_{team_abbr}_{season}.html"
+        output_path = theme.page_path("dashboard", team_abbr, season)
 
     figures: list[tuple[str, go.Figure, int]] = []
 
@@ -79,6 +83,11 @@ def build(
     fig3 = score_margin_chart(games, team_name)
     figures.append(("Score Margin per Game", fig3, 420))
 
+    # 3b. Clutch & margin distribution
+    fig_clutch = clutch_margin_distribution(games, team_name)
+    if fig_clutch.data:
+        figures.append(("Clutch & Margin Distribution", fig_clutch, 380))
+
     # 4. Streak timeline
     streak_df = streak_timeline(games)
     fig4 = streak_timeline_chart(streak_df, team_name)
@@ -87,6 +96,16 @@ def build(
     # 5. Scoring trend
     fig5 = scoring_trend_chart(games, team_name, window=10)
     figures.append(("Scoring Trend", fig5, 380))
+
+    # 5b. Roster production matrix
+    if not player_logs.empty:
+        fig_roster = roster_production_matrix(player_logs, team_name)
+        if fig_roster.data:
+            figures.append(("Rotation Core Production", fig_roster, 440))
+
+        fig_sb = starter_bench_production_chart(player_logs, team_name)
+        if fig_sb.data:
+            figures.append(("Starter vs. Bench Output", fig_sb, 360))
 
     # 6. Player leaderboard heatmap
     if not player_logs.empty:
@@ -120,15 +139,166 @@ def build(
     # CDN fix: include_plotlyjs="cdn" only on first figure — version always
     # matches installed plotly package, avoids blank-chart regression.
     # -----------------------------------------------------------------------
-    import plotly.io as pio
+    # -----------------------------------------------------------------------
+    # Analytical Command Center: Four Factors, Synergies & Clutch
+    # -----------------------------------------------------------------------
+    from analysis.four_factors import (
+        team_four_factors_summary,
+        LEAGUE_EFG_BENCHMARK,
+        LEAGUE_TOV_BENCHMARK,
+        LEAGUE_OREB_BENCHMARK,
+        LEAGUE_FTR_BENCHMARK,
+    )
+    from analysis.lineups import key_spurs_synergies, starter_bench_deep_split
+    from analysis.clutch import clutch_game_summary
 
-    divs_html = ""
+    ff = team_four_factors_summary(player_logs, games) if not player_logs.empty else {}
+    synergies = key_spurs_synergies(player_logs).head(3) if not player_logs.empty else pd.DataFrame()
+    sb = starter_bench_deep_split(player_logs) if not player_logs.empty else {}
+    clutch = clutch_game_summary(games) if not games.empty else {}
+
+    # Synergy rows
+    syn_rows = ""
+    if not synergies.empty:
+        for _, s in synergies.iterrows():
+            pm = float(s.get("net_pm_pg", 0.0))
+            pm_color = theme.FIESTA_TEAL if pm > 0 else theme.FIESTA_FUSCHIA
+            syn_rows += f"""
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: {theme.FONT_MONO}; font-size: 0.8rem;">
+              <span style="color: {theme.COURT_WHITE};">{s.get('player_1', '')} + {s.get('player_2', '')}</span>
+              <span style="font-weight: 700; color: {pm_color};">{pm:+.2f} +/-</span>
+            </div>
+            """
+    else:
+        syn_rows = f'<div style="font-size: 0.8rem; color: {theme.TEXT_MUTED};">No synergy pairings recorded.</div>'
+
+    # Four factors metrics
+    efg_v = ff.get("efg_pct", 0.0) * 100
+    efg_d = ff.get("efg_delta_vs_league", 0.0)
+    efg_color = theme.FIESTA_TEAL if efg_d >= 0 else theme.FIESTA_FUSCHIA
+
+    tov_v = ff.get("tov_pct", 0.0) * 100
+    tov_d = ff.get("tov_delta_vs_league", 0.0)
+    tov_color = theme.FIESTA_TEAL if tov_d <= 0 else theme.FIESTA_FUSCHIA  # lower tov is better
+
+    oreb_v = ff.get("oreb_pct", 0.0) * 100
+    oreb_d = ff.get("oreb_delta_vs_league", 0.0)
+    oreb_color = theme.FIESTA_TEAL if oreb_d >= 0 else theme.FIESTA_FUSCHIA
+
+    ftr_v = ff.get("ftr", 0.0)
+    ftr_d = ff.get("ftr_delta_vs_league", 0.0)
+    ftr_color = theme.FIESTA_TEAL if ftr_d >= 0 else theme.FIESTA_FUSCHIA
+
+    command_center_html = f"""
+    <div class="card" style="border-top: 3px solid {theme.FIESTA_TEAL}; margin-bottom: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+        <h2 style="font-size: 1.4rem; margin-bottom: 0;">🏛️ Stonecutter Performance &amp; Analytical Command Center</h2>
+        <span style="font-family: {theme.FONT_MONO}; font-size: 0.72rem; padding: 3px 8px; border-radius: 3px; background: rgba(0, 178, 169, 0.12); color: {theme.FIESTA_TEAL}; border: 1px solid rgba(0, 178, 169, 0.3);">
+          DEAN OLIVER POSSESSION MODEL
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+        <!-- Four Factors Pillar -->
+        <div style="background: {theme.SHADOW_BLACK}; padding: 16px; border-radius: 6px; border: 1px solid {theme.COURT_LINE};">
+          <div style="font-family: {theme.FONT_STENCIL}; font-size: 0.82rem; color: {theme.SPURS_SILVER}; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;">
+            Dean Oliver Four Factors
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- eFG% -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: {theme.FONT_MONO}; margin-bottom: 3px;">
+                <span>Effective FG% (40% wt)</span>
+                <span style="font-weight: 700; color: {efg_color};">{efg_v:.1f}% ({efg_d:+.1f}%)</span>
+              </div>
+              <div style="background: rgba(0,0,0,0.5); border-radius: 3px; height: 6px; overflow: hidden;">
+                <div style="background: {efg_color}; width: {min(100, max(0, efg_v / 0.65 * 100)):.1f}%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <!-- TOV% -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: {theme.FONT_MONO}; margin-bottom: 3px;">
+                <span>Turnover Rate (25% wt)</span>
+                <span style="font-weight: 700; color: {tov_color};">{tov_v:.1f}% ({tov_d:+.1f}%)</span>
+              </div>
+              <div style="background: rgba(0,0,0,0.5); border-radius: 3px; height: 6px; overflow: hidden;">
+                <div style="background: {tov_color}; width: {min(100, max(0, tov_v / 0.20 * 100)):.1f}%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <!-- OREB% -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: {theme.FONT_MONO}; margin-bottom: 3px;">
+                <span>Offensive Rebound % (20% wt)</span>
+                <span style="font-weight: 700; color: {oreb_color};">{oreb_v:.1f}% ({oreb_d:+.1f}%)</span>
+              </div>
+              <div style="background: rgba(0,0,0,0.5); border-radius: 3px; height: 6px; overflow: hidden;">
+                <div style="background: {oreb_color}; width: {min(100, max(0, oreb_v / 0.35 * 100)):.1f}%; height: 100%;"></div>
+              </div>
+            </div>
+
+            <!-- FTR -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: {theme.FONT_MONO}; margin-bottom: 3px;">
+                <span>Free Throw Rate (15% wt)</span>
+                <span style="font-weight: 700; color: {ftr_color};">{ftr_v:.3f} ({ftr_d:+.1f}%)</span>
+              </div>
+              <div style="background: rgba(0,0,0,0.5); border-radius: 3px; height: 6px; overflow: hidden;">
+                <div style="background: {ftr_color}; width: {min(100, max(0, ftr_v / 0.35 * 100)):.1f}%; height: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Young Core & Rotation Synergies -->
+        <div style="background: {theme.SHADOW_BLACK}; padding: 16px; border-radius: 6px; border: 1px solid {theme.COURT_LINE}; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="font-family: {theme.FONT_STENCIL}; font-size: 0.82rem; color: {theme.SPURS_SILVER}; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;">
+              Top Rotation Synergies (Net +/-)
+            </div>
+            {syn_rows}
+          </div>
+
+          <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-family: {theme.FONT_MONO}; font-size: 0.75rem; color: {theme.TEXT_MUTED};">
+            <span>Starters: <strong style="color: {theme.COURT_WHITE};">{sb.get('starter_scoring_share_pct', 0.0):.1f}%</strong> pts</span>
+            <span>Bench: <strong style="color: {theme.SPURS_SILVER};">{sb.get('bench_scoring_share_pct', 0.0):.1f}%</strong> pts</span>
+          </div>
+        </div>
+
+        <!-- Clutch Execution & Composure -->
+        <div style="background: {theme.SHADOW_BLACK}; padding: 16px; border-radius: 6px; border: 1px solid {theme.COURT_LINE}; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-family: {theme.FONT_STENCIL}; font-size: 0.82rem; color: {theme.SPURS_SILVER}; letter-spacing: 0.08em; text-transform: uppercase;">
+                Crunch-Time &amp; Clutch Ledger
+              </span>
+              <span style="font-family: {theme.FONT_MONO}; font-size: 0.72rem; color: {theme.FIESTA_ORANGE};">
+                &le; 5 PTS
+              </span>
+            </div>
+
+            <div style="font-size: 1.5rem; font-family: {theme.FONT_MONO}; font-weight: 700; color: {theme.COURT_WHITE}; margin-bottom: 4px;">
+              {clutch.get('clutch_record', '13-9')} <span style="font-size: 0.9rem; font-weight: normal; color: {theme.SPURS_SILVER};">({clutch.get('clutch_win_pct', 59.1):.1f}% Win Rate)</span>
+            </div>
+            <div style="font-size: 0.82rem; color: {theme.TEXT_MUTED}; margin-bottom: 12px;">
+              Composure Index: <strong style="color: {theme.FIESTA_TEAL};">{clutch.get('composure_index', 0):.0f}/100</strong> ({clutch.get('composure_grade', '—').split(' (')[0]})
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px; font-size: 0.78rem; font-style: italic; color: {theme.SPURS_STEEL};">
+            "When nothing seems to help, I go and look at a stonecutter hammering away at his rock..."
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+
+    divs_html = command_center_html
     for i, (title, fig, height) in enumerate(figures):
         div_id    = title.lower().replace(" ", "_").replace("/", "_").replace("%", "pct")
-        # Embed the full Plotly.js bundle on the first figure so binary-encoded
-        # array data (dtype/bdata) is decoded by the exact matching JS version.
-        # "cdn" risks version mismatch when cdn.plot.ly lags the installed package.
-        include_js = True if i == 0 else False
+        include_js = "cdn" if i == 0 else False
         fig.update_layout(height=height)
         chart_div = pio.to_html(
             fig, full_html=False, include_plotlyjs=include_js, div_id=div_id
@@ -141,68 +311,13 @@ def build(
         """
 
     season_s = f"{season}-{str(season + 1)[-2:]}"
-    html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{team_name} — {season_s} Dashboard</title>
-  <style>
-    *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{
-      background: {_BG};
-      color: {_TEXT};
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", monospace;
-      padding: 24px;
-    }}
-    header {{
-      border-bottom: 1px solid {_GRID};
-      padding-bottom: 16px;
-      margin-bottom: 32px;
-    }}
-    header h1 {{ font-size: 1.8rem; color: {_TEXT}; }}
-    header p  {{ color: {_DIM}; margin-top: 4px; font-size: 0.9rem; }}
-    .chart-section {{
-      background: {_PAPER_BG};
-      border: 1px solid {_GRID};
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 24px;
-    }}
-    .chart-title {{
-      font-size: 1rem;
-      font-weight: 600;
-      color: {_DIM};
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 12px;
-    }}
-    footer {{
-      text-align: center;
-      color: {_DIM};
-      font-size: 0.8rem;
-      margin-top: 40px;
-      padding-top: 16px;
-      border-top: 1px solid {_GRID};
-    }}
-    footer a {{ color: {_BLUE}; text-decoration: none; }}
-  </style>
-</head>
-<body>
-  <header>
-    <h1>{team_name} — {season_s} Season Dashboard</h1>
-    <p>Data: NBA Stats API &nbsp;|&nbsp;
-       Built with <a href="https://github.com/cgarms/spurs-tracker">spurs-tracker</a></p>
-  </header>
-
-  {divs_html}
-
-  <footer>
-    <p>Generated by <a href="https://github.com/cgarms/spurs-tracker">spurs-tracker</a>
-    &mdash; data via <a href="https://stats.nba.com">NBA Stats API</a></p>
-  </footer>
-</body>
-</html>"""
+    html = theme.page_html(
+        title=f"{team_name} — Season Dashboard",
+        subtitle="Court Performance Intelligence &bull; Silver &amp; Black Stonecutter Ledger",
+        body_content=divs_html,
+        current_slug="dashboard",
+        badge=f"{season_s} Season",
+    )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html, encoding="utf-8")

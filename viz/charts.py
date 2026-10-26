@@ -12,39 +12,31 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 
+from viz import theme
+
 # ---------------------------------------------------------------------------
-# Shared dark theme
+# Spurs Silver & Black + Fiesta design system (mapped from viz.theme)
 # ---------------------------------------------------------------------------
 
-_BG          = "#0e1117"
-_PAPER_BG    = "#161b22"
-_GRID        = "#30363d"
-_TEXT        = "#e6edf3"
-_GREEN       = "#3fb950"
-_RED         = "#f85149"
-_BLUE        = "#58a6ff"
-_YELLOW      = "#d29922"
-_DIM         = "#8b949e"
-_SPURS_SILVER = "#c4ced4"
-_SPURS_BLACK  = "#000000"
-
-_LAYOUT_BASE = dict(
-    paper_bgcolor=_PAPER_BG,
-    plot_bgcolor=_BG,
-    font=dict(color=_TEXT, family="monospace"),
-    xaxis=dict(gridcolor=_GRID, zerolinecolor=_GRID),
-    yaxis=dict(gridcolor=_GRID, zerolinecolor=_GRID),
-    margin=dict(l=60, r=30, t=60, b=50),
-    legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor=_GRID),
-)
+_BG           = theme.FROST_BANK_FLOOR
+_PAPER_BG     = theme.SILVER_SLATE
+_SHADOW_BG    = theme.SHADOW_BLACK
+_GRID         = theme.COURT_LINE
+_TEXT         = theme.COURT_WHITE
+_GREEN        = theme.FIESTA_TEAL
+_RED          = theme.FIESTA_FUSCHIA
+_BLUE         = theme.SPURS_SILVER
+_YELLOW       = theme.FIESTA_ORANGE
+_DIM          = theme.TEXT_MUTED
+_SPURS_SILVER = theme.SPURS_SILVER
+_SPURS_STEEL  = theme.SPURS_STEEL
+_SPURS_BLACK  = theme.FROST_BANK_FLOOR
+_GOLD         = theme.HARDWOOD_GOLD
 
 
 def _apply_theme(fig: go.Figure, **extra) -> go.Figure:
-    layout = {**_LAYOUT_BASE, **extra}
-    fig.update_layout(**layout)
-    fig.update_xaxes(gridcolor=_GRID, zerolinecolor=_GRID)
-    fig.update_yaxes(gridcolor=_GRID, zerolinecolor=_GRID)
-    return fig
+    """Apply the official Spurs theme layout to a Plotly figure."""
+    return theme.apply(fig, **extra)
 
 
 # ---------------------------------------------------------------------------
@@ -106,7 +98,7 @@ def rolling_win_pct_chart(
         return go.Figure()
 
     f["win_flag"] = (f["result"] == "W").astype(int)
-    colors = [_BLUE, _YELLOW, _GREEN, _RED]
+    colors = [_GREEN, _BLUE, _YELLOW, _GOLD]
 
     fig = go.Figure()
     for i, w in enumerate(windows):
@@ -517,3 +509,195 @@ def pace_comparison_chart(
         yaxis_range=[0.2, 0.9],
     )
     return fig
+
+
+# ---------------------------------------------------------------------------
+# Full Roster Production Matrix
+# ---------------------------------------------------------------------------
+
+def roster_production_matrix(player_logs: pd.DataFrame, team_name: str, top_n: int = 10) -> go.Figure:
+    """
+    Multi-metric comparison for top rotation players: PPG, RPG, APG, and TS%.
+    Provides a full-team view beyond any single player.
+    """
+    if player_logs.empty:
+        return go.Figure()
+
+    agg = player_logs.groupby("player_name").agg(
+        games=("game_id", "count"),
+        pts=("pts", "mean"),
+        reb=("reb", "mean"),
+        ast=("ast", "mean"),
+        ts_pct=("ts_pct", "mean"),
+        plus_minus=("plus_minus", "mean"),
+        minutes=("min", "mean"),
+    ).reset_index()
+
+    # Filter to players with at least 5 games or top by minutes
+    agg = agg[agg["games"] >= 3].sort_values("pts", ascending=True).tail(top_n)
+    if agg.empty:
+        return go.Figure()
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Bar(
+        y=agg["player_name"],
+        x=agg["pts"].round(1),
+        name="PTS",
+        orientation="h",
+        marker=dict(color=_SPURS_SILVER),
+        hovertemplate="%{y}<br>PTS: %{x:.1f}<extra></extra>",
+    ))
+    fig.add_trace(go.Bar(
+        y=agg["player_name"],
+        x=agg["reb"].round(1),
+        name="REB",
+        orientation="h",
+        marker=dict(color=_GREEN),
+        hovertemplate="%{y}<br>REB: %{x:.1f}<extra></extra>",
+    ))
+    fig.add_trace(go.Bar(
+        y=agg["player_name"],
+        x=agg["ast"].round(1),
+        name="AST",
+        orientation="h",
+        marker=dict(color=_YELLOW),
+        hovertemplate="%{y}<br>AST: %{x:.1f}<extra></extra>",
+    ))
+
+    _apply_theme(fig,
+        title=dict(text=f"{team_name} — Rotation Core Production (Top {len(agg)} Players)", font=dict(size=16)),
+        barmode="group",
+        xaxis_title="Per Game Average",
+        yaxis_title="",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        height=max(400, len(agg) * 36 + 100),
+    )
+    return fig
+
+
+# ---------------------------------------------------------------------------
+# Clutch & Margin Distribution
+# ---------------------------------------------------------------------------
+
+def clutch_margin_distribution(games: pd.DataFrame, team_name: str) -> go.Figure:
+    """
+    Distribution of game outcomes by margin:
+      - Blowout Wins (+15+)
+      - Decisive Wins (+6 to +14)
+      - Clutch Wins (+1 to +5)
+      - Clutch Losses (-1 to -5)
+      - Decisive Losses (-6 to -14)
+      - Blowout Losses (-15+)
+    Adapts to any season outcome (blowout heavy, nail-biter heavy, etc.).
+    """
+    f = games[games["status"] == "Final"].copy()
+    if f.empty or "margin" not in f.columns:
+        return go.Figure()
+
+    bins = [-999, -15, -6, 0, 5, 14, 999]
+    labels = [
+        "Blowout Loss (-15+)",
+        "Decisive Loss (-6 to -14)",
+        "Clutch Loss (-1 to -5)",
+        "Clutch Win (+1 to +5)",
+        "Decisive Win (+6 to +14)",
+        "Blowout Win (+15+)",
+    ]
+    colors = [
+        _RED,
+        "#d35d79",
+        "#a87c88",
+        "#69b8b2",
+        _GREEN,
+        _YELLOW,
+    ]
+
+    f["margin_bucket"] = pd.cut(f["margin"], bins=bins, labels=labels)
+    counts = f["margin_bucket"].value_counts().reindex(labels, fill_value=0)
+
+    fig = go.Figure(go.Bar(
+        x=counts.index,
+        y=counts.values,
+        marker=dict(color=colors),
+        text=counts.values,
+        textposition="outside",
+        hovertemplate="%{x}: %{y} games<extra></extra>",
+    ))
+
+    _apply_theme(fig,
+        title=dict(text=f"{team_name} — Game Margin & Clutch Distribution", font=dict(size=16)),
+        xaxis_title="Outcome Tier",
+        yaxis_title="Number of Games",
+        xaxis_tickangle=-20,
+        height=380,
+    )
+    return fig
+
+
+# ---------------------------------------------------------------------------
+# Starter vs. Bench Contribution Split
+# ---------------------------------------------------------------------------
+
+def starter_bench_production_chart(player_logs: pd.DataFrame, team_name: str) -> go.Figure:
+    """
+    Compare aggregate scoring, rebounding, and playmaking between
+    starting rotation and second unit.
+    """
+    if player_logs.empty:
+        return go.Figure()
+
+    per_game = player_logs.groupby(["player_id", "player_name"]).agg(
+        games=("game_id", "count"),
+        avg_min=("min", "mean"),
+        pts=("pts", "mean"),
+        reb=("reb", "mean"),
+        ast=("ast", "mean"),
+    ).reset_index()
+
+    if len(per_game) < 5:
+        return go.Figure()
+
+    top5_ids = set(per_game.nlargest(5, "avg_min")["player_id"])
+    starters = per_game[per_game["player_id"].isin(top5_ids)]
+    bench = per_game[~per_game["player_id"].isin(top5_ids)]
+
+    categories = ["Total PTS/G", "Total REB/G", "Total AST/G"]
+    starter_vals = [
+        round(starters["pts"].sum(), 1),
+        round(starters["reb"].sum(), 1),
+        round(starters["ast"].sum(), 1),
+    ]
+    bench_vals = [
+        round(bench["pts"].sum(), 1),
+        round(bench["reb"].sum(), 1),
+        round(bench["ast"].sum(), 1),
+    ]
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=starter_vals,
+        name="Starting 5 Unit",
+        marker=dict(color=_SPURS_SILVER),
+        text=starter_vals,
+        textposition="outside",
+    ))
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=bench_vals,
+        name="Second Unit (Bench)",
+        marker=dict(color=_GREEN),
+        text=bench_vals,
+        textposition="outside",
+    ))
+
+    _apply_theme(fig,
+        title=dict(text=f"{team_name} — Starting 5 vs. Second Unit Output", font=dict(size=16)),
+        barmode="group",
+        yaxis_title="Aggregate Output",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        height=360,
+    )
+    return fig
+

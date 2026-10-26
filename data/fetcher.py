@@ -104,16 +104,23 @@ class Fetcher:
         season: int,
         client: NBAClient | None = None,
         force_refresh: bool = False,
+        season_type: str = "Regular Season",
     ) -> None:
-        self.team_id   = team_id
-        self.season    = season
-        self.season_s  = season_str(season)
-        self.client    = client or NBAClient()
-        self.force     = force_refresh
-        self.team_abbr = _ID_TO_ABBR.get(team_id, "")
+        self.team_id     = team_id
+        self.season      = season
+        self.season_s    = season_str(season)
+        self.client      = client or NBAClient()
+        self.force       = force_refresh
+        self.season_type = season_type
+        self.team_abbr   = _ID_TO_ABBR.get(team_id, "")
 
     def _cache(self, name: str) -> Path:
-        return CACHE_DIR / f"{name}_{self.team_id}_{self.season}.parquet"
+        suffix = ""
+        if self.season_type == "Pre Season":
+            suffix = "_preseason"
+        elif self.season_type == "Playoffs":
+            suffix = "_playoffs"
+        return CACHE_DIR / f"{name}_{self.team_id}_{self.season}{suffix}.parquet"
 
     def _needs_refresh(self, name: str) -> bool:
         return self.force or not self._cache(name).exists()
@@ -122,19 +129,19 @@ class Fetcher:
     # Public entry point
     # ------------------------------------------------------------------
 
-    def fetch_all(self) -> dict[str, pd.DataFrame]:
+    def fetch_all(self, incremental: bool = True) -> dict[str, pd.DataFrame]:
         """Fetch and cache all tables. Returns dict of DataFrames."""
-        log.info("=== Fetching all data: team=%d season=%s ===",
-                 self.team_id, self.season_s)
+        log.info("=== Fetching all data: team=%d season=%s (%s) ===",
+                 self.team_id, self.season_s, self.season_type)
 
         roster = fetch_roster(self.team_id, self.season, self.client, self.force)
 
-        if not self._needs_refresh("games") and not self._needs_refresh("player_game_log"):
+        if not self._needs_refresh("games") and not self._needs_refresh("player_game_log") and not incremental:
             log.info("All tables cached, loading from disk")
             games      = pd.read_parquet(self._cache("games"))
             player_log = pd.read_parquet(self._cache("player_game_log"))
         else:
-            games, player_log = self._fetch_boxscore_data()
+            games, player_log = self._fetch_boxscore_data(incremental=incremental)
 
         log.info("=== Fetch complete ===")
         return {
@@ -147,18 +154,21 @@ class Fetcher:
     # Core fetch: game log + boxscores in one pass
     # ------------------------------------------------------------------
 
-    def _fetch_boxscore_data(self) -> tuple[pd.DataFrame, pd.DataFrame]:
+    def _fetch_boxscore_data(self, incremental: bool = True) -> tuple[pd.DataFrame, pd.DataFrame]:
         """
         Fetch team game log + per-game boxscores.
+        Supports incremental updates: only fetches box scores for newly completed games.
         Returns (games_df, player_game_log_df).
         """
-        log.info("Fetching team game log for %s %s", self.team_abbr, self.season_s)
+        log.info("Fetching team game log for %s %s (%s)", self.team_abbr, self.season_s, self.season_type)
         game_log = self.client.get_team_game_log(
-            self.team_id, self.season_s, season_type="Regular Season"
+            self.team_id, self.season_s, season_type=self.season_type
         )
 
         if game_log.empty:
-            log.warning("No games found for team %d season %s", self.team_id, self.season_s)
+            log.warning("No games found for team %d season %s (%s)", self.team_id, self.season_s, self.season_type)
+            if self._cache("games").exists() and not self.force:
+                return pd.read_parquet(self._cache("games")), pd.read_parquet(self._cache("player_game_log"))
             games_df  = pd.DataFrame()
             games_df  = enforce_schema(games_df, GAMES_SCHEMA)
             plog_df   = pd.DataFrame()
@@ -167,14 +177,37 @@ class Fetcher:
             plog_df.to_parquet(self._cache("player_game_log"), index=False)
             return games_df, plog_df
 
+        existing_games = pd.DataFrame()
+        existing_plogs = pd.DataFrame()
+        existing_ids: set[str] = set()
+
+        if incremental and not self.force and self._cache("games").exists() and self._cache("player_game_log").exists():
+            try:
+                existing_games = pd.read_parquet(self._cache("games"))
+                existing_plogs = pd.read_parquet(self._cache("player_game_log"))
+                if not existing_games.empty and "game_id" in existing_games.columns:
+                    existing_ids = set(existing_games["game_id"].astype(str))
+            except Exception as e:
+                log.warning("Could not read existing cache for incremental check: %s", e)
+
+        # Filter game_log to only games that need fetching
+        if existing_ids:
+            games_to_fetch = game_log[~game_log["game_id"].astype(str).isin(existing_ids)]
+        else:
+            games_to_fetch = game_log
+
+        if games_to_fetch.empty and not existing_games.empty:
+            log.info("Incremental check: 0 new games to fetch. Existing %d games up to date.", len(existing_games))
+            return existing_games, existing_plogs
+
         # game_log from teamgamelog has: game_id, game_date, matchup, wl, pts (no plus_minus)
-        game_rows:  list[dict] = []
+        game_rows:   list[dict] = []
         player_rows: list[dict] = []
 
-        total = len(game_log)
-        log.info("Processing %d games...", total)
+        total = len(games_to_fetch)
+        log.info("Processing %d games (incremental: %d new / %d total in log)...", total, total, len(game_log))
 
-        for i, (_, gl_row) in enumerate(game_log.iterrows()):
+        for i, (_, gl_row) in enumerate(games_to_fetch.iterrows()):
             game_id   = str(gl_row["game_id"])
             raw_date  = gl_row.get("game_date", "")
             game_date = _parse_game_date(raw_date)
@@ -313,15 +346,28 @@ class Fetcher:
             if (i + 1) % 10 == 0:
                 log.info("  Processed %d / %d games", i + 1, total)
 
-        games_df = pd.DataFrame(game_rows)
+        new_games_df = pd.DataFrame(game_rows)
+        new_plog_df  = pd.DataFrame(player_rows)
+
+        if not existing_games.empty and not new_games_df.empty:
+            games_df = pd.concat([existing_games, new_games_df], ignore_index=True)
+            games_df = games_df.drop_duplicates(subset=["game_id"]).sort_values("game_date").reset_index(drop=True)
+        else:
+            games_df = new_games_df if not new_games_df.empty else existing_games
+
+        if not existing_plogs.empty and not new_plog_df.empty:
+            plog_df = pd.concat([existing_plogs, new_plog_df], ignore_index=True)
+            plog_df = plog_df.drop_duplicates(subset=["game_id", "player_id"]).sort_values("game_date").reset_index(drop=True)
+        else:
+            plog_df = new_plog_df if not new_plog_df.empty else existing_plogs
+
         games_df = enforce_schema(games_df, GAMES_SCHEMA)
         games_df.to_parquet(self._cache("games"), index=False)
-        log.info("Cached %d games → %s", len(games_df), self._cache("games"))
+        log.info("Cached %d total games → %s", len(games_df), self._cache("games"))
 
-        plog_df = pd.DataFrame(player_rows)
         plog_df = enforce_schema(plog_df, PLAYER_GAME_LOG_SCHEMA)
         plog_df.to_parquet(self._cache("player_game_log"), index=False)
-        log.info("Cached %d player-game rows → %s", len(plog_df), self._cache("player_game_log"))
+        log.info("Cached %d total player-game rows → %s", len(plog_df), self._cache("player_game_log"))
 
         return games_df, plog_df
 
