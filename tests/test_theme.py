@@ -37,7 +37,10 @@ def test_page_html_renders_structure():
     assert "<!DOCTYPE html>" in html
     assert "Test Page" in html
     assert "Court Content" in html
-    assert "stonecutter" in html
+    assert "Created and Maintained by" in html
+    assert '<a href="https://www.corygarms.com" target="_blank" rel="noopener">Cory Garms</a>' in html
+    assert 'href="https://x.com/cory_garms"' in html
+    assert 'href="https://github.com/cory-garms"' in html
 
 
 def test_alamo_styling_elements():
@@ -59,3 +62,10 @@ def test_alamo_styling_elements():
     assert "The Alamo City" in html
     assert "alamo-roofline-crown" in html
     assert "alamo-footer-seal" in html
+
+
+def test_font_constants_are_safe_inside_style_attributes():
+    # Interpolated into style="..."; a double quote would end the attribute and drop the font
+    for name in dir(theme):
+        if name.startswith("FONT_") and name != "FONTS_LINK":
+            assert '"' not in getattr(theme, name), name

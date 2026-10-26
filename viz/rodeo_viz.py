@@ -10,7 +10,6 @@ from __future__ import annotations
 from pathlib import Path
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.io as pio
 
 import config
 from config import TEAM_ABBR, SEASON, season_str
@@ -189,7 +188,7 @@ def build_rodeo_page(
         return f"""
         <div class="card" style="margin-bottom: 0; border-top: 3px solid {accent_color};">
           <div style="font-family: {theme.FONT_MONO}; font-size: 0.75rem; color: {accent_color}; text-transform: uppercase; letter-spacing: 0.1em;">{title}</div>
-          <div style="font-family: {theme.FONT_DISPLAY}; font-size: 2.6rem; color: {theme.COURT_WHITE}; margin: 4px 0 2px;">{rec}</div>
+          <div style="font-family: {theme.FONT_LED}; font-size: 3.2rem; color: {theme.COURT_WHITE}; margin: 4px 0 2px;">{rec}</div>
           <div style="font-family: {theme.FONT_MONO}; font-size: 0.85rem; color: {theme.TEXT_MUTED};">Win%: {pct} &bull; Net: {net}</div>
           <div style="font-size: 0.8rem; color: {theme.COURT_WHITE}; margin-top: 8px; border-top: 1px solid {theme.COURT_LINE}; padding-top: 6px;">
             PPG: {ppg} &bull; Opp PPG: {opp}
@@ -214,9 +213,9 @@ def build_rodeo_page(
     fig_hist.update_layout(height=400)
     fig_ratings.update_layout(height=400)
 
-    div_margin = pio.to_html(fig_margin, full_html=False, include_plotlyjs="cdn", div_id="rodeo_margin_chart")
-    div_hist = pio.to_html(fig_hist, full_html=False, include_plotlyjs=False, div_id="rodeo_historical_chart")
-    div_ratings = pio.to_html(fig_ratings, full_html=False, include_plotlyjs=False, div_id="rodeo_ratings_chart")
+    div_margin = theme.chart_html(fig_margin, "rodeo_margin_chart", include_plotlyjs="cdn")
+    div_hist = theme.chart_html(fig_hist, "rodeo_historical_chart", include_plotlyjs=False)
+    div_ratings = theme.chart_html(fig_ratings, "rodeo_ratings_chart", include_plotlyjs=False)
 
     # 3. Historical Benchmark Table
     bench_rows = ""
@@ -278,10 +277,11 @@ def build_rodeo_page(
     season_s = season_str(season)
     html = theme.page_html(
         title="Rodeo Road Trip",
-        subtitle="Tracking the February Road Marathon Against Historical Spurs Championship Standards",
+        subtitle="The February road trip, game by game, against the championship-era trips since 2003.",
         body_content=body_content,
         current_slug="rodeo",
         badge=f"{season_s} Gauntlet",
+        games_played=int((games["status"] == "Final").sum()) if not games.empty else 0,
     )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)

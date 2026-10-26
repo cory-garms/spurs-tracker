@@ -214,13 +214,20 @@ def build_beautiful_game_post(ctx: dict[str, Any]) -> dict[str, str]:
     ast_pct = bg.get("assisted_fg_pct", 0.0) * 100
     apc = bg.get("assist_points_created_pg", 0.0)
 
-    passers = player_pass_contributors(player_logs, min_games=10)
+    # Ten games qualifies a passer once the season allows it; early on, require most of the games played
+    games_played = player_logs["game_id"].nunique() if not player_logs.empty else 0
+    passers = player_pass_contributors(player_logs, min_games=max(1, min(10, games_played - 1)))
     top_facilitators = ""
     if not passers.empty:
         top_facilitators = ", ".join([
             f"<strong>{r['player_name']}</strong> ({r['ast_pg']:.1f} APG, {r['ast_tov']:.2f} AST/TOV)"
             for _, r in passers.head(3).iterrows()
         ])
+    hub_paragraph = (
+        f"<p>The passing hub is anchored by {top_facilitators}, finding cutters and kicking out to open shooters "
+        f"as defenses collapse into the paint. When the ball moves with conviction, the Spurs offense operates at "
+        f"its highest expressive ceiling.</p>"
+    ) if top_facilitators else ""
 
     html = f"""
     <p class="essay-lead">
@@ -237,11 +244,7 @@ def build_beautiful_game_post(ctx: dict[str, Any]) -> dict[str, str]:
       originate from an assist, generating an estimated <strong>{apc} Assist Points Created (APC)</strong> per night.
     </p>
 
-    <p>
-      The passing hub is anchored by {top_facilitators}, finding cutters and kicking out to open shooters as defenses
-      collapse toward Wembanyama's gravity. When the ball moves with conviction, the Spurs offense operates at its highest
-      expressive ceiling.
-    </p>
+    {hub_paragraph}
     """
 
     return {

@@ -304,6 +304,8 @@ class Fetcher:
                         "min":        minutes,
                         "pts":        pts_p,
                         "reb":        oreb + dreb,
+                        "oreb":       oreb,
+                        "dreb":       dreb,
                         "ast":        _safe_int(pr.get("ast")),
                         "stl":        _safe_int(pr.get("stl")),
                         "blk":        _safe_int(pr.get("blk")),

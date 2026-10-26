@@ -39,6 +39,23 @@ def _apply_theme(fig: go.Figure, **extra) -> go.Figure:
     return theme.apply(fig, **extra)
 
 
+def _date_axis(dates: pd.Series) -> dict:
+    """
+    Date x-axis settings. Early in the season Plotly fills a few-day span with
+    hourly ticks ("12:00"), so pin ticks to whole days until the span is wide.
+    """
+    d = pd.to_datetime(dates)
+    axis = dict(xaxis_tickformat="%b %-d")
+    if not d.empty and (d.max() - d.min()).days < 21:
+        axis["xaxis_dtick"] = 86_400_000  # one day in ms
+    return axis
+
+
+def _game_number_axis(n_games: int) -> dict:
+    """Whole-number game ticks (no "Game 1.5")."""
+    return dict(xaxis_tickformat="d", xaxis_dtick=1 if n_games <= 15 else None)
+
+
 # ---------------------------------------------------------------------------
 # Season timeline  (cumulative W-L)
 # ---------------------------------------------------------------------------
@@ -76,6 +93,9 @@ def season_timeline(games: pd.DataFrame, team_name: str) -> go.Figure:
         title=dict(text=f"{team_name} — Season Timeline", font=dict(size=16)),
         xaxis_title="Game Number",
         yaxis_title="Cumulative Total",
+        yaxis_tickformat="d",
+        yaxis_dtick=1 if len(f) <= 15 else None,
+        **_game_number_axis(len(f)),
     )
     return fig
 
@@ -102,7 +122,7 @@ def rolling_win_pct_chart(
 
     fig = go.Figure()
     for i, w in enumerate(windows):
-        roll = f["win_flag"].rolling(w).mean()
+        roll = f["win_flag"].rolling(w, min_periods=1).mean()
         fig.add_trace(go.Scatter(
             x=f["game_date"], y=roll,
             name=f"{w}-Game Win%",
@@ -117,6 +137,7 @@ def rolling_win_pct_chart(
         xaxis_title="Date",
         yaxis_title="Win%",
         yaxis_range=[0, 1],
+        **_date_axis(f["game_date"]),
     )
     return fig
 
@@ -158,20 +179,20 @@ def score_margin_chart(games: pd.DataFrame, team_name: str) -> go.Figure:
     fig.add_trace(
         go.Scatter(
             x=f["game_n"], y=f["cum_margin"],
-            name="Cumulative",
-            mode="lines",
+            name="Running total",
+            mode="lines+markers",
             line=dict(color=_BLUE, width=2),
             hovertemplate="Game %{x}<br>Cumulative: %{y:+d}<extra></extra>",
         ),
-        secondary_y=True,
+        secondary_y=False,  # same scale as the bars, so the running total reads off the same axis
     )
     fig.add_hline(y=0, line_color=_DIM, line_width=1)
     _apply_theme(fig,
         title=dict(text=f"{team_name} — Score Margin per Game", font=dict(size=16)),
         xaxis_title="Game Number",
+        **_game_number_axis(len(f)),
     )
-    fig.update_yaxes(title_text="Game Margin", secondary_y=False, gridcolor=_GRID)
-    fig.update_yaxes(title_text="Cumulative",  secondary_y=True,  gridcolor=_GRID)
+    fig.update_yaxes(title_text="Points", secondary_y=False, gridcolor=_GRID)
     return fig
 
 
@@ -214,8 +235,8 @@ def scoring_trend_chart(
     if f.empty:
         return go.Figure()
 
-    f["roll_pts"]     = f["pts"].rolling(window).mean()
-    f["roll_opp_pts"] = f["opp_pts"].rolling(window).mean()
+    f["roll_pts"]     = f["pts"].rolling(window, min_periods=1).mean()
+    f["roll_opp_pts"] = f["opp_pts"].rolling(window, min_periods=1).mean()
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(
@@ -234,6 +255,7 @@ def scoring_trend_chart(
         title=dict(text=f"{team_name} — Scoring Trend ({window}-Game Rolling)", font=dict(size=16)),
         xaxis_title="Date",
         yaxis_title="Points",
+        **_date_axis(f["game_date"]),
     )
     return fig
 
@@ -409,6 +431,7 @@ def defensive_rating_trend(games: pd.DataFrame, team_name: str) -> go.Figure:
         title=dict(text=f"{team_name} — Defensive Rating Trend (10-Game Rolling)", font=dict(size=16)),
         xaxis_title="Date",
         yaxis_title="Defensive Rating",
+        **_date_axis(trend.index.to_series()),
     )
     return fig
 
@@ -517,13 +540,15 @@ def pace_comparison_chart(
 
 def roster_production_matrix(player_logs: pd.DataFrame, team_name: str, top_n: int = 10) -> go.Figure:
     """
-    Multi-metric comparison for top rotation players: PPG, RPG, APG, and TS%.
+    Multi-metric comparison for top rotation players: PPG, RPG, APG and minutes.
     Provides a full-team view beyond any single player.
     """
     if player_logs.empty:
         return go.Figure()
 
-    agg = player_logs.groupby("player_name").agg(
+    # Per-game averages over games actually played; DNP rows would drag every average down
+    played = player_logs[player_logs["min"] > 0]
+    agg = played.groupby("player_name").agg(
         games=("game_id", "count"),
         pts=("pts", "mean"),
         reb=("reb", "mean"),
@@ -564,6 +589,14 @@ def roster_production_matrix(player_logs: pd.DataFrame, team_name: str, top_n: i
         marker=dict(color=_YELLOW),
         hovertemplate="%{y}<br>AST: %{x:.1f}<extra></extra>",
     ))
+    fig.add_trace(go.Bar(
+        y=agg["player_name"],
+        x=agg["minutes"].round(1),
+        name="MIN",
+        orientation="h",
+        marker=dict(color=_RED),
+        hovertemplate="%{y}<br>MIN: %{x:.1f}<extra></extra>",
+    ))
 
     _apply_theme(fig,
         title=dict(text=f"{team_name} — Rotation Core Production (Top {len(agg)} Players)", font=dict(size=16)),
@@ -571,7 +604,7 @@ def roster_production_matrix(player_logs: pd.DataFrame, team_name: str, top_n: i
         xaxis_title="Per Game Average",
         yaxis_title="",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        height=max(400, len(agg) * 36 + 100),
+        height=max(400, len(agg) * 46 + 100),
     )
     return fig
 

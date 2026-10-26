@@ -10,8 +10,9 @@ env/
 # Jupyter
 .ipynb_checkpoints/
 
-# PNG exports (too large for git)
-docs/img/
+# PNG exports and full-resolution art originals stay local; the web-sized card art is published
+docs/img/*
+!docs/img/loteria/
 output/
 
 # OS

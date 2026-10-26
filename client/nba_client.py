@@ -236,15 +236,27 @@ class NBAClient:
     # League-wide stats (for rankings)
     # ------------------------------------------------------------------
 
+    # The league "dash" endpoints answer 500 unless every filter is present, even when empty
+    _DASH_FILTERS: dict[str, Any] = {
+        "PlusMinus": "N", "PaceAdjust": "N", "Rank": "N", "Month": 0, "OpponentTeamID": 0,
+        "Period": 0, "LastNGames": 0, "PORound": 0, "TeamID": 0, "TwoWay": 0,
+        "DateFrom": "", "DateTo": "", "GameSegment": "", "Location": "", "Outcome": "",
+        "SeasonSegment": "", "VsConference": "", "VsDivision": "", "Conference": "",
+        "Division": "", "GameScope": "", "PlayerExperience": "", "PlayerPosition": "",
+        "StarterBench": "", "ShotClockRange": "",
+    }
+
     def get_league_team_stats(
-        self, season: str, per_mode: str = "PerGame"
+        self, season: str, measure_type: str = "Base", per_mode: str = "PerGame"
     ) -> pd.DataFrame:
-        """Season team stats for all 30 teams (for ranking context)."""
+        """Season team stats for all 30 teams. measure_type: Base, Advanced, Four Factors, ..."""
         data = self._get("leaguedashteamstats", {
-            "Season":     season,
-            "PerMode":    per_mode,
-            "SeasonType": "Regular Season",
-            "LeagueID":   "00",
+            **self._DASH_FILTERS,
+            "Season":      season,
+            "SeasonType":  "Regular Season",
+            "LeagueID":    "00",
+            "MeasureType": measure_type,
+            "PerMode":     per_mode,
         })
         return self._parse(data)
 
@@ -255,13 +267,13 @@ class NBAClient:
         per_mode: str = "PerGame",
     ) -> pd.DataFrame:
         """Season player stats (optionally filtered to one team)."""
-        params: dict[str, Any] = {
-            "Season":     season,
-            "PerMode":    per_mode,
-            "SeasonType": "Regular Season",
-            "LeagueID":   "00",
-        }
-        if team_id:
-            params["TeamID"] = team_id
-        data = self._get("leaguedashplayerstats", params)
+        data = self._get("leaguedashplayerstats", {
+            **self._DASH_FILTERS,
+            "Season":      season,
+            "SeasonType":  "Regular Season",
+            "LeagueID":    "00",
+            "MeasureType": "Base",
+            "PerMode":     per_mode,
+            "TeamID":      team_id or 0,
+        })
         return self._parse(data)

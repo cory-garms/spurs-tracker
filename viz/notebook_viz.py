@@ -91,10 +91,11 @@ def build_notebook_page(
     season_s = season_str(season)
     html = theme.page_html(
         title="Spurs Notebook",
-        subtitle="Living Essays in Silver & Black Performance Analytics &mdash; Computed Dynamically at Build Time",
+        subtitle="Essays on the season. Every number in them is recomputed from the box scores after each game.",
         body_content=body_content,
         current_slug="notebook",
         badge=f"{season_s} Essays",
+        games_played=int((games["status"] == "Final").sum()) if not games.empty else 0,
     )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)

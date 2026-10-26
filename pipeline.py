@@ -84,9 +84,14 @@ def run_pipeline(
     if not skip_fetch and refresh:
         console.print("[cyan]Stage 1: Fetching data from stats.nba.com…[/cyan]")
         try:
-            from data.league import fetch_league_standings
+            from data.league import fetch_league_standings, fetch_team_players
+            from data.schedule import fetch_schedule, next_game, now_utc
             fetcher.fetch_all(incremental=True)
             fetch_league_standings(season=season, force_refresh=True)
+            # Schedule drives the Next Game preview; the opponent's player stats feed "players to watch"
+            nxt = next_game(fetch_schedule(season=season, force_refresh=True), team_abbr.upper(), now_utc())
+            if nxt:
+                fetch_team_players(TEAMS[nxt["opponent"]]["id"], season=season, force_refresh=True)
             pipeline_results.append(("Stage 1: Ingestion", "PASS", "Cache refreshed from stats.nba.com"))
         except Exception as e:
             console.print(f"[yellow]Warning: Fetch encountered an error: {e}. Falling back to cached parquets.[/yellow]")
@@ -146,19 +151,20 @@ def run_pipeline(
             from viz.wemby_viz import build_wemby_lab_page
             from viz.rodeo_viz import build_rodeo_page
             from viz.notebook_viz import build_notebook_page
-            from viz.props_viz import build_props_board_page, build_matchup_page
-            from viz.theme import stamp_index_season
+            from viz.props_viz import build_props_board_page
+            from viz.matchup_viz import build_matchup_page
+            from viz.index_viz import build_index_page
 
             dash_path = build(games, player_logs, team_name, team_abbr, season)
             wemby_path = build_wemby_lab_page(games, player_logs, season, team_abbr)
             rodeo_path = build_rodeo_page(games, season, team_abbr)
             nb_path = build_notebook_page(games, player_logs, roster, season, team_abbr)
             props_path = build_props_board_page(games, player_logs, season, team_abbr)
-            matchup_path = build_matchup_page(games, season, team_abbr)
+            matchup_path = build_matchup_page(games, player_logs, season, team_abbr)
             if team_abbr.upper() == config.TEAM_ABBR and season == config.SEASON:
-                stamp_index_season(season_s)
+                build_index_page(games, player_logs, season, team_abbr)
 
-            pipeline_results.append(("Stage 4: Visual Compilation", "PASS", "6 HTML portals generated"))
+            pipeline_results.append(("Stage 4: Visual Compilation", "PASS", "6 HTML portals + landing page generated"))
         except Exception as e:
             console.print(f"[red]Visual compilation failed: {e}[/red]")
             pipeline_results.append(("Stage 4: Visual Compilation", "FAIL", str(e)))

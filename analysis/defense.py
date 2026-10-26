@@ -67,7 +67,7 @@ def defensive_ratings_trend(games: pd.DataFrame, window: int = 10) -> pd.DataFra
     f = games[games["status"] == "Final"].sort_values("game_date").copy()
     if f.empty or "drtg" not in f.columns:
         return pd.DataFrame()
-    f["rolling_drtg"] = f["drtg"].rolling(window).mean().round(1)
+    f["rolling_drtg"] = f["drtg"].rolling(window, min_periods=1).mean().round(1)
     return f[["game_date", "drtg", "rolling_drtg"]].set_index("game_date")
 
 

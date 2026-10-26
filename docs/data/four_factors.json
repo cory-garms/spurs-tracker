@@ -5,15 +5,15 @@
     "efg_pct": 0.507,
     "ts_pct": 0.542,
     "tov_pct": 0.114,
-    "oreb_pct": 0.229,
+    "oreb_pct": 0.256,
     "ftr": 0.235,
     "efg_delta_vs_league": -3.8,
     "tov_delta_vs_league": -1.6,
-    "oreb_delta_vs_league": -1.6,
+    "oreb_delta_vs_league": 1.1,
     "ftr_delta_vs_league": -1.0,
     "l10_efg_pct": 0.506,
     "l10_tov_pct": 0.115,
-    "l10_oreb_pct": 0.229,
+    "l10_oreb_pct": 0.256,
     "l10_ftr": 0.238,
     "home_efg_pct": 0.485,
     "road_efg_pct": 0.55
@@ -38,10 +38,10 @@
     {
       "factor": "Offensive Rebound % (OREB%)",
       "weight": "20%",
-      "spurs_stat": "22.9%",
+      "spurs_stat": "25.6%",
       "league_avg": "24.5%",
-      "delta": "-1.6%",
-      "grade": "C"
+      "delta": "+1.1%",
+      "grade": "A"
     },
     {
       "factor": "Free Throw Rate (FTR)",

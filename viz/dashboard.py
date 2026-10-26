@@ -15,7 +15,6 @@ from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.io as pio
 
 from config import OUTPUT_DIR, TEAM_ABBR, SEASON
 from viz import theme
@@ -71,37 +70,31 @@ def build(
 
     figures: list[tuple[str, go.Figure, int]] = []
 
-    # 1. Season timeline
-    fig1 = season_timeline(games, team_name)
-    figures.append(("Season Timeline", fig1, 420))
+    final_games = int((games["status"] == "Final").sum()) if not games.empty else 0
+    show_trends = final_games >= theme.MIN_TREND_GAMES
 
-    # 2. Rolling win%
-    fig2 = rolling_win_pct_chart(games, team_name, windows=[5, 10])
-    figures.append(("Rolling Win%", fig2, 380))
-
-    # 3. Score margin
+    # Per-game margin carries the early season on its own: wins, losses and the
+    # running total in one chart. Trend lines join once there is a trend to see.
     fig3 = score_margin_chart(games, team_name)
     figures.append(("Score Margin per Game", fig3, 420))
 
-    # 3b. Clutch & margin distribution
+    if show_trends:
+        figures.append(("Season Timeline", season_timeline(games, team_name), 420))
+        figures.append(("Rolling Win%", rolling_win_pct_chart(games, team_name, windows=[5, 10]), 380))
+
     fig_clutch = clutch_margin_distribution(games, team_name)
     if fig_clutch.data:
-        figures.append(("Clutch & Margin Distribution", fig_clutch, 380))
+        figures.append(("Close Games & Margin Distribution", fig_clutch, 380))
 
-    # 4. Streak timeline
-    streak_df = streak_timeline(games)
-    fig4 = streak_timeline_chart(streak_df, team_name)
-    figures.append(("Streak Timeline", fig4, 320))
-
-    # 5. Scoring trend
-    fig5 = scoring_trend_chart(games, team_name, window=10)
-    figures.append(("Scoring Trend", fig5, 380))
+    if show_trends:
+        figures.append(("Streak Timeline", streak_timeline_chart(streak_timeline(games), team_name), 320))
+        figures.append(("Scoring Trend", scoring_trend_chart(games, team_name, window=10), 380))
 
     # 5b. Roster production matrix
     if not player_logs.empty:
         fig_roster = roster_production_matrix(player_logs, team_name)
         if fig_roster.data:
-            figures.append(("Rotation Core Production", fig_roster, 440))
+            figures.append(("Rotation Core Production", fig_roster, fig_roster.layout.height or 440))
 
         fig_sb = starter_bench_production_chart(player_logs, team_name)
         if fig_sb.data:
@@ -129,7 +122,7 @@ def build(
             figures.append(("Shot Efficiency (USG% vs TS%)", fig8, 520))
 
     # 9. Defensive rating trend
-    if "drtg" in games.columns and games["drtg"].notna().any():
+    if show_trends and "drtg" in games.columns and games["drtg"].notna().any():
         fig9 = defensive_rating_trend(games, team_name)
         if fig9.data:
             figures.append(("Defensive Rating Trend", fig9, 380))
@@ -156,6 +149,16 @@ def build(
     synergies = key_spurs_synergies(player_logs).head(3) if not player_logs.empty else pd.DataFrame()
     sb = starter_bench_deep_split(player_logs) if not player_logs.empty else {}
     clutch = clutch_game_summary(games) if not games.empty else {}
+    close_n = int(clutch.get("clutch_games_played", 0))
+    if close_n >= theme.MIN_GRADE_GAMES:
+        composure_html = (
+            f'Composure: <strong style="color: {theme.FIESTA_TEAL};">{clutch.get("composure_index", 0):.0f}/100</strong> '
+            f'({clutch.get("composure_grade", "—").split(" (")[0]})'
+        )
+    else:
+        composure_html = theme.small_sample_badge(
+            f"Composure grade after {theme.MIN_GRADE_GAMES} close games ({close_n} so far)"
+        )
 
     # Synergy rows
     syn_rows = ""
@@ -192,17 +195,14 @@ def build(
     command_center_html = f"""
     <div class="card" style="border-top: 3px solid {theme.FIESTA_TEAL}; margin-bottom: 24px;">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
-        <h2 style="font-size: 1.4rem; margin-bottom: 0;">🏛️ Stonecutter Performance &amp; Analytical Command Center</h2>
-        <span style="font-family: {theme.FONT_MONO}; font-size: 0.72rem; padding: 3px 8px; border-radius: 3px; background: rgba(0, 178, 169, 0.12); color: {theme.FIESTA_TEAL}; border: 1px solid rgba(0, 178, 169, 0.3);">
-          DEAN OLIVER POSSESSION MODEL
-        </span>
+        <h2 style="margin-bottom: 0;">Team Snapshot</h2>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
         <!-- Four Factors Pillar -->
         <div style="background: {theme.SHADOW_BLACK}; padding: 16px; border-radius: 6px; border: 1px solid {theme.COURT_LINE};">
           <div style="font-family: {theme.FONT_STENCIL}; font-size: 0.82rem; color: {theme.SPURS_SILVER}; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;">
-            Dean Oliver Four Factors
+            Four Factors <span style="text-transform: none; letter-spacing: 0; color: {theme.TEXT_MUTED};">(vs. league average)</span>
           </div>
           
           <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -256,7 +256,7 @@ def build(
         <div style="background: {theme.SHADOW_BLACK}; padding: 16px; border-radius: 6px; border: 1px solid {theme.COURT_LINE}; display: flex; flex-direction: column; justify-content: space-between;">
           <div>
             <div style="font-family: {theme.FONT_STENCIL}; font-size: 0.82rem; color: {theme.SPURS_SILVER}; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;">
-              Top Rotation Synergies (Net +/-)
+              Best Duos <span style="text-transform: none; letter-spacing: 0; color: {theme.TEXT_MUTED};">(avg +/- when both play)</span>
             </div>
             {syn_rows}
           </div>
@@ -272,37 +272,32 @@ def build(
           <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="font-family: {theme.FONT_STENCIL}; font-size: 0.82rem; color: {theme.SPURS_SILVER}; letter-spacing: 0.08em; text-transform: uppercase;">
-                Crunch-Time &amp; Clutch Ledger
+                Close Games
               </span>
               <span style="font-family: {theme.FONT_MONO}; font-size: 0.72rem; color: {theme.FIESTA_ORANGE};">
-                &le; 5 PTS
+                decided by &le; 5
               </span>
             </div>
 
             <div style="font-size: 1.5rem; font-family: {theme.FONT_MONO}; font-weight: 700; color: {theme.COURT_WHITE}; margin-bottom: 4px;">
-              {clutch.get('clutch_record', '13-9')} <span style="font-size: 0.9rem; font-weight: normal; color: {theme.SPURS_SILVER};">({clutch.get('clutch_win_pct', 59.1):.1f}% Win Rate)</span>
+              {clutch.get('clutch_record', '0-0')} <span style="font-size: 0.9rem; font-weight: normal; color: {theme.SPURS_SILVER};">({clutch.get('clutch_win_pct', 0.0):.1f}% won)</span>
             </div>
             <div style="font-size: 0.82rem; color: {theme.TEXT_MUTED}; margin-bottom: 12px;">
-              Composure Index: <strong style="color: {theme.FIESTA_TEAL};">{clutch.get('composure_index', 0):.0f}/100</strong> ({clutch.get('composure_grade', '—').split(' (')[0]})
+              {composure_html}
             </div>
           </div>
 
-          <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px; font-size: 0.78rem; font-style: italic; color: {theme.SPURS_STEEL};">
-            "When nothing seems to help, I go and look at a stonecutter hammering away at his rock..."
-          </div>
         </div>
       </div>
     </div>
     """
 
-    divs_html = command_center_html
+    divs_html = command_center_html + _spotlight_html(games, player_logs)
     for i, (title, fig, height) in enumerate(figures):
         div_id    = title.lower().replace(" ", "_").replace("/", "_").replace("%", "pct")
         include_js = "cdn" if i == 0 else False
         fig.update_layout(height=height)
-        chart_div = pio.to_html(
-            fig, full_html=False, include_plotlyjs=include_js, div_id=div_id
-        )
+        chart_div = theme.chart_html(fig, div_id, include_plotlyjs=include_js)
         divs_html += f"""
         <section class="chart-section">
             <h2 class="chart-title">{title}</h2>
@@ -312,16 +307,74 @@ def build(
 
     season_s = f"{season}-{str(season + 1)[-2:]}"
     html = theme.page_html(
-        title=f"{team_name} — Season Dashboard",
-        subtitle="Court Performance Intelligence &bull; Silver &amp; Black Stonecutter Ledger",
+        title="Season Dashboard",
+        subtitle="How the team is playing: results, the four factors, who plays well together, and close games.",
         body_content=divs_html,
         current_slug="dashboard",
         badge=f"{season_s} Season",
+        games_played=int((games["status"] == "Final").sum()) if not games.empty else 0,
     )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html, encoding="utf-8")
     return output_path
+
+
+def _spotlight_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
+    """Player of the Game, Breakout and Hot Hand, ranked by Game Score so anyone can headline."""
+    from analysis.performers import MIN_BASELINE_GAMES, game_performers, hot_hand
+
+    if player_logs.empty:
+        return ""
+    perf = game_performers(player_logs)
+    hot = hot_hand(player_logs)
+    potg = perf.get("player_of_the_game")
+
+    matchup = ""
+    if potg is not None and not games.empty:
+        g = games[games["game_id"] == potg["game_id"]]
+        if not g.empty:
+            g = g.iloc[0]
+            matchup = f'{g["result"]} {int(g["pts"])}-{int(g["opp_pts"])} {"vs." if g["home_away"] == "H" else "@"} {g["opponent_abbr"]}'
+
+    def tile(kicker: str, color: str, name: str, line: str, foot: str) -> str:
+        return f"""
+        <div style="background: {theme.SHADOW_BLACK}; border: 1px solid {theme.COURT_LINE}; border-left: 6px solid {color}; padding: 16px;">
+          <div style="font-family: {theme.FONT_HEADING}; font-size: 1.05rem; letter-spacing: 0.14em; text-transform: uppercase; color: {color};">{kicker}</div>
+          <div style="font-family: {theme.FONT_DISPLAY}; font-size: 1.5rem; line-height: 1.1; margin: 6px 0 4px; color: {theme.COURT_WHITE};">{name}</div>
+          <div style="font-family: {theme.FONT_LED}; font-size: 1.6rem; color: {theme.FIESTA_ORANGE};">{line}</div>
+          <div style="font-size: 0.82rem; color: {theme.TEXT_MUTED}; margin-top: 4px;">{foot}</div>
+        </div>"""
+
+    tiles = []
+    if potg:
+        tiles.append(tile("Player of the Game", theme.FIESTA_TEAL, potg["player_name"], potg["line"],
+                          f'{matchup} &middot; Game Score {potg["game_score"]}'))
+    if perf.get("breakout"):
+        b = perf["breakout"]
+        tiles.append(tile("Breakout", theme.FIESTA_FUSCHIA, b["player_name"], b["line"],
+                          f'Game Score {b["game_score"]}, {b["above_avg"]:+.1f} above his {b["season_avg"]} average'))
+    else:
+        tiles.append(tile("Breakout", theme.FIESTA_FUSCHIA, "&mdash;", "",
+                          theme.small_sample_badge(
+                              f"Flags a player well above his own average once players have {MIN_BASELINE_GAMES} games")
+                          if player_logs["game_id"].nunique() <= MIN_BASELINE_GAMES
+                          else "No one far above his usual level last game."))
+    if hot:
+        tiles.append(tile(f'Hot Hand &middot; last {hot["window"]}', theme.FIESTA_ORANGE, hot["player_name"], hot["line"],
+                          f'Average Game Score {hot["game_score"]} over his last {hot["games"]} games'))
+
+    return f"""
+    <section class="card" id="spotlight">
+      <h2>Player Spotlight</h2>
+      <p style="color: {theme.TEXT_MUTED}; font-size: 0.88rem; margin: -6px 0 14px;">
+        Ranked by Game Score, a one-number box score rating, so whoever had the big night gets the headline.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+        {"".join(tiles)}
+      </div>
+    </section>
+    """
 
 
 # ---------------------------------------------------------------------------

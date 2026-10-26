@@ -10,7 +10,6 @@ from __future__ import annotations
 from pathlib import Path
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.io as pio
 
 import config
 from config import TEAM_ABBR, SEASON, season_str
@@ -188,22 +187,22 @@ def build_wemby_lab_page(
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
       <div class="card" style="margin-bottom: 0; text-align: center;">
         <div style="font-family: {theme.FONT_MONO}; font-size: 0.8rem; color: {theme.TEXT_MUTED}; text-transform: uppercase;">Points Per Game</div>
-        <div style="font-family: {theme.FONT_DISPLAY}; font-size: 2.8rem; color: {theme.COURT_WHITE}; line-height: 1.1;">{offense['ppg']:.1f}</div>
+        <div style="font-family: {theme.FONT_LED}; font-size: 3.4rem; color: {theme.COURT_WHITE}; line-height: 1.1;">{offense['ppg']:.1f}</div>
         <div style="font-size: 0.78rem; color: {theme.FIESTA_TEAL}; font-family: {theme.FONT_MONO};">TS%: {offense['true_shooting_pct']:.3f} | eFG%: {offense['effective_fg_pct']:.3f}</div>
       </div>
       <div class="card" style="margin-bottom: 0; text-align: center;">
         <div style="font-family: {theme.FONT_MONO}; font-size: 0.8rem; color: {theme.TEXT_MUTED}; text-transform: uppercase;">Blocks Per Game</div>
-        <div style="font-family: {theme.FONT_DISPLAY}; font-size: 2.8rem; color: {theme.FIESTA_TEAL}; line-height: 1.1;">{stocks['blocks_per_game']:.2f}</div>
+        <div style="font-family: {theme.FONT_LED}; font-size: 3.4rem; color: {theme.FIESTA_TEAL}; line-height: 1.1;">{stocks['blocks_per_game']:.2f}</div>
         <div style="font-size: 0.78rem; color: {theme.TEXT_MUTED}; font-family: {theme.FONT_MONO};">Total Blocks: {stocks['total_blocks']}</div>
       </div>
       <div class="card" style="margin-bottom: 0; text-align: center;">
         <div style="font-family: {theme.FONT_MONO}; font-size: 0.8rem; color: {theme.TEXT_MUTED}; text-transform: uppercase;">Stocks (STL + BLK)</div>
-        <div style="font-family: {theme.FONT_DISPLAY}; font-size: 2.8rem; color: {theme.SPURS_SILVER}; line-height: 1.1;">{stocks['stocks_per_game']:.2f}</div>
+        <div style="font-family: {theme.FONT_LED}; font-size: 3.4rem; color: {theme.SPURS_SILVER}; line-height: 1.1;">{stocks['stocks_per_game']:.2f}</div>
         <div style="font-size: 0.78rem; color: {theme.FIESTA_ORANGE}; font-family: {theme.FONT_MONO};">Per 36 Min: {stocks['stocks_per_36']:.2f}</div>
       </div>
       <div class="card" style="margin-bottom: 0; text-align: center;">
         <div style="font-family: {theme.FONT_MONO}; font-size: 0.8rem; color: {theme.TEXT_MUTED}; text-transform: uppercase;">5x5 Watch</div>
-        <div style="font-family: {theme.FONT_DISPLAY}; font-size: 2.8rem; color: {theme.FIESTA_ORANGE}; line-height: 1.1;">{stocks['five_by_fives']}</div>
+        <div style="font-family: {theme.FONT_LED}; font-size: 3.4rem; color: {theme.FIESTA_ORANGE}; line-height: 1.1;">{stocks['five_by_fives']}</div>
         <div style="font-size: 0.78rem; color: {theme.TEXT_MUTED}; font-family: {theme.FONT_MONO};">Near Misses (5x4): {stocks['five_by_fours']}</div>
       </div>
     </div>
@@ -218,9 +217,9 @@ def build_wemby_lab_page(
     fig_impact.update_layout(height=380)
     fig_milestones.update_layout(height=380)
 
-    div_stocks = pio.to_html(fig_stocks, full_html=False, include_plotlyjs="cdn", div_id="wemby_stocks_timeline")
-    div_impact = pio.to_html(fig_impact, full_html=False, include_plotlyjs=False, div_id="wemby_deterrence_split")
-    div_milestones = pio.to_html(fig_milestones, full_html=False, include_plotlyjs=False, div_id="wemby_milestones")
+    div_stocks = theme.chart_html(fig_stocks, "wemby_stocks_timeline", include_plotlyjs="cdn")
+    div_impact = theme.chart_html(fig_impact, "wemby_deterrence_split", include_plotlyjs=False)
+    div_milestones = theme.chart_html(fig_milestones, "wemby_milestones", include_plotlyjs=False)
 
     # 3. Top Defensive Masterclasses Table
     top_performances = wemby.sort_values("stocks", ascending=False).head(8)
@@ -247,7 +246,7 @@ def build_wemby_lab_page(
 
     table_section = f"""
     <div class="card">
-      <h2>🛸 Top Defensive Masterclasses (Season Highs in Stocks)</h2>
+      <h2>🛸 Best Defensive Nights (most steals + blocks)</h2>
       <div style="overflow-x: auto;">
         <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
           <thead>
@@ -272,7 +271,7 @@ def build_wemby_lab_page(
     {kpi_cards}
 
     <section class="chart-section">
-      <h2 class="chart-title">👽 Alien Gravity: Stocks Timeline (Steals + Blocks)</h2>
+      <h2 class="chart-title">👽 Steals + Blocks, Game by Game</h2>
       {div_stocks}
     </section>
 
@@ -295,10 +294,11 @@ def build_wemby_lab_page(
     season_s = season_str(season)
     html = theme.page_html(
         title="Wemby Lab",
-        subtitle="Victor Wembanyama Defensive Horizon & Perimeter Gravity Intelligence",
+        subtitle="Victor Wembanyama's blocks, steals and rim protection, and his biggest nights so far.",
         body_content=body_content,
         current_slug="wemby",
         badge=f"{season_s} Lab",
+        games_played=int((games["status"] == "Final").sum()) if not games.empty else 0,
     )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)

@@ -3,284 +3,452 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spurs HQ — San Antonio Spurs Analytics</title>
+  <title>Spurs Stats HQ — San Antonio Spurs Analytics</title>
+  <meta name="description" content="San Antonio Spurs 2026-27: 1-2. Who&#x27;s playing well, the rotation and close games, rebuilt after every game.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Spurs Stats HQ · 2026-27 · 1-2">
+  <meta property="og:description" content="San Antonio Spurs 2026-27: 1-2. Who&#x27;s playing well, the rotation and close games, rebuilt after every game.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Spurs Stats HQ · 2026-27 · 1-2">
+  <meta name="twitter:description" content="San Antonio Spurs 2026-27: 1-2. Who&#x27;s playing well, the rotation and close games, rebuilt after every game.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Graduate&family=Share+Tech+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@400;600;700;800&family=Bowlby+One&family=Courier+Prime:wght@400;700&family=Rye&family=Share+Tech+Mono&family=Teko:wght@500;600;700&family=VT323&display=swap" rel="stylesheet">
   <style>
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       background:
-        radial-gradient(ellipse at 50% 0%, rgba(196, 206, 212, 0.05) 0%, transparent 75%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 12px),
         #0B0E11;
       color: #F6F8FA;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       min-height: 100vh;
       width: 100%;
       overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
     }
-    body { padding: clamp(16px, 4vw, 36px); max-width: 1200px; margin: 0 auto; }
+    .sarape-band {
+      height: 18px; background: linear-gradient(#00B2A9 0 33.3%, #EF426F 33.3% 66.6%, #FF8200 66.6%);
+      transform: skewY(-0.8deg); margin: 10px -20px 0;
+    }
+    .page { padding: clamp(12px, 3vw, 28px); max-width: 1440px; margin: 0 auto; }
+
+    /* ---- Navigation ---- */
+    .nav-bar { margin-bottom: 28px; }
+    .nav-pages { display: flex; flex-wrap: wrap; gap: 10px; }
+    @media (max-width: 640px) {
+      /* One swipeable row on phones instead of three wrapped rows */
+      .nav-pages {
+        flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+        padding: 2px 8px 8px 2px; margin: 0 -12px 0 0;
+      }
+      .nav-pages::-webkit-scrollbar { display: none; }
+      .nav-page { flex: 0 0 auto; }
+    }
+    .nav-page {
+      color: #F6F8FA; text-decoration: none;
+      font-family: 'Teko', sans-serif; font-size: 1.1rem; line-height: 1;
+      font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 9px 14px 7px;
+      background: #161A1F;
+      border: 2px solid #28313A;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    }
+    a.nav-page:hover {
+      border-color: #F6F8FA; transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 #00B2A9;
+    }
+    .nav-page.current {
+      background: #F6F8FA; border-color: #F6F8FA; color: #0B0E11;
+      box-shadow: 4px 4px 0 #EF426F;
+      cursor: default;
+    }
+    .nav-page.index-link { color: #F2C14E; background: transparent; border-color: transparent; }
+    .nav-page.index-link:hover { box-shadow: none; transform: none; color: #F6F8FA; }
 
     /* ---- Alamo Heritage & Architecture ---- */
-    .alamo-header-wrap {
-      margin-bottom: 28px;
-      position: relative;
-    }
+    .alamo-header-wrap { margin-bottom: 36px; position: relative; }
     .alamo-roofline-crown {
-      width: clamp(140px, 30vw, 240px);
-      height: 18px;
-      margin: 0 auto -1px;
-      display: block;
-      position: relative;
-      z-index: 2;
+      width: clamp(140px, 30vw, 240px); height: 18px;
+      margin: 0 auto -2px; display: block; position: relative; z-index: 2;
     }
-    .alamo-roofline-crown svg {
-      width: 100%; height: 100%; display: block;
-    }
+    .alamo-roofline-crown svg { width: 100%; height: 100%; display: block; }
     .alamo-meta-banner {
       display: inline-flex; align-items: center; gap: 8px;
-      font-family: "Share Tech Mono", monospace; font-size: 0.72rem; letter-spacing: 0.12em;
-      text-transform: uppercase; color: #C9B097;
-      padding: 4px 10px; background: rgba(201, 176, 151, 0.08);
-      border: 1px solid rgba(201, 176, 151, 0.25); border-radius: 4px;
+      font-family: 'Teko', sans-serif; font-size: 1.05rem; font-weight: 600; line-height: 1;
+      letter-spacing: 0.22em; text-transform: uppercase; color: #FF8200;
+      margin-bottom: 12px;
     }
     .alamo-icon-svg {
       width: 22px; height: 12px; display: inline-block; vertical-align: middle;
-      color: #C9B097; flex-shrink: 0;
+      color: #FF8200; flex-shrink: 0;
     }
     .alamo-footer-seal {
       display: flex; justify-content: center; align-items: center; margin-bottom: 14px;
-      opacity: 0.75;
     }
-    .alamo-footer-seal .alamo-icon-svg {
-      width: 44px; height: 22px; color: #8A9399;
-    }
+    .alamo-footer-seal .alamo-icon-svg { width: 44px; height: 22px; color: #C4CED4; }
 
     /* ---- Header ---- */
     header {
-      background:
-        radial-gradient(ellipse at 90% 10%, rgba(201, 176, 151, 0.06) 0%, transparent 60%),
-        linear-gradient(180deg, #161A1F 0%, #1D232A 100%);
-      border: 1px solid #28313A;
-      border-top: 4px solid #C4CED4;
-      border-radius: 6px;
-      padding: clamp(20px, 4vw, 36px);
-      position: relative;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-    header::after {
-      content: "";
-      position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
-      background: linear-gradient(90deg, #00B2A9 0%, #00B2A9 33.3%, #EF426F 33.3%, #EF426F 66.6%, #FF8200 66.6%, #FF8200 100%);
-    }
-    .hero-meta {
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;
-    }
-    .motto {
-      font-family: "Share Tech Mono", monospace; font-size: 0.8rem; letter-spacing: 0.15em; color: #00B2A9; text-transform: uppercase;
-    }
-    .badge {
-      font-family: "Share Tech Mono", monospace; font-size: 0.75rem; padding: 4px 10px;
-      background: #0B0E11; border: 1px solid #C4CED4; color: #F6F8FA; border-radius: 3px;
-    }
-    h1 {
-      font-family: "Teko", sans-serif; font-size: clamp(2.4rem, 6vw, 4rem);
-      letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.05; color: #F6F8FA;
-    }
-    .subtitle {
-      color: #9DA7B0; font-size: clamp(0.95rem, 2.2vw, 1.15rem); margin-top: 10px; max-width: 820px; line-height: 1.5;
-    }
-
-    /* ---- Section Groups ---- */
-    .section-title {
-      font-family: "Barlow Condensed", sans-serif; font-size: 1.3rem; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase; color: #C4CED4;
-      display: flex; align-items: center; gap: 12px; margin: 32px 0 16px;
-    }
-    .section-title::after {
-      content: ""; flex: 1; height: 1px; background: #28313A;
-    }
-
-    /* ---- Grid Cards ---- */
-    .card-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
-    }
-    .portal-card {
       background: #161A1F;
-      border: 1px solid #28313A;
-      border-radius: 6px;
-      padding: 22px;
-      text-decoration: none;
-      color: inherit;
-      display: flex; flex-direction: column; justify-content: space-between;
-      transition: all 0.22s ease;
+      border: 2px solid #F6F8FA;
+      box-shadow: 8px 8px 0 #EF426F, 16px 16px 0 #00B2A9;
+      padding: clamp(18px, 3.5vw, 30px);
       position: relative;
-      overflow: hidden;
+      margin-right: 16px;
     }
-    .portal-card::before {
-      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: transparent; transition: background 0.22s ease;
+    header h1 {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px;
+      line-height: 1;
     }
-    .portal-card:hover {
-      transform: translateY(-3px);
-      border-color: #C4CED4;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    header h1 .title-text {
+      font-family: 'Bowlby One', sans-serif;
+      font-size: clamp(1.7rem, 5vw, 3.2rem);
+      font-weight: 400;
+      text-transform: uppercase;
+      color: #F6F8FA;
+      transform: skewX(-9deg);
+      text-shadow: 3px 3px 0 #EF426F, 6px 6px 0 #00B2A9;
     }
-    .portal-card.teal:hover::before { background: #00B2A9; }
-    .portal-card.fuschia:hover::before { background: #EF426F; }
-    .portal-card.orange:hover::before { background: #FF8200; }
-    .portal-card.silver:hover::before { background: #C4CED4; }
+    header h1 .badge {
+      font-family: 'VT323', monospace; font-size: 1.35rem; line-height: 1;
+      color: #FF8200; border: 2px solid #FF8200; background: transparent;
+      padding: 3px 10px 1px; text-shadow: 0 0 10px rgba(255, 130, 0, 0.5);
+    }
+    header p {
+      color: #C4CED4; margin-top: 14px;
+      font-size: clamp(0.9rem, 2vw, 1.05rem); line-height: 1.5;
+    }
 
-    .card-top { margin-bottom: 16px; }
-    .card-tag {
-      font-family: "Share Tech Mono", monospace; font-size: 0.72rem; letter-spacing: 0.08em;
-      text-transform: uppercase; color: #8A9399; margin-bottom: 8px;
+    /* ---- Cards ---- */
+    .chart-section, .card {
+      --accent: #00B2A9;
+      background: #161A1F;
+      border: 2px solid rgba(246, 248, 250, 0.85);
+      padding: clamp(14px, 3vw, 22px);
+      margin: 0 8px 32px 0;
+      box-shadow: 8px 8px 0 var(--accent);
     }
-    .card-heading {
-      font-family: "Barlow Condensed", sans-serif; font-size: 1.4rem; font-weight: 700;
-      letter-spacing: 0.04em; text-transform: uppercase; color: #F6F8FA;
+    .chart-section:nth-of-type(3n+2), .card:nth-of-type(3n+2) { --accent: #EF426F; }
+    .chart-section:nth-of-type(3n), .card:nth-of-type(3n) { --accent: #FF8200; }
+    .chart-title, .card h2 {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(1.35rem, 3vw, 1.7rem);
+      font-weight: 600; line-height: 1;
+      color: #F6F8FA;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #28313A;
+      display: flex; align-items: center; gap: 12px;
     }
-    .card-desc {
-      color: #9DA7B0; font-size: 0.9rem; line-height: 1.5; margin-top: 8px;
+    .chart-title::before, .card h2::before {
+      content: ""; flex: 0 0 auto; width: 14px; height: 14px; margin-right: -2px;
+      background: linear-gradient(#00B2A9 0 33.3%, #EF426F 33.3% 66.6%, #FF8200 66.6%); order: -1;
     }
-    .card-cta {
-      font-family: "Barlow Condensed", sans-serif; font-size: 0.85rem; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase; color: #C4CED4;
-      display: flex; align-items: center; gap: 6px; margin-top: 18px;
+    .chart-title > :not(:first-child):last-child, .card h2 > :not(:first-child):last-child { margin-left: auto; }
+
+    /* ---- Badges ---- */
+    .badge {
+      display: inline-block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      background: #1D232A;
+      border: 1px solid #8A9399;
+      color: #F6F8FA;
+      text-transform: uppercase;
     }
-    .portal-card:hover .card-cta { color: #00B2A9; }
+    .badge.teal { background: rgba(0, 178, 169, 0.15); border-color: #00B2A9; color: #00B2A9; }
+    .badge.fuschia { background: rgba(239, 66, 111, 0.15); border-color: #EF426F; color: #EF426F; }
+    .badge.small-sample {
+      font-family: 'Courier Prime', monospace; font-size: 0.72rem; text-transform: none; letter-spacing: 0;
+      color: #F2C14E; border: 1px dashed #F2C14E; background: rgba(242, 193, 78, 0.08);
+      white-space: normal; line-height: 1.35;
+    }
+    .early-season {
+      border: 2px dashed #F2C14E; background: rgba(242, 193, 78, 0.07); color: #F6F8FA;
+      padding: 12px 16px; margin: 0 8px 28px 0; font-size: 0.92rem; line-height: 1.5;
+    }
+    .early-season strong { color: #F2C14E; font-family: 'Teko', sans-serif; font-size: 1.15rem;
+      font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 4px; }
+    .badge.orange { background: rgba(255, 130, 0, 0.15); border-color: #FF8200; color: #FF8200; }
 
     /* ---- Footer ---- */
     footer {
-      text-align: center; color: #9DA7B0; font-size: 0.85rem; margin-top: 56px; padding-top: 24px;
-      border-top: 1px solid #28313A;
+      text-align: center; color: #9DA7B0;
+      font-size: 0.85rem; margin-top: 56px; padding-top: 28px;
+      position: relative;
     }
-    .stonecutter {
-      max-width: 720px; margin: 0 auto 16px; font-style: italic; font-size: 0.82rem; line-height: 1.6; color: #8A9399;
+    footer::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+      background: repeating-linear-gradient(90deg, #00B2A9 0 60px, #EF426F 60px 120px, #FF8200 120px 180px);
     }
+    footer .credit {
+      font-family: 'Teko', sans-serif; font-size: 1.35rem; font-weight: 600; line-height: 1.1;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #F6F8FA;
+    }
+    footer .links { margin-top: 8px; font-family: 'Courier Prime', monospace; font-size: 0.85rem; }
+    footer .links span { margin: 0 8px; color: #9DA7B0; }
+    footer a { color: #F2C14E; text-decoration: none; }
+    footer a:hover, footer a:focus-visible { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      header { box-shadow: 6px 6px 0 #EF426F, 12px 12px 0 #00B2A9; margin-right: 12px; }
+      .chart-section, .card { box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }
+    }
+    
+
+    html, body {
+      background:
+        repeating-linear-gradient(45deg, rgba(0,0,0,0.09) 0 2px, transparent 2px 14px),
+        #7A2E1F;
+    }
+    .hq-hero { text-align: center; padding: 18px 0 6px; }
+    .hq-hero h1 {
+      font-family: 'Rye', serif; font-weight: 400;
+      font-size: clamp(2.6rem, 9vw, 5rem); line-height: 1;
+      color: #F4EAD5; text-shadow: 4px 4px 0 #1B1712;
+    }
+    .hq-hero .sub {
+      font-family: 'Courier Prime', monospace; font-weight: 700; color: #F2C14E;
+      font-size: clamp(0.75rem, 2.2vw, 0.95rem); letter-spacing: 0.2em; text-transform: uppercase;
+      margin-top: 12px;
+    }
+    .hq-hero .season {
+      font-family: 'Courier Prime', monospace; font-weight: 700; color: #F4EAD5;
+      font-size: clamp(0.7rem, 2vw, 0.85rem); letter-spacing: 0.3em; text-transform: uppercase;
+      margin-top: 6px; opacity: 0.85;
+    }
+    .hq-hero .lede {
+      max-width: 640px; margin: 14px auto 0; color: #F4EAD5; opacity: 0.9;
+      font-size: clamp(0.9rem, 2vw, 1.02rem); line-height: 1.55;
+    }
+
+    .scoreboard {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: #0B0E11; border: 4px solid #1B1712;
+      outline: 3px solid #F4EAD5; outline-offset: -9px;
+      margin: 30px auto 40px; max-width: 980px; padding: 14px 10px;
+      box-shadow: 8px 8px 0 #1B1712;
+    }
+    .scoreboard > div { text-align: center; padding: 6px 8px; }
+    .scoreboard > div + div { border-left: 2px dashed #28313A; }
+    .scoreboard .k {
+      font-family: 'Teko', sans-serif; font-weight: 600; font-size: 1rem; line-height: 1;
+      letter-spacing: 0.2em; text-transform: uppercase; color: #C4CED4;
+    }
+    .scoreboard .v {
+      font-family: 'VT323', monospace; font-size: clamp(2rem, 5vw, 2.8rem); line-height: 1.05;
+      color: #FF8200; text-shadow: 0 0 14px rgba(255, 130, 0, 0.5);
+    }
+    .scoreboard .v.W { color: #00B2A9; text-shadow: 0 0 14px rgba(0, 178, 169, 0.5); }
+    .scoreboard .v.L { color: #EF426F; text-shadow: 0 0 14px rgba(239, 66, 111, 0.5); }
+    .scoreboard .sep { color: #28313A; margin: 0 0.25em; text-shadow: none; }
+    .scoreboard .d { font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; color: #9DA7B0; }
+
+    .deck {
+      display: grid; gap: clamp(16px, 2.4vw, 28px);
+      grid-template-columns: repeat(var(--per-row), minmax(0, 1fr));
+      max-width: calc(var(--per-row) * 270px); margin: 0 auto;
+    }
+    .loteria { text-decoration: none; color: inherit; display: block; }
+    @media (max-width: 1100px) {
+      .deck { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 820px; }
+    }
+    .loteria .frame {
+      background: #F4EAD5; color: #1B1712;
+      border: 6px solid #1B1712; outline: 3px solid #F4EAD5;
+      padding: 10px; aspect-ratio: 5 / 7; display: flex; flex-direction: column;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .loteria:hover .frame, .loteria:focus-visible .frame {
+      transform: translate(-3px, -3px) rotate(-1deg);
+      box-shadow: 10px 10px 0 #1B1712;
+    }
+    .loteria .num { font-family: 'Courier Prime', monospace; font-weight: 700; font-size: 1.15rem; line-height: 1; }
+    .loteria .art {
+      flex: 1; margin: 8px 0; border: 3px solid #1B1712;
+      background:
+        repeating-conic-gradient(from 0deg at 50% 55%, rgba(255,255,255,0.13) 0 7.5deg, transparent 7.5deg 15deg),
+        var(--c);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      color: var(--ink);
+    }
+    .loteria .art.has-img {
+      position: relative; overflow: hidden; display: block; background: var(--c);
+    }
+    .loteria .art.has-img img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.25s ease;
+    }
+    .loteria:hover .art.has-img img { transform: scale(1.04); }
+    .loteria .medallion {
+      position: absolute; top: 8px; width: 42%; aspect-ratio: 1;
+      border-radius: 50%; background: #1B1712; color: #F4EAD5;
+      border: 3px solid #F4EAD5; outline: 2px solid #1B1712;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+    }
+    .loteria .medallion.left  { left: 8px;  transform: rotate(-7deg); }
+    .loteria .medallion.right { right: 8px; transform: rotate(7deg); }
+    .loteria .medallion.top { left: 50%; transform: translateX(-50%) rotate(-4deg); }
+    .loteria .medallion.bottom { left: 50%; top: auto; bottom: 8px; transform: translateX(-50%) rotate(3deg); }
+    .loteria .medallion.tablet { left: 67%; top: 76%; transform: translate(-50%, -50%) rotate(-6deg); }
+    .loteria .medallions.stack-right {
+      position: absolute; right: 7px; bottom: 7px; top: 22%; width: 25%;
+      display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
+    }
+    .loteria .medallion.mini { position: static; width: 100%; border-width: 2px; gap: 0; }
+    .loteria .medallion.mini:nth-child(odd)  { transform: rotate(-5deg); }
+    .loteria .medallion.mini:nth-child(even) { transform: rotate(5deg); }
+    .loteria .medallion.mini .stat { font-size: clamp(0.85rem, 1.5vw, 1.05rem); }
+    .loteria .medallion.mini .caption { font-size: 0.5rem; letter-spacing: 0.08em; }
+    .loteria .medallion.center { left: 50%; top: 44%; transform: translate(-50%, -50%) rotate(-4deg); }
+    .loteria .medallion .stat {
+      font-size: clamp(1.3rem, 2.6vw, 1.75rem); text-shadow: 2px 2px 0 var(--c);
+    }
+    .loteria .medallion .caption {
+      background: none; padding: 0; font-size: 0.55rem; letter-spacing: 0.1em;
+      max-width: 86%; text-align: center; line-height: 1.15;
+    }
+    .loteria .stat {
+      font-family: 'Alfa Slab One', serif; font-size: clamp(2.6rem, 6vw, 3.6rem); line-height: 1;
+      text-shadow: 3px 3px 0 var(--sh);
+    }
+    .loteria .stat.long  { font-size: clamp(1.9rem, 4.2vw, 2.6rem); }
+    .loteria .stat.xlong { font-size: clamp(1.4rem, 3vw, 1.9rem); }
+    .loteria .medallion .stat.long  { font-size: clamp(0.95rem, 1.8vw, 1.2rem); }
+    .loteria .medallion .stat.xlong { font-size: clamp(0.75rem, 1.4vw, 0.95rem); }
+    .loteria .caption {
+      font-family: 'Courier Prime', monospace; font-weight: 700; font-size: 0.78rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      background: #1B1712; color: #F4EAD5; padding: 3px 8px;
+    }
+    .loteria .name {
+      font-family: 'Rye', serif; font-size: clamp(1.3rem, 3vw, 1.65rem); line-height: 1.1;
+      text-align: center; border-top: 3px solid #1B1712; padding-top: 8px;
+    }
+    .loteria .blurb {
+      color: #F4EAD5; font-size: 0.88rem; line-height: 1.45; margin-top: 14px; opacity: 0.92;
+    }
+
+    footer { color: #F4EAD5; }
+    footer .credit { color: #F4EAD5; }
+    .alamo-footer-seal .alamo-icon-svg { color: #F4EAD5; }
+
+    @media (max-width: 640px) {
+      .deck { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .loteria .frame { border-width: 4px; padding: 6px; }
+      .loteria .stat { font-size: 2.2rem; text-shadow: 2px 2px 0 var(--sh); }
+      .loteria .stat.long { font-size: 1.6rem; }
+      .loteria .stat.xlong { font-size: 1.15rem; }
+      .loteria .medallion { border-width: 2px; }
+      .loteria .medallion.left, .loteria .medallion.right, .loteria .medallion.top { top: 5px; }
+      .loteria .medallion.bottom { bottom: 5px; }
+      .loteria .medallions.stack-right { right: 4px; bottom: 4px; gap: 4px; width: 27%; }
+      .loteria .medallion.mini .stat { font-size: 0.68rem; }
+      .loteria .medallion.mini .caption { font-size: 0.36rem; }
+      .loteria .medallion .stat { font-size: 1.05rem; text-shadow: 1px 1px 0 var(--c); }
+      .loteria .medallion .stat.long { font-size: 0.8rem; }
+      .loteria .medallion .stat.xlong { font-size: 0.62rem; }
+      .loteria .medallion .caption { font-size: 0.42rem; letter-spacing: 0.04em; }
+      .loteria .medallion.left { left: 5px; }
+      .loteria .medallion.right { right: 5px; }
+      .loteria .caption { font-size: 0.6rem; letter-spacing: 0.08em; padding: 2px 5px; }
+      .loteria .name { font-size: 1.05rem; padding-top: 5px; }
+      .loteria .blurb { font-size: 0.78rem; margin-top: 10px; }
+      .scoreboard { grid-template-columns: repeat(2, 1fr); row-gap: 10px; }
+      .scoreboard > div:nth-child(3) { border-left: none; }
+    }
+    
   </style>
 </head>
 <body>
-  <div class="alamo-header-wrap">
-    <div class="alamo-roofline-crown">
-      <svg class="alamo-roofline-svg" viewBox="0 0 120 18" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18 Z" fill="#161A1F"/>
-        <path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18" stroke="#28313A" stroke-width="1" fill="none"/>
-      </svg>
-    </div>
-    <header>
-      <div class="hero-meta">
-        <div class="alamo-meta-banner">
-          <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon">
-            <path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/>
-            <path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/>
-            <path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/>
-          </svg>
-          <span>The Alamo City &bull; Mission San Antonio</span>
+  <div class="sarape-band" aria-hidden="true"></div>
+  <div class="page">
+    <section class="hq-hero">
+      <h1>Spurs Stats HQ</h1>
+      <div class="sub">&#9733; Putting hammer to stone since 2024 &#9733;</div>
+      <div class="season">2026-27 season</div>
+      <p class="lede">The San Antonio Spurs, by the numbers: who's playing well, how the rotation
+        fits together and what happens in close games, rebuilt from the box scores after every game.</p>
+    </section>
+
+    <section class="scoreboard" aria-label="Season at a glance">
+      <div><div class="k">Record</div><div class="v">1-2</div><div class="d">2026-27</div></div>
+      <div><div class="k">Last game</div><div class="v W">W 122-106</div><div class="d">@ DAL &middot; Oct 24</div></div>
+      <div><div class="k">Streak</div><div class="v W">W1</div><div class="d">current run</div></div>
+      <div><div class="k">Top performer</div><div class="v">Fox</div><div class="d">19 PTS &middot; 9 AST &middot; 3 STL</div></div>
+    </section>
+
+    <main class="deck" style="--per-row:3;">
+      
+      <a class="loteria" href="dashboard.html" style="--c:#00B2A9; --ink:#F4EAD5; --sh:#1B1712;">
+        <div class="frame">
+          <div class="num">1</div>
+          <div class="art has-img"><img src="img/loteria/tablero.webp" alt="" loading="lazy" decoding="async"><div class="medallion tablet"><div class="stat">1-2</div><div class="caption">Record</div></div></div>
+          <div class="name">El Tablero</div>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="motto">&bull; Pound the Rock &bull;</span>
-          <span class="badge">2026-27 Season Suite</span>
+        <p class="blurb">The season dashboard: four factors, rotation pairings, clutch ledger, scoring and defensive trends.</p>
+      </a>
+      <a class="loteria" href="wemby_lab.html" style="--c:#EF426F; --ink:#F4EAD5; --sh:#1B1712;">
+        <div class="frame">
+          <div class="num">2</div>
+          <div class="art has-img"><img src="img/loteria/alien.webp" alt="" loading="lazy" decoding="async"><div class="medallions stack-right"><div class="medallion mini"><div class="stat">20.0</div><div class="caption">PTS</div></div><div class="medallion mini"><div class="stat">11.0</div><div class="caption">REB</div></div><div class="medallion mini"><div class="stat">4.7</div><div class="caption">STOCKS</div></div></div></div>
+          <div class="name">El Alien</div>
         </div>
+        <p class="blurb">The Wemby Lab: rim deterrence, stocks timeline, milestone watch and his best defensive nights.</p>
+      </a>
+      <a class="loteria" href="dashboard.html#spotlight" style="--c:#7A2E1F; --ink:#F4EAD5; --sh:#1B1712;">
+        <div class="frame">
+          <div class="num">7</div>
+          <div class="art has-img"><img src="img/loteria/valiente.webp" alt="" loading="lazy" decoding="async"><div class="medallion right"><div class="stat">Fox</div><div class="caption">Hot hand &middot; last 3</div></div></div>
+          <div class="name">El Valiente</div>
+        </div>
+        <p class="blurb">Whoever is playing best right now: De'Aaron Fox leads the team in Game Score over the last 3 games (18.3).</p>
+      </a>
+      <a class="loteria" href="notebook.html" style="--c:#1B1712; --ink:#F4EAD5; --sh:#1B1712;">
+        <div class="frame">
+          <div class="num">4</div>
+          <div class="art has-img"><img src="img/loteria/libreta.webp" alt="" loading="lazy" decoding="async"><div class="medallion bottom"><div class="stat">&#9998;</div><div class="caption">Essays</div></div></div>
+          <div class="name">La Libreta</div>
+        </div>
+        <p class="blurb">The Notebook: living essays where every number is recomputed from the data at build time.</p>
+      </a>
+      <a class="loteria" href="matchup.html" style="--c:#F2C14E; --ink:#1B1712; --sh:transparent;">
+        <div class="frame">
+          <div class="num">5</div>
+          <div class="art has-img"><img src="img/loteria/duelo.webp" alt="" loading="lazy" decoding="async"><div class="medallion top"><div class="stat long">vs. SAC</div><div class="caption">Tue 7:00 PM</div></div></div>
+          <div class="name">El Duelo</div>
+        </div>
+        <p class="blurb">Next up: Kings at Spurs, Tuesday, Oct 27 · 7:00 PM CT. Tale of the tape, recent form and players to watch.</p>
+      </a>
+      <a class="loteria" href="props_board.html" style="--c:#C4CED4; --ink:#1B1712; --sh:transparent;">
+        <div class="frame">
+          <div class="num">6</div>
+          <div class="art has-img"><img src="img/loteria/mercado.webp" alt="" loading="lazy" decoding="async"><div class="medallion center"><div class="stat">O/U</div><div class="caption">Prop board</div></div></div>
+          <div class="name">El Mercado</div>
+        </div>
+        <p class="blurb">Player prop hit rates from game logs. For fun and analysis, not betting advice.</p>
+      </a>
+    </main>
+    
+    <footer>
+      <div class="alamo-footer-seal" aria-hidden="true">
+        <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon"><path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/><path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/><path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/></svg>
       </div>
-      <h1>San Antonio Spurs HQ</h1>
-      <p class="subtitle">
-        The comprehensive San Antonio Spurs analytical suite: tracking full-roster performance,
-        young core development, clutch execution, 2014-style ball movement, Rodeo Road Trip splits,
-        and the Victor Wembanyama defensive laboratory. Built to adapt to every phase of the season.
+      <p class="credit">Created and Maintained by <a href="https://www.corygarms.com" target="_blank" rel="noopener">Cory Garms</a></p>
+      <p class="links">
+        <a href="https://x.com/cory_garms" target="_blank" rel="noopener">X / Twitter @cory_garms</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="https://github.com/cory-garms" target="_blank" rel="noopener">GitHub cory-garms</a>
       </p>
-    </header>
+    </footer>
+    
   </div>
-
-  <main>
-    <h2 class="section-title">🏀 Court Intelligence &amp; Performance</h2>
-    <div class="card-grid">
-      <a href="dashboard.html" class="portal-card silver">
-        <div class="card-top">
-          <div class="card-tag">Team &amp; Roster Suite</div>
-          <div class="card-heading">Season Dashboard</div>
-          <p class="card-desc">
-            Complete team performance ledger: rotation core production matrix, starter vs. bench output, clutch margin distribution, rolling win rates, hot/cold shooting, and defensive ratings.
-          </p>
-        </div>
-        <div class="card-cta">Launch Dashboard &rarr;</div>
-      </a>
-
-      <a href="wemby_lab.html" class="portal-card teal">
-        <div class="card-top">
-          <div class="card-tag">Specialized Defensive Lab</div>
-          <div class="card-heading">The Wemby Factor</div>
-          <p class="card-desc">
-            Opponent FG% rim suppression inside 6 feet, block and steal distribution, defensive radius contours, 5x5 milestone tracker, and on/off swing ratings.
-          </p>
-        </div>
-        <div class="card-cta">Enter Wemby Lab &rarr;</div>
-      </a>
-
-      <a href="rodeo_road_trip.html" class="portal-card orange">
-        <div class="card-top">
-          <div class="card-tag">Split Tracker</div>
-          <div class="card-heading">Rodeo Road Trip</div>
-          <p class="card-desc">
-            February multi-week road trip splits, fatigue decay curves, and comparative historical performance against championship runs since 2003.
-          </p>
-        </div>
-        <div class="card-cta">Analyze Road Trip &rarr;</div>
-      </a>
-
-      <a href="notebook.html" class="portal-card fuschia">
-        <div class="card-top">
-          <div class="card-tag">Dynamic Analysis</div>
-          <div class="card-heading">Spurs Notebook</div>
-          <p class="card-desc">
-            Living analytical essays evaluating rotation pairings, assist-to-turnover metrics, and clutch performance with numbers calculated at build time.
-          </p>
-        </div>
-        <div class="card-cta">Read Notebook &rarr;</div>
-      </a>
-    </div>
-
-    <h2 class="section-title">🎲 Game Day &amp; Props Intelligence</h2>
-    <div class="card-grid">
-      <a href="matchup.html" class="portal-card silver">
-        <div class="card-top">
-          <div class="card-tag">Simulation &amp; Beatdown Lab</div>
-          <div class="card-heading">Matchup &amp; Beatdown Predictor</div>
-          <p class="card-desc">
-            Empirical 29-team scoring margin simulator, win probability models, blowout meters (+10, +15, +20), and real-time interactive rest fatigue and venue toggles.
-          </p>
-        </div>
-        <div class="card-cta">Launch Predictor &rarr;</div>
-      </a>
-
-      <a href="props_board.html" class="portal-card teal">
-        <div class="card-top">
-          <div class="card-tag">Market Models</div>
-          <div class="card-heading">Player Props Board</div>
-          <p class="card-desc">
-            Points, rebounds, assists, and stocks projections priced against consensus sportsbook lines, published with measured confidence intervals.
-          </p>
-        </div>
-        <div class="card-cta">Inspect Props Board &rarr;</div>
-      </a>
-    </div>
-  </main>
-
-  <footer>
-    <div class="alamo-footer-seal" aria-hidden="true">
-      <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon">
-        <path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/>
-        <path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/>
-        <path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/>
-      </svg>
-    </div>
-    <p class="stonecutter">
-      &ldquo;When nothing seems to help, I go and look at a stonecutter hammering away at his rock,
-      perhaps a hundred times without as much as a crack showing in it. Yet at the hundred and first blow
-      it will split in two, and I know it was not that last blow that did it, but all that had gone before.&rdquo;
-      <br>&mdash; Jacob Riis / San Antonio Spurs Creed
-    </p>
-    <p>The Alamo City &bull; San Antonio Spurs Analytics Suite &bull; Silver &amp; Black Performance Intelligence</p>
-  </footer>
 </body>
 </html>

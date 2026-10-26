@@ -14,7 +14,7 @@ Identity:
 
 from __future__ import annotations
 
-import re
+from datetime import date
 from pathlib import Path
 import config
 
@@ -58,6 +58,20 @@ FIESTA_TEAL      = "#00B2A9"  # Win / Over / Deterrence
 FIESTA_FUSCHIA   = "#EF426F"  # Loss / Under / Defect
 FIESTA_ORANGE    = "#FF8200"  # Warning / Neutral mark
 
+# Lotería palette (landing page): cream card stock, ink outlines, adobe terracotta
+LOTERIA_CREAM    = "#F4EAD5"
+LOTERIA_INK      = "#1B1712"
+ADOBE_TERRACOTTA = "#7A2E1F"
+MARIGOLD         = "#F2C14E"
+
+# Three-band sarape stripe, as worn on the 1990s Fiesta-era uniforms
+SARAPE_STRIPE = (
+    f"linear-gradient({FIESTA_TEAL} 0 33.3%, {FIESTA_FUSCHIA} 33.3% 66.6%, {FIESTA_ORANGE} 66.6%)"
+)
+SARAPE_RIBBON = (
+    f"repeating-linear-gradient(90deg, {FIESTA_TEAL} 0 60px, {FIESTA_FUSCHIA} 60px 120px, {FIESTA_ORANGE} 120px 180px)"
+)
+
 CATEGORICAL: tuple[str, ...] = (
     FIESTA_TEAL,
     SPURS_SILVER,
@@ -76,17 +90,28 @@ FONTS_LINK = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
     '  <link href="https://fonts.googleapis.com/css2?'
+    'family=Alfa+Slab+One&'
     'family=Barlow+Condensed:wght@400;600;700;800&'
-    'family=Graduate&'
+    'family=Bowlby+One&'
+    'family=Courier+Prime:wght@400;700&'
+    'family=Rye&'
     'family=Share+Tech+Mono&'
-    'family=Teko:wght@500;600;700&display=swap" rel="stylesheet">'
+    'family=Teko:wght@500;600;700&'
+    'family=VT323&display=swap" rel="stylesheet">'
 )
 
-FONT_DISPLAY = '"Teko", sans-serif'
-FONT_STENCIL = '"Barlow Condensed", sans-serif'
-FONT_TITLE   = '"Barlow Condensed", sans-serif'
-FONT_MONO    = '"Share Tech Mono", monospace'
-FONT_BODY    = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+# Single quotes inside: these are interpolated into style="..." attributes,
+# where a double quote would end the attribute and silently drop the font.
+FONT_DISPLAY = "'Bowlby One', sans-serif"       # chunky 90s italic headlines
+FONT_HEADING = "'Teko', sans-serif"             # section & card titles
+FONT_LED     = "'VT323', monospace"             # arena scoreboard numerals
+FONT_WESTERN = "'Rye', serif"                   # Lotería card names
+FONT_SLAB    = "'Alfa Slab One', serif"         # Lotería card numerals
+FONT_TYPE    = "'Courier Prime', monospace"     # typewritten captions
+FONT_STENCIL = "'Barlow Condensed', sans-serif"
+FONT_TITLE   = "'Barlow Condensed', sans-serif"
+FONT_MONO    = "'Share Tech Mono', monospace"
+FONT_BODY    = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
 
 # ---------------------------------------------------------------------------
 # Plotly Layout Standards
@@ -95,21 +120,39 @@ LAYOUT_BASE = dict(
     paper_bgcolor=SILVER_SLATE,
     plot_bgcolor=FROST_BANK_FLOOR,
     font=dict(color=COURT_WHITE, family="Share Tech Mono, monospace", size=12),
+    title_font=dict(family="Teko, sans-serif", size=22, color=COURT_WHITE),
     xaxis=dict(gridcolor=COURT_LINE, zerolinecolor=COURT_LINE),
     yaxis=dict(gridcolor=COURT_LINE, zerolinecolor=COURT_LINE),
     margin=dict(l=60, r=30, t=50, b=50),
     legend=dict(
         bgcolor="rgba(0,0,0,0)",
         bordercolor=COURT_LINE,
-        font=dict(family="Barlow Condensed, sans-serif", size=13),
+        font=dict(family="Teko, sans-serif", size=16),
     ),
 )
 
+# Fans read these charts, they don't operate them: hover tooltips stay, the
+# zoom/pan toolbar goes, and scroll-zoom is off so phones can scroll past charts.
 PLOTLY_CONFIG = {
     "responsive": True,
     "displaylogo": False,
-    "modeBarButtonsToRemove": ["lasso2d", "select2d", "autoScale2d"],
+    "displayModeBar": False,
+    "scrollZoom": False,
 }
+
+
+def chart_html(fig, div_id: str, include_plotlyjs: bool | str = False) -> str:
+    """
+    Embed a themed figure in a page. The surrounding section heading names the
+    chart, so the figure's own title is dropped to avoid saying it twice.
+    """
+    import plotly.io as pio
+
+    fig.update_layout(title=None, margin=dict(t=24))
+    return pio.to_html(
+        fig, full_html=False, include_plotlyjs=include_plotlyjs,
+        div_id=div_id, config=PLOTLY_CONFIG,
+    )
 
 
 def apply(fig, **extra):
@@ -124,25 +167,57 @@ def apply(fig, **extra):
 # ---------------------------------------------------------------------------
 # Navigation & Modes
 # ---------------------------------------------------------------------------
-MODE_COURT = "court"
-MODE_PROPS = "props"
-
-MODE_LABELS = {
-    MODE_COURT: "🏀 Court Intelligence",
-    MODE_PROPS: "🎲 Props & Market",
-}
-
-# slug -> (filename, nav label, mode)
 # Filenames are season-agnostic so shared links survive the yearly rollover;
 # the current season (config.SEASON) always publishes to these names.
-PAGES: dict[str, tuple[str, str, str]] = {
-    "dashboard": ("dashboard.html",       "Season Dashboard", MODE_COURT),
-    "wemby":     ("wemby_lab.html",       "Wemby Lab",        MODE_COURT),
-    "rodeo":     ("rodeo_road_trip.html", "Rodeo Road Trip",  MODE_COURT),
-    "notebook":  ("notebook.html",        "Spurs Notebook",   MODE_COURT),
-    "matchup":   ("matchup.html",         "Matchup Intel",    MODE_PROPS),
-    "board":     ("props_board.html",     "Player Props",     MODE_PROPS),
+PAGES: dict[str, tuple[str, str]] = {
+    "dashboard": ("dashboard.html",       "Dashboard"),
+    "wemby":     ("wemby_lab.html",       "Wemby Lab"),
+    "rodeo":     ("rodeo_road_trip.html", "Rodeo Road Trip"),
+    "notebook":  ("notebook.html",        "Notebook"),
+    "matchup":   ("matchup.html",         "Next Game"),
+    "board":     ("props_board.html",     "Props"),
 }
+
+
+# Early-season thresholds: trend charts need enough games to show a trend, and
+# graded/percentage stats get a small-sample label until they settle.
+MIN_TREND_GAMES = 10
+MIN_GRADE_GAMES = 5
+SMALL_SAMPLE_GAMES = 15
+
+
+def small_sample_badge(text: str) -> str:
+    """Inline label marking a stat as too early to read much into."""
+    return f'<span class="badge small-sample" title="Small sample: expect this to move a lot">{text}</span>'
+
+
+def early_season_note(games_played: int) -> str:
+    """Page-level notice shown until the sample is large enough to trust rates and trends."""
+    if games_played >= SMALL_SAMPLE_GAMES:
+        return ""
+    return (
+        f'<div class="early-season" role="note"><strong>Early season:</strong> {games_played} '
+        f'game{"s" if games_played != 1 else ""} played. Percentages and hit rates swing a lot this early; '
+        f'trend charts appear after {MIN_TREND_GAMES} games.</div>'
+    )
+
+
+# Seasonal pages are still built (old links keep working) but are only featured
+# in the nav and on the landing page inside their window: (month, day) inclusive.
+SEASONAL_PAGES: dict[str, tuple[tuple[int, int], tuple[int, int]]] = {
+    # Rodeo Road Trip: lead-up from mid-January, through the post-trip splits in April
+    "rodeo": ((1, 15), (4, 30)),
+}
+
+
+def is_featured(slug: str, today: date | None = None) -> bool:
+    """Whether a page should be surfaced in navigation right now."""
+    window = SEASONAL_PAGES.get(slug)
+    if window is None:
+        return True
+    today = today or date.today()
+    (m1, d1), (m2, d2) = window
+    return (m1, d1) <= (today.month, today.day) <= (m2, d2)
 
 
 def page_path(slug: str, team_abbr: str = config.TEAM_ABBR, season: int = config.SEASON) -> Path:
@@ -158,66 +233,27 @@ def page_path(slug: str, team_abbr: str = config.TEAM_ABBR, season: int = config
     return config.OUTPUT_DIR / filename
 
 
-def stamp_index_season(season_label: str) -> None:
-    """Keep the hand-authored landing page's season badge in sync with the build."""
-    index = config.OUTPUT_DIR / "index.html"
-    if not index.exists():
-        return
-    html = index.read_text(encoding="utf-8")
-    html = re.sub(r'(<span class="badge">)\d{4}-\d{2}( Season Suite</span>)', rf"\g<1>{season_label}\g<2>", html)
-    index.write_text(html, encoding="utf-8")
-
-
-def _mode_landing(mode: str) -> str:
-    for slug, (fn, _, m) in PAGES.items():
-        if m == mode:
-            return fn
-    return "index.html"
-
-
-def nav_bar(current_slug: str) -> str:
-    """Generate the responsive Spurs dual-mode navigation bar."""
-    curr_entry = PAGES.get(current_slug)
-    curr_mode = curr_entry[2] if curr_entry else MODE_COURT
-
-    # Mode switch buttons
-    mode_buttons = []
-    for mode, label in MODE_LABELS.items():
-        is_active = (mode == curr_mode)
-        active_cls = " active" if is_active else ""
-        target_fn = _mode_landing(mode)
-        if is_active:
-            mode_buttons.append(f'<span class="mode-seg{active_cls}">{label}</span>')
-        else:
-            mode_buttons.append(f'<a href="{target_fn}" class="mode-seg">{label}</a>')
-    mode_switch_html = f'<div class="mode-switch">{"".join(mode_buttons)}</div>'
-
-    # Page links inside the active mode
-    page_links = [
-        '<a href="index.html" class="nav-page index-link">← Spurs HQ</a>'
-    ]
-    for slug, (filename, label, mode) in PAGES.items():
-        if mode != curr_mode:
-            continue
+def nav_bar(current_slug: str, today: date | None = None) -> str:
+    """One row of links: back to HQ, then every page that's in season."""
+    links = ['<a href="index.html" class="nav-page index-link">← Spurs Stats HQ</a>']
+    for slug, (filename, label) in PAGES.items():
         if slug == current_slug:
-            page_links.append(f'<span class="nav-page current">{label}</span>')
-        else:
-            page_links.append(f'<a href="{filename}" class="nav-page">{label}</a>')
-
-    pages_html = f'<div class="nav-pages">{" ".join(page_links)}</div>'
-    return f'<nav class="nav-bar">{mode_switch_html}{pages_html}</nav>'
+            links.append(f'<span class="nav-page current" aria-current="page">{label}</span>')
+        elif is_featured(slug, today):
+            links.append(f'<a href="{filename}" class="nav-page">{label}</a>')
+    return f'<nav class="nav-bar"><div class="nav-pages">{" ".join(links)}</div></nav>'
 
 
 # ---------------------------------------------------------------------------
 # CSS Chrome Generator
 # ---------------------------------------------------------------------------
 def page_css() -> str:
-    """Stonecutter Silver & Black + Fiesta CSS."""
+    """Fiesta Night '94: Silver & Black base with 1990s Fiesta-uniform accents."""
     return f"""
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     html, body {{
       background:
-        radial-gradient(ellipse at 50% 0%, rgba(196, 206, 212, 0.04) 0%, transparent 70%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 12px),
         {FROST_BANK_FLOOR};
       color: {COURT_WHITE};
       font-family: {FONT_BODY};
@@ -226,140 +262,128 @@ def page_css() -> str:
       overflow-x: hidden;
       -webkit-text-size-adjust: 100%;
     }}
-    body {{ padding: clamp(12px, 3vw, 28px); }}
+    .sarape-band {{
+      height: 18px; background: {SARAPE_STRIPE};
+      transform: skewY(-0.8deg); margin: 10px -20px 0;
+    }}
+    .page {{ padding: clamp(12px, 3vw, 28px); max-width: 1440px; margin: 0 auto; }}
 
     /* ---- Navigation ---- */
-    .nav-bar {{ margin-bottom: 24px; }}
-    .mode-switch {{
-      display: flex; width: 100%;
-      border: 1px solid {COURT_LINE}; border-radius: 4px;
-      overflow: hidden; margin-bottom: 12px;
-      background: {FROST_BANK_FLOOR};
+    .nav-bar {{ margin-bottom: 28px; }}
+    .nav-pages {{ display: flex; flex-wrap: wrap; gap: 10px; }}
+    @media (max-width: 640px) {{
+      /* One swipeable row on phones instead of three wrapped rows */
+      .nav-pages {{
+        flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+        padding: 2px 8px 8px 2px; margin: 0 -12px 0 0;
+      }}
+      .nav-pages::-webkit-scrollbar {{ display: none; }}
+      .nav-page {{ flex: 0 0 auto; }}
     }}
-    .mode-seg {{
-      flex: 1 1 50%; text-align: center;
-      padding: 10px 8px;
-      font-family: {FONT_STENCIL}; font-size: clamp(0.75rem, 2.5vw, 0.9rem);
-      font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: {TEXT_MUTED}; text-decoration: none;
-      background: {FROST_BANK_FLOOR};
-      transition: background 0.18s ease, color 0.18s ease;
-      min-height: 44px; display: flex; align-items: center; justify-content: center;
-    }}
-    .mode-seg + .mode-seg {{ border-left: 1px solid {COURT_LINE}; }}
-    .mode-seg.active {{
-      background: {SHADOW_BLACK}; color: {COURT_WHITE};
-      box-shadow: inset 0 -3px 0 {SPURS_SILVER};
-    }}
-    a.mode-seg:hover {{ background: {SILVER_SLATE}; color: {COURT_WHITE}; }}
-
-    .nav-pages {{ display: flex; flex-wrap: wrap; gap: 8px; }}
     .nav-page {{
       color: {COURT_WHITE}; text-decoration: none;
-      font-family: {FONT_STENCIL}; font-size: 0.8rem;
+      font-family: {FONT_HEADING}; font-size: 1.1rem; line-height: 1;
       font-weight: 600;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 8px 14px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 9px 14px 7px;
       background: {SILVER_SLATE};
-      border: 1px solid {COURT_LINE};
-      border-radius: 4px;
-      transition: all 0.18s ease;
+      border: 2px solid {COURT_LINE};
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
     }}
-    a.nav-page:hover {{ background: {SHADOW_BLACK}; border-color: {SPURS_SILVER}; color: {SPURS_SILVER}; }}
+    a.nav-page:hover {{
+      border-color: {COURT_WHITE}; transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 {FIESTA_TEAL};
+    }}
     .nav-page.current {{
-      background: {SHADOW_BLACK}; border-color: {SPURS_SILVER}; color: {SPURS_SILVER};
-      box-shadow: inset 0 0 0 1px {SPURS_SILVER};
+      background: {COURT_WHITE}; border-color: {COURT_WHITE}; color: {FROST_BANK_FLOOR};
+      box-shadow: 4px 4px 0 {FIESTA_FUSCHIA};
       cursor: default;
     }}
-    .nav-page.index-link {{ color: {TEXT_MUTED}; background: transparent; border-color: transparent; }}
-    .nav-page.index-link:hover {{ color: {COURT_WHITE}; background: {SILVER_SLATE}; }}
+    .nav-page.index-link {{ color: {MARIGOLD}; background: transparent; border-color: transparent; }}
+    .nav-page.index-link:hover {{ box-shadow: none; transform: none; color: {COURT_WHITE}; }}
 
     /* ---- Alamo Heritage & Architecture ---- */
-    .alamo-header-wrap {{
-      margin-bottom: 24px;
-      position: relative;
-    }}
+    .alamo-header-wrap {{ margin-bottom: 36px; position: relative; }}
     .alamo-roofline-crown {{
-      width: clamp(140px, 30vw, 240px);
-      height: 18px;
-      margin: 0 auto -1px;
-      display: block;
-      position: relative;
-      z-index: 2;
+      width: clamp(140px, 30vw, 240px); height: 18px;
+      margin: 0 auto -2px; display: block; position: relative; z-index: 2;
     }}
-    .alamo-roofline-crown svg {{
-      width: 100%; height: 100%; display: block;
-    }}
+    .alamo-roofline-crown svg {{ width: 100%; height: 100%; display: block; }}
     .alamo-meta-banner {{
       display: inline-flex; align-items: center; gap: 8px;
-      font-family: {FONT_MONO}; font-size: 0.72rem; letter-spacing: 0.12em;
-      text-transform: uppercase; color: {ALAMO_STONE}; margin-bottom: 10px;
-      padding: 4px 10px; background: rgba(201, 176, 151, 0.08);
-      border: 1px solid rgba(201, 176, 151, 0.25); border-radius: 4px;
+      font-family: {FONT_HEADING}; font-size: 1.05rem; font-weight: 600; line-height: 1;
+      letter-spacing: 0.22em; text-transform: uppercase; color: {FIESTA_ORANGE};
+      margin-bottom: 12px;
     }}
     .alamo-icon-svg {{
       width: 22px; height: 12px; display: inline-block; vertical-align: middle;
-      color: {ALAMO_STONE}; flex-shrink: 0;
+      color: {FIESTA_ORANGE}; flex-shrink: 0;
     }}
     .alamo-footer-seal {{
       display: flex; justify-content: center; align-items: center; margin-bottom: 14px;
-      opacity: 0.75;
     }}
-    .alamo-footer-seal .alamo-icon-svg {{
-      width: 44px; height: 22px; color: {SPURS_STEEL};
-    }}
+    .alamo-footer-seal .alamo-icon-svg {{ width: 44px; height: 22px; color: {SPURS_SILVER}; }}
 
     /* ---- Header ---- */
     header {{
-      background:
-        radial-gradient(ellipse at 90% 10%, rgba(201, 176, 151, 0.06) 0%, transparent 60%),
-        linear-gradient(180deg, {SILVER_SLATE} 0%, {SHADOW_BLACK} 100%);
-      border: 1px solid {COURT_LINE};
-      border-top: 3px solid {SPURS_SILVER};
-      border-radius: 6px;
-      padding: clamp(16px, 3vw, 24px);
+      background: {SILVER_SLATE};
+      border: 2px solid {COURT_WHITE};
+      box-shadow: 8px 8px 0 {FIESTA_FUSCHIA}, 16px 16px 0 {FIESTA_TEAL};
+      padding: clamp(18px, 3.5vw, 30px);
       position: relative;
-    }}
-    header::after {{
-      content: "";
-      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, {FIESTA_TEAL} 0%, {FIESTA_TEAL} 33.3%, {FIESTA_FUSCHIA} 33.3%, {FIESTA_FUSCHIA} 66.6%, {FIESTA_ORANGE} 66.6%, {FIESTA_ORANGE} 100%);
+      margin-right: 16px;
     }}
     header h1 {{
+      display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px;
+      line-height: 1;
+    }}
+    header h1 .title-text {{
       font-family: {FONT_DISPLAY};
-      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
-      letter-spacing: 0.04em;
+      font-size: clamp(1.7rem, 5vw, 3.2rem);
+      font-weight: 400;
       text-transform: uppercase;
       color: {COURT_WHITE};
-      display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+      transform: skewX(-9deg);
+      text-shadow: 3px 3px 0 {FIESTA_FUSCHIA}, 6px 6px 0 {FIESTA_TEAL};
+    }}
+    header h1 .badge {{
+      font-family: {FONT_LED}; font-size: 1.35rem; line-height: 1;
+      color: {FIESTA_ORANGE}; border: 2px solid {FIESTA_ORANGE}; background: transparent;
+      padding: 3px 10px 1px; text-shadow: 0 0 10px rgba(255, 130, 0, 0.5);
     }}
     header p {{
-      color: {TEXT_MUTED}; margin-top: 6px;
-      font-size: clamp(0.85rem, 2vw, 1.0rem); line-height: 1.5;
+      color: {SPURS_SILVER}; margin-top: 14px;
+      font-size: clamp(0.9rem, 2vw, 1.05rem); line-height: 1.5;
     }}
 
     /* ---- Cards ---- */
     .chart-section, .card {{
+      --accent: {FIESTA_TEAL};
       background: {SILVER_SLATE};
-      border: 1px solid {COURT_LINE};
-      border-radius: 6px;
+      border: 2px solid rgba(246, 248, 250, 0.85);
       padding: clamp(14px, 3vw, 22px);
-      margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin: 0 8px 32px 0;
+      box-shadow: 8px 8px 0 var(--accent);
     }}
+    .chart-section:nth-of-type(3n+2), .card:nth-of-type(3n+2) {{ --accent: {FIESTA_FUSCHIA}; }}
+    .chart-section:nth-of-type(3n), .card:nth-of-type(3n) {{ --accent: {FIESTA_ORANGE}; }}
     .chart-title, .card h2 {{
-      font-family: {FONT_STENCIL};
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: {SPURS_SILVER};
+      font-family: {FONT_HEADING};
+      font-size: clamp(1.35rem, 3vw, 1.7rem);
+      font-weight: 600; line-height: 1;
+      color: {COURT_WHITE};
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid {COURT_LINE};
-      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed {COURT_LINE};
+      display: flex; align-items: center; gap: 12px;
     }}
+    .chart-title::before, .card h2::before {{
+      content: ""; flex: 0 0 auto; width: 14px; height: 14px; margin-right: -2px;
+      background: {SARAPE_STRIPE}; order: -1;
+    }}
+    .chart-title > :not(:first-child):last-child, .card h2 > :not(:first-child):last-child {{ margin-left: auto; }}
 
     /* ---- Badges ---- */
     .badge {{
@@ -367,7 +391,6 @@ def page_css() -> str:
       font-family: {FONT_MONO};
       font-size: 0.75rem;
       padding: 3px 8px;
-      border-radius: 3px;
       background: {SHADOW_BLACK};
       border: 1px solid {SPURS_STEEL};
       color: {COURT_WHITE};
@@ -375,37 +398,58 @@ def page_css() -> str:
     }}
     .badge.teal {{ background: rgba(0, 178, 169, 0.15); border-color: {FIESTA_TEAL}; color: {FIESTA_TEAL}; }}
     .badge.fuschia {{ background: rgba(239, 66, 111, 0.15); border-color: {FIESTA_FUSCHIA}; color: {FIESTA_FUSCHIA}; }}
+    .badge.small-sample {{
+      font-family: {FONT_TYPE}; font-size: 0.72rem; text-transform: none; letter-spacing: 0;
+      color: {MARIGOLD}; border: 1px dashed {MARIGOLD}; background: rgba(242, 193, 78, 0.08);
+      white-space: normal; line-height: 1.35;
+    }}
+    .early-season {{
+      border: 2px dashed {MARIGOLD}; background: rgba(242, 193, 78, 0.07); color: {COURT_WHITE};
+      padding: 12px 16px; margin: 0 8px 28px 0; font-size: 0.92rem; line-height: 1.5;
+    }}
+    .early-season strong {{ color: {MARIGOLD}; font-family: {FONT_HEADING}; font-size: 1.15rem;
+      font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 4px; }}
     .badge.orange {{ background: rgba(255, 130, 0, 0.15); border-color: {FIESTA_ORANGE}; color: {FIESTA_ORANGE}; }}
 
     /* ---- Footer ---- */
     footer {{
       text-align: center; color: {TEXT_MUTED};
-      font-size: 0.85rem; margin-top: 48px; padding-top: 24px;
-      border-top: 1px solid {COURT_LINE};
+      font-size: 0.85rem; margin-top: 56px; padding-top: 28px;
+      position: relative;
     }}
-    footer .stonecutter {{
-      max-width: 680px; margin: 0 auto 16px;
-      font-style: italic; font-size: 0.8rem; line-height: 1.5; color: {SPURS_STEEL};
+    footer::before {{
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+      background: {SARAPE_RIBBON};
     }}
-    footer a {{ color: {SPURS_SILVER}; text-decoration: none; }}
-    footer a:hover {{ text-decoration: underline; }}
+    footer .credit {{
+      font-family: {FONT_HEADING}; font-size: 1.35rem; font-weight: 600; line-height: 1.1;
+      letter-spacing: 0.08em; text-transform: uppercase; color: {COURT_WHITE};
+    }}
+    footer .links {{ margin-top: 8px; font-family: {FONT_TYPE}; font-size: 0.85rem; }}
+    footer .links span {{ margin: 0 8px; color: {TEXT_MUTED}; }}
+    footer a {{ color: {MARIGOLD}; text-decoration: none; }}
+    footer a:hover, footer a:focus-visible {{ text-decoration: underline; }}
+
+    @media (max-width: 640px) {{
+      header {{ box-shadow: 6px 6px 0 {FIESTA_FUSCHIA}, 12px 12px 0 {FIESTA_TEAL}; margin-right: 12px; }}
+      .chart-section, .card {{ box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }}
+    }}
     """
 
 
 def page_footer() -> str:
-    """Generate the standard Spurs footer with stonecutter motto and Alamo City seal."""
+    """Standard footer: Alamo seal, author credit and links."""
     return f"""
     <footer>
       <div class="alamo-footer-seal" aria-hidden="true">
         {ALAMO_ICON_SVG}
       </div>
-      <p class="stonecutter">
-        &ldquo;When nothing seems to help, I go and look at a stonecutter hammering away at his rock,
-        perhaps a hundred times without as much as a crack showing in it. Yet at the hundred and first blow
-        it will split in two, and I know it was not that last blow that did it, but all that had gone before.&rdquo;
-        <br>&mdash; Jacob Riis / San Antonio Spurs Creed
+      <p class="credit">Created and Maintained by <a href="https://www.corygarms.com" target="_blank" rel="noopener">Cory Garms</a></p>
+      <p class="links">
+        <a href="https://x.com/cory_garms" target="_blank" rel="noopener">X / Twitter @cory_garms</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="https://github.com/cory-garms" target="_blank" rel="noopener">GitHub cory-garms</a>
       </p>
-      <p>The Alamo City &bull; San Antonio Spurs Analytics Suite &bull; Silver &amp; Black Performance Intelligence</p>
     </footer>
     """
 
@@ -415,9 +459,11 @@ def page_html(
     subtitle: str,
     body_content: str,
     current_slug: str = "dashboard",
-    badge: str = "2025-26 Season",
+    badge: str = f"{config.season_str(config.SEASON)} Season",
+    games_played: int | None = None,
 ) -> str:
     """Wrap content in the official Spurs HTML shell."""
+    note = early_season_note(games_played) if games_played is not None else ""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -430,6 +476,8 @@ def page_html(
   </style>
 </head>
 <body>
+  <div class="sarape-band" aria-hidden="true"></div>
+  <div class="page">
   {nav_bar(current_slug)}
   <div class="alamo-header-wrap">
     <div class="alamo-roofline-crown">
@@ -440,14 +488,16 @@ def page_html(
         {ALAMO_ICON_SVG}
         <span>The Alamo City &bull; Mission San Antonio</span>
       </div>
-      <h1>{title} <span class="badge">{badge}</span></h1>
+      <h1><span class="title-text">{title}</span> <span class="badge">{badge}</span></h1>
       <p>{subtitle}</p>
     </header>
   </div>
   <main>
+    {note}
     {body_content}
   </main>
   {page_footer()}
+  </div>
 </body>
 </html>
 """

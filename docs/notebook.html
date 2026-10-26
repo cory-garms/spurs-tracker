@@ -6,163 +6,150 @@
   <title>Spurs Notebook — San Antonio Spurs Analytics</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Graduate&family=Share+Tech+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@400;600;700;800&family=Bowlby+One&family=Courier+Prime:wght@400;700&family=Rye&family=Share+Tech+Mono&family=Teko:wght@500;600;700&family=VT323&display=swap" rel="stylesheet">
   <style>
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       background:
-        radial-gradient(ellipse at 50% 0%, rgba(196, 206, 212, 0.04) 0%, transparent 70%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 12px),
         #0B0E11;
       color: #F6F8FA;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       min-height: 100vh;
       width: 100%;
       overflow-x: hidden;
       -webkit-text-size-adjust: 100%;
     }
-    body { padding: clamp(12px, 3vw, 28px); }
+    .sarape-band {
+      height: 18px; background: linear-gradient(#00B2A9 0 33.3%, #EF426F 33.3% 66.6%, #FF8200 66.6%);
+      transform: skewY(-0.8deg); margin: 10px -20px 0;
+    }
+    .page { padding: clamp(12px, 3vw, 28px); max-width: 1440px; margin: 0 auto; }
 
     /* ---- Navigation ---- */
-    .nav-bar { margin-bottom: 24px; }
-    .mode-switch {
-      display: flex; width: 100%;
-      border: 1px solid #28313A; border-radius: 4px;
-      overflow: hidden; margin-bottom: 12px;
-      background: #0B0E11;
+    .nav-bar { margin-bottom: 28px; }
+    .nav-pages { display: flex; flex-wrap: wrap; gap: 10px; }
+    @media (max-width: 640px) {
+      /* One swipeable row on phones instead of three wrapped rows */
+      .nav-pages {
+        flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+        padding: 2px 8px 8px 2px; margin: 0 -12px 0 0;
+      }
+      .nav-pages::-webkit-scrollbar { display: none; }
+      .nav-page { flex: 0 0 auto; }
     }
-    .mode-seg {
-      flex: 1 1 50%; text-align: center;
-      padding: 10px 8px;
-      font-family: "Barlow Condensed", sans-serif; font-size: clamp(0.75rem, 2.5vw, 0.9rem);
-      font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: #9DA7B0; text-decoration: none;
-      background: #0B0E11;
-      transition: background 0.18s ease, color 0.18s ease;
-      min-height: 44px; display: flex; align-items: center; justify-content: center;
-    }
-    .mode-seg + .mode-seg { border-left: 1px solid #28313A; }
-    .mode-seg.active {
-      background: #1D232A; color: #F6F8FA;
-      box-shadow: inset 0 -3px 0 #C4CED4;
-    }
-    a.mode-seg:hover { background: #161A1F; color: #F6F8FA; }
-
-    .nav-pages { display: flex; flex-wrap: wrap; gap: 8px; }
     .nav-page {
       color: #F6F8FA; text-decoration: none;
-      font-family: "Barlow Condensed", sans-serif; font-size: 0.8rem;
+      font-family: 'Teko', sans-serif; font-size: 1.1rem; line-height: 1;
       font-weight: 600;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 8px 14px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 9px 14px 7px;
       background: #161A1F;
-      border: 1px solid #28313A;
-      border-radius: 4px;
-      transition: all 0.18s ease;
+      border: 2px solid #28313A;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
     }
-    a.nav-page:hover { background: #1D232A; border-color: #C4CED4; color: #C4CED4; }
+    a.nav-page:hover {
+      border-color: #F6F8FA; transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 #00B2A9;
+    }
     .nav-page.current {
-      background: #1D232A; border-color: #C4CED4; color: #C4CED4;
-      box-shadow: inset 0 0 0 1px #C4CED4;
+      background: #F6F8FA; border-color: #F6F8FA; color: #0B0E11;
+      box-shadow: 4px 4px 0 #EF426F;
       cursor: default;
     }
-    .nav-page.index-link { color: #9DA7B0; background: transparent; border-color: transparent; }
-    .nav-page.index-link:hover { color: #F6F8FA; background: #161A1F; }
+    .nav-page.index-link { color: #F2C14E; background: transparent; border-color: transparent; }
+    .nav-page.index-link:hover { box-shadow: none; transform: none; color: #F6F8FA; }
 
     /* ---- Alamo Heritage & Architecture ---- */
-    .alamo-header-wrap {
-      margin-bottom: 24px;
-      position: relative;
-    }
+    .alamo-header-wrap { margin-bottom: 36px; position: relative; }
     .alamo-roofline-crown {
-      width: clamp(140px, 30vw, 240px);
-      height: 18px;
-      margin: 0 auto -1px;
-      display: block;
-      position: relative;
-      z-index: 2;
+      width: clamp(140px, 30vw, 240px); height: 18px;
+      margin: 0 auto -2px; display: block; position: relative; z-index: 2;
     }
-    .alamo-roofline-crown svg {
-      width: 100%; height: 100%; display: block;
-    }
+    .alamo-roofline-crown svg { width: 100%; height: 100%; display: block; }
     .alamo-meta-banner {
       display: inline-flex; align-items: center; gap: 8px;
-      font-family: "Share Tech Mono", monospace; font-size: 0.72rem; letter-spacing: 0.12em;
-      text-transform: uppercase; color: #C9B097; margin-bottom: 10px;
-      padding: 4px 10px; background: rgba(201, 176, 151, 0.08);
-      border: 1px solid rgba(201, 176, 151, 0.25); border-radius: 4px;
+      font-family: 'Teko', sans-serif; font-size: 1.05rem; font-weight: 600; line-height: 1;
+      letter-spacing: 0.22em; text-transform: uppercase; color: #FF8200;
+      margin-bottom: 12px;
     }
     .alamo-icon-svg {
       width: 22px; height: 12px; display: inline-block; vertical-align: middle;
-      color: #C9B097; flex-shrink: 0;
+      color: #FF8200; flex-shrink: 0;
     }
     .alamo-footer-seal {
       display: flex; justify-content: center; align-items: center; margin-bottom: 14px;
-      opacity: 0.75;
     }
-    .alamo-footer-seal .alamo-icon-svg {
-      width: 44px; height: 22px; color: #8A9399;
-    }
+    .alamo-footer-seal .alamo-icon-svg { width: 44px; height: 22px; color: #C4CED4; }
 
     /* ---- Header ---- */
     header {
-      background:
-        radial-gradient(ellipse at 90% 10%, rgba(201, 176, 151, 0.06) 0%, transparent 60%),
-        linear-gradient(180deg, #161A1F 0%, #1D232A 100%);
-      border: 1px solid #28313A;
-      border-top: 3px solid #C4CED4;
-      border-radius: 6px;
-      padding: clamp(16px, 3vw, 24px);
+      background: #161A1F;
+      border: 2px solid #F6F8FA;
+      box-shadow: 8px 8px 0 #EF426F, 16px 16px 0 #00B2A9;
+      padding: clamp(18px, 3.5vw, 30px);
       position: relative;
-    }
-    header::after {
-      content: "";
-      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, #00B2A9 0%, #00B2A9 33.3%, #EF426F 33.3%, #EF426F 66.6%, #FF8200 66.6%, #FF8200 100%);
+      margin-right: 16px;
     }
     header h1 {
-      font-family: "Teko", sans-serif;
-      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
-      letter-spacing: 0.04em;
+      display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px;
+      line-height: 1;
+    }
+    header h1 .title-text {
+      font-family: 'Bowlby One', sans-serif;
+      font-size: clamp(1.7rem, 5vw, 3.2rem);
+      font-weight: 400;
       text-transform: uppercase;
       color: #F6F8FA;
-      display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+      transform: skewX(-9deg);
+      text-shadow: 3px 3px 0 #EF426F, 6px 6px 0 #00B2A9;
+    }
+    header h1 .badge {
+      font-family: 'VT323', monospace; font-size: 1.35rem; line-height: 1;
+      color: #FF8200; border: 2px solid #FF8200; background: transparent;
+      padding: 3px 10px 1px; text-shadow: 0 0 10px rgba(255, 130, 0, 0.5);
     }
     header p {
-      color: #9DA7B0; margin-top: 6px;
-      font-size: clamp(0.85rem, 2vw, 1.0rem); line-height: 1.5;
+      color: #C4CED4; margin-top: 14px;
+      font-size: clamp(0.9rem, 2vw, 1.05rem); line-height: 1.5;
     }
 
     /* ---- Cards ---- */
     .chart-section, .card {
+      --accent: #00B2A9;
       background: #161A1F;
-      border: 1px solid #28313A;
-      border-radius: 6px;
+      border: 2px solid rgba(246, 248, 250, 0.85);
       padding: clamp(14px, 3vw, 22px);
-      margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin: 0 8px 32px 0;
+      box-shadow: 8px 8px 0 var(--accent);
     }
+    .chart-section:nth-of-type(3n+2), .card:nth-of-type(3n+2) { --accent: #EF426F; }
+    .chart-section:nth-of-type(3n), .card:nth-of-type(3n) { --accent: #FF8200; }
     .chart-title, .card h2 {
-      font-family: "Barlow Condensed", sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #C4CED4;
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(1.35rem, 3vw, 1.7rem);
+      font-weight: 600; line-height: 1;
+      color: #F6F8FA;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #28313A;
-      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #28313A;
+      display: flex; align-items: center; gap: 12px;
     }
+    .chart-title::before, .card h2::before {
+      content: ""; flex: 0 0 auto; width: 14px; height: 14px; margin-right: -2px;
+      background: linear-gradient(#00B2A9 0 33.3%, #EF426F 33.3% 66.6%, #FF8200 66.6%); order: -1;
+    }
+    .chart-title > :not(:first-child):last-child, .card h2 > :not(:first-child):last-child { margin-left: auto; }
 
     /* ---- Badges ---- */
     .badge {
       display: inline-block;
-      font-family: "Share Tech Mono", monospace;
+      font-family: 'Share Tech Mono', monospace;
       font-size: 0.75rem;
       padding: 3px 8px;
-      border-radius: 3px;
       background: #1D232A;
       border: 1px solid #8A9399;
       color: #F6F8FA;
@@ -170,25 +157,49 @@
     }
     .badge.teal { background: rgba(0, 178, 169, 0.15); border-color: #00B2A9; color: #00B2A9; }
     .badge.fuschia { background: rgba(239, 66, 111, 0.15); border-color: #EF426F; color: #EF426F; }
+    .badge.small-sample {
+      font-family: 'Courier Prime', monospace; font-size: 0.72rem; text-transform: none; letter-spacing: 0;
+      color: #F2C14E; border: 1px dashed #F2C14E; background: rgba(242, 193, 78, 0.08);
+      white-space: normal; line-height: 1.35;
+    }
+    .early-season {
+      border: 2px dashed #F2C14E; background: rgba(242, 193, 78, 0.07); color: #F6F8FA;
+      padding: 12px 16px; margin: 0 8px 28px 0; font-size: 0.92rem; line-height: 1.5;
+    }
+    .early-season strong { color: #F2C14E; font-family: 'Teko', sans-serif; font-size: 1.15rem;
+      font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 4px; }
     .badge.orange { background: rgba(255, 130, 0, 0.15); border-color: #FF8200; color: #FF8200; }
 
     /* ---- Footer ---- */
     footer {
       text-align: center; color: #9DA7B0;
-      font-size: 0.85rem; margin-top: 48px; padding-top: 24px;
-      border-top: 1px solid #28313A;
+      font-size: 0.85rem; margin-top: 56px; padding-top: 28px;
+      position: relative;
     }
-    footer .stonecutter {
-      max-width: 680px; margin: 0 auto 16px;
-      font-style: italic; font-size: 0.8rem; line-height: 1.5; color: #8A9399;
+    footer::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+      background: repeating-linear-gradient(90deg, #00B2A9 0 60px, #EF426F 60px 120px, #FF8200 120px 180px);
     }
-    footer a { color: #C4CED4; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    footer .credit {
+      font-family: 'Teko', sans-serif; font-size: 1.35rem; font-weight: 600; line-height: 1.1;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #F6F8FA;
+    }
+    footer .links { margin-top: 8px; font-family: 'Courier Prime', monospace; font-size: 0.85rem; }
+    footer .links span { margin: 0 8px; color: #9DA7B0; }
+    footer a { color: #F2C14E; text-decoration: none; }
+    footer a:hover, footer a:focus-visible { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      header { box-shadow: 6px 6px 0 #EF426F, 12px 12px 0 #00B2A9; margin-right: 12px; }
+      .chart-section, .card { box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }
+    }
     
   </style>
 </head>
 <body>
-  <nav class="nav-bar"><div class="mode-switch"><span class="mode-seg active">🏀 Court Intelligence</span><a href="matchup.html" class="mode-seg">🎲 Props & Market</a></div><div class="nav-pages"><a href="index.html" class="nav-page index-link">← Spurs HQ</a> <a href="dashboard.html" class="nav-page">Season Dashboard</a> <a href="wemby_lab.html" class="nav-page">Wemby Lab</a> <a href="rodeo_road_trip.html" class="nav-page">Rodeo Road Trip</a> <span class="nav-page current">Spurs Notebook</span></div></nav>
+  <div class="sarape-band" aria-hidden="true"></div>
+  <div class="page">
+  <nav class="nav-bar"><div class="nav-pages"><a href="index.html" class="nav-page index-link">← Spurs Stats HQ</a> <a href="dashboard.html" class="nav-page">Dashboard</a> <a href="wemby_lab.html" class="nav-page">Wemby Lab</a> <span class="nav-page current" aria-current="page">Notebook</span> <a href="matchup.html" class="nav-page">Next Game</a> <a href="props_board.html" class="nav-page">Props</a></div></nav>
   <div class="alamo-header-wrap">
     <div class="alamo-roofline-crown">
       <svg class="alamo-roofline-svg" viewBox="0 0 120 18" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18 Z" fill="#161A1F"/><path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18" stroke="#28313A" stroke-width="1" fill="none"/></svg>
@@ -198,11 +209,12 @@
         <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon"><path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/><path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/><path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/></svg>
         <span>The Alamo City &bull; Mission San Antonio</span>
       </div>
-      <h1>Spurs Notebook <span class="badge">2026-27 Essays</span></h1>
-      <p>Living Essays in Silver & Black Performance Analytics &mdash; Computed Dynamically at Build Time</p>
+      <h1><span class="title-text">Spurs Notebook</span> <span class="badge">2026-27 Essays</span></h1>
+      <p>Essays on the season. Every number in them is recomputed from the box scores after each game.</p>
     </header>
   </div>
   <main>
+    <div class="early-season" role="note"><strong>Early season:</strong> 3 games played. Percentages and hit rates swing a lot this early; trend charts appear after 10 games.</div>
     
     
     <div class="card" style="background: linear-gradient(180deg, #161A1F 0%, #1D232A 100%); border-top: 3px solid #00B2A9; margin-bottom: 32px;">
@@ -219,10 +231,10 @@
         <article class="card" id="french-horizon" style="padding: clamp(20px, 4vw, 36px); margin-bottom: 32px; border-left: 4px solid #C4CED4;">
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
             <span class="badge teal">Defensive Gravity</span>
-            <span style="font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #9DA7B0;">2026-27 Season Analysis</span>
+            <span style="font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: #9DA7B0;">2026-27 Season Analysis</span>
           </div>
 
-          <h2 style="font-family: "Barlow Condensed", sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
+          <h2 style="font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
             The French Horizon: Victor Wembanyama and the Outer Boundary of Defense
           </h2>
 
@@ -271,10 +283,10 @@
         <article class="card" id="stonecutters-ledger" style="padding: clamp(20px, 4vw, 36px); margin-bottom: 32px; border-left: 4px solid #C4CED4;">
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
             <span class="badge silver">Culture & Development</span>
-            <span style="font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #9DA7B0;">2026-27 Season Analysis</span>
+            <span style="font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: #9DA7B0;">2026-27 Season Analysis</span>
           </div>
 
-          <h2 style="font-family: "Barlow Condensed", sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
+          <h2 style="font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
             The Stonecutter's Ledger: Tracking the Incremental Fractures of Growth
           </h2>
 
@@ -308,10 +320,10 @@
         <article class="card" id="rodeo-gauntlet" style="padding: clamp(20px, 4vw, 36px); margin-bottom: 32px; border-left: 4px solid #C4CED4;">
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
             <span class="badge orange">Road Gauntlet</span>
-            <span style="font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #9DA7B0;">February 2026 Split Analysis</span>
+            <span style="font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: #9DA7B0;">February 2026 Split Analysis</span>
           </div>
 
-          <h2 style="font-family: "Barlow Condensed", sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
+          <h2 style="font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
             The Rodeo Gauntlet: Highway Fatigue and the Crucible of Champions
           </h2>
 
@@ -345,10 +357,10 @@
         <article class="card" id="pass-first" style="padding: clamp(20px, 4vw, 36px); margin-bottom: 32px; border-left: 4px solid #C4CED4;">
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
             <span class="badge silver">Motion Offense</span>
-            <span style="font-family: "Share Tech Mono", monospace; font-size: 0.8rem; color: #9DA7B0;">2026-27 Season Analysis</span>
+            <span style="font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: #9DA7B0;">2026-27 Season Analysis</span>
           </div>
 
-          <h2 style="font-family: "Barlow Condensed", sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
+          <h2 style="font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.4rem, 3vw, 2.0rem); color: #F6F8FA; border-bottom: 1px solid #28313A; padding-bottom: 12px; margin-bottom: 18px; line-height: 1.25;">
             Pass First, Ask Questions Later: The Revival of Spurs Motion Basketball
           </h2>
 
@@ -368,11 +380,7 @@
       originate from an assist, generating an estimated <strong>60.7 Assist Points Created (APC)</strong> per night.
     </p>
 
-    <p>
-      The passing hub is anchored by , finding cutters and kicking out to open shooters as defenses
-      collapse toward Wembanyama's gravity. When the ball moves with conviction, the Spurs offense operates at its highest
-      expressive ceiling.
-    </p>
+    <p>The passing hub is anchored by <strong>De'Aaron Fox</strong> (8.3 APG, 2.78 AST/TOV), <strong>Stephon Castle</strong> (4.7 APG, 2.00 AST/TOV), <strong>Dylan Harper</strong> (3.0 APG, 2.25 AST/TOV), finding cutters and kicking out to open shooters as defenses collapse into the paint. When the ball moves with conviction, the Spurs offense operates at its highest expressive ceiling.</p>
     
           </div>
         </article>
@@ -385,14 +393,14 @@
       <div class="alamo-footer-seal" aria-hidden="true">
         <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon"><path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/><path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/><path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/></svg>
       </div>
-      <p class="stonecutter">
-        &ldquo;When nothing seems to help, I go and look at a stonecutter hammering away at his rock,
-        perhaps a hundred times without as much as a crack showing in it. Yet at the hundred and first blow
-        it will split in two, and I know it was not that last blow that did it, but all that had gone before.&rdquo;
-        <br>&mdash; Jacob Riis / San Antonio Spurs Creed
+      <p class="credit">Created and Maintained by <a href="https://www.corygarms.com" target="_blank" rel="noopener">Cory Garms</a></p>
+      <p class="links">
+        <a href="https://x.com/cory_garms" target="_blank" rel="noopener">X / Twitter @cory_garms</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="https://github.com/cory-garms" target="_blank" rel="noopener">GitHub cory-garms</a>
       </p>
-      <p>The Alamo City &bull; San Antonio Spurs Analytics Suite &bull; Silver &amp; Black Performance Intelligence</p>
     </footer>
     
+  </div>
 </body>
 </html>

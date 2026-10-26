@@ -1,12 +1,13 @@
 """
 League-Wide Context Fetcher & Cache Orchestrator.
 
-Fetches and caches season standings and advanced ratings (OffRtg, DefRtg, NetRtg, Pace)
-for all 30 NBA teams into data/cache/league_standings_{season}.parquet.
+Fetches and caches season records, advanced ratings (OffRtg, DefRtg, NetRtg, Pace)
+and the Four Factors for all 30 NBA teams into data/cache/league_standings_{season}.parquet,
+plus per-player season stats for any one team (the next opponent).
 
 Used by:
-  - Matchup & Beatdown Predictor (analysis/predictions.py)
-  - Standings & Conference Rankings (analysis/standings.py)
+  - Next Game preview (viz/matchup_viz.py)
+  - Matchup projections (analysis/predictions.py)
 """
 
 from __future__ import annotations
@@ -37,6 +38,15 @@ LEAGUE_STANDINGS_SCHEMA: dict[str, str] = {
     "drtg": "Float64",
     "nrtg": "Float64",
     "pace": "Float64",
+    # Four Factors, own and allowed
+    "efg_pct": "Float64",
+    "tov_pct": "Float64",
+    "oreb_pct": "Float64",
+    "fta_rate": "Float64",
+    "opp_efg_pct": "Float64",
+    "opp_tov_pct": "Float64",
+    "opp_oreb_pct": "Float64",
+    "opp_fta_rate": "Float64",
 }
 
 
@@ -50,8 +60,12 @@ def fetch_league_standings(
     force_refresh: bool = False,
 ) -> pd.DataFrame:
     """
-    Fetch and cache league-wide standings and ratings for all 30 teams.
+    Fetch and cache league-wide records, ratings and Four Factors for all 30 teams.
     Returns DataFrame matching LEAGUE_STANDINGS_SCHEMA.
+
+    If the API is unreachable the last good cache is returned; with no cache the
+    error propagates. Ratings are never filled with placeholders, since every
+    matchup comparison downstream would silently treat all 30 teams as equal.
     """
     cache_file = _cache_path(season)
     if not force_refresh and cache_file.exists():
@@ -60,81 +74,59 @@ def fetch_league_standings(
 
     client = client or NBAClient()
     season_s = season_str(season)
-    log.info("Fetching league standings for %s...", season_s)
+    log.info("Fetching league ratings for %s...", season_s)
 
     try:
-        raw_standings = client.get_standings(season_s, season_type="Regular Season")
+        base = client.get_league_team_stats(season_s, "Base")
+        adv = client.get_league_team_stats(season_s, "Advanced")
+        ff = client.get_league_team_stats(season_s, "Four Factors")
     except Exception as e:
-        log.warning("Could not fetch live standings from API (%s). Building baseline from TEAMS registry.", e)
-        raw_standings = pd.DataFrame()
+        if cache_file.exists():
+            log.warning("League ratings fetch failed (%s); keeping last cache %s", e, cache_file)
+            return pd.read_parquet(cache_file)
+        raise
 
-    records = []
-    # Reverse lookup for abbr by ID
     id_to_abbr = {v["id"]: k for k, v in TEAMS.items()}
-
-    if not raw_standings.empty:
-        # Standardize columns from leaguestandingsv3
-        for _, row in raw_standings.iterrows():
-            tid = int(row.get("teamid", 0))
-            abbr = id_to_abbr.get(tid, str(row.get("teamcity", "")[:3]).upper())
-            tinfo = TEAMS.get(abbr, {})
-
-            w = int(row.get("w", 0))
-            l = int(row.get("l", 0))
-            g = w + l
-            pts = float(row.get("pointsfor", 0.0))
-            opp_pts = float(row.get("pointsagainst", 0.0))
-            pts_pg = round(pts / g, 1) if g > 0 else 112.0
-            opp_pts_pg = round(opp_pts / g, 1) if g > 0 else 112.0
-
-            records.append({
-                "team_id": tid,
-                "team_abbr": abbr,
-                "team_name": tinfo.get("name", str(row.get("teamname", abbr))),
-                "conference": tinfo.get("conf", str(row.get("conferencename", "West"))),
-                "division": tinfo.get("div", "NBA"),
-                "wins": w,
-                "losses": l,
-                "win_pct": round(w / g, 3) if g > 0 else 0.500,
-                "pts_pg": pts_pg,
-                "opp_pts_pg": opp_pts_pg,
-                "margin": round(pts_pg - opp_pts_pg, 2),
-                "ortg": round(float(row.get("offensive_rating", pts_pg)), 1),
-                "drtg": round(float(row.get("defensive_rating", opp_pts_pg)), 1),
-                "nrtg": round(float(row.get("net_rating", pts_pg - opp_pts_pg)), 2),
-                "pace": round(float(row.get("pace", 99.5)), 1),
-            })
-    else:
-        # Baseline fallback with realistic baseline ratings for all 30 teams
-        for abbr, info in TEAMS.items():
-            records.append({
-                "team_id": info["id"],
-                "team_abbr": abbr,
-                "team_name": info["name"],
-                "conference": info["conf"],
-                "division": info["div"],
-                "wins": 0,
-                "losses": 0,
-                "win_pct": 0.500,
-                "pts_pg": 112.5,
-                "opp_pts_pg": 112.5,
-                "margin": 0.0,
-                "ortg": 112.5,
-                "drtg": 112.5,
-                "nrtg": 0.0,
-                "pace": 99.5,
-            })
-
-    df = pd.DataFrame(records)
-    # Cast types
+    df = (
+        base[["team_id", "gp", "w", "l", "w_pct", "pts", "plus_minus"]]
+        .merge(adv[["team_id", "off_rating", "def_rating", "net_rating", "pace"]], on="team_id")
+        .merge(ff[["team_id", "efg_pct", "fta_rate", "tm_tov_pct", "oreb_pct",
+                   "opp_efg_pct", "opp_fta_rate", "opp_tov_pct", "opp_oreb_pct"]], on="team_id")
+    )
+    df["team_abbr"] = df["team_id"].map(id_to_abbr)
+    df = df[df["team_abbr"].notna()].copy()
+    out = pd.DataFrame({
+        "team_id": df["team_id"],
+        "team_abbr": df["team_abbr"],
+        "team_name": df["team_abbr"].map(lambda a: TEAMS[a]["name"]),
+        "conference": df["team_abbr"].map(lambda a: TEAMS[a]["conf"]),
+        "division": df["team_abbr"].map(lambda a: TEAMS[a]["div"]),
+        "wins": df["w"],
+        "losses": df["l"],
+        "win_pct": df["w_pct"],
+        "pts_pg": df["pts"].round(1),
+        "opp_pts_pg": (df["pts"] - df["plus_minus"]).round(1),
+        "margin": df["plus_minus"].round(2),
+        "ortg": df["off_rating"],
+        "drtg": df["def_rating"],
+        "nrtg": df["net_rating"],
+        "pace": df["pace"],
+        "efg_pct": df["efg_pct"],
+        "tov_pct": df["tm_tov_pct"],
+        "oreb_pct": df["oreb_pct"],
+        "fta_rate": df["fta_rate"],
+        "opp_efg_pct": df["opp_efg_pct"],
+        "opp_tov_pct": df["opp_tov_pct"],
+        "opp_oreb_pct": df["opp_oreb_pct"],
+        "opp_fta_rate": df["opp_fta_rate"],
+    })
     for col, dtype in LEAGUE_STANDINGS_SCHEMA.items():
-        if col in df.columns:
-            df[col] = df[col].astype(dtype)
+        out[col] = out[col].astype(dtype)
 
     cache_file.parent.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(cache_file, index=False)
-    log.info("Cached %d teams in league standings → %s", len(df), cache_file)
-    return df
+    out.to_parquet(cache_file, index=False)
+    log.info("Cached %d teams in league standings → %s", len(out), cache_file)
+    return out.reset_index(drop=True)
 
 
 def load_league_standings(season: int = config.SEASON) -> pd.DataFrame:
@@ -143,3 +135,38 @@ def load_league_standings(season: int = config.SEASON) -> pd.DataFrame:
     if not cache_file.exists():
         return fetch_league_standings(season=season, force_refresh=False)
     return pd.read_parquet(cache_file)
+
+
+# ---------------------------------------------------------------------------
+# One team's player season stats (used for the next opponent's players to watch)
+# ---------------------------------------------------------------------------
+
+def _team_players_path(team_id: int, season: int) -> Path:
+    return CACHE_DIR / f"team_players_{team_id}_{season}.parquet"
+
+
+def fetch_team_players(team_id: int, season: int = config.SEASON,
+                       client: NBAClient | None = None, force_refresh: bool = False) -> pd.DataFrame:
+    """Per-game season stats for every player on one team; last cache kept if the API fails."""
+    path = _team_players_path(team_id, season)
+    if not force_refresh and path.exists():
+        return pd.read_parquet(path)
+    client = client or NBAClient()
+    try:
+        df = client.get_league_player_stats(season_str(season), team_id=team_id)
+    except Exception as e:
+        if path.exists():
+            log.warning("Player stats fetch failed for %s (%s); keeping last cache", team_id, e)
+            return pd.read_parquet(path)
+        raise
+    keep = ["player_id", "player_name", "gp", "min", "pts", "reb", "oreb", "dreb", "ast", "stl", "blk",
+            "tov", "pf", "fgm", "fga", "fg3m", "ftm", "fta", "plus_minus"]
+    df = df[[c for c in keep if c in df.columns]]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_parquet(path, index=False)
+    return df
+
+
+def load_team_players(team_id: int, season: int = config.SEASON) -> pd.DataFrame:
+    path = _team_players_path(team_id, season)
+    return pd.read_parquet(path) if path.exists() else pd.DataFrame()

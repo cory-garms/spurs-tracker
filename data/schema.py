@@ -46,6 +46,8 @@ PLAYER_GAME_LOG_SCHEMA: dict[str, str] = {
     "min":        "Float64",   # minutes played
     "pts":        "Int64",
     "reb":        "Int64",     # total rebounds
+    "oreb":       "Int64",     # offensive rebounds (Game Score weights them higher)
+    "dreb":       "Int64",     # defensive rebounds
     "ast":        "Int64",
     "stl":        "Int64",
     "blk":        "Int64",

@@ -101,7 +101,8 @@ def main() -> None:
         from viz.wemby_viz import build_wemby_lab_page
         from viz.rodeo_viz import build_rodeo_page
         from viz.notebook_viz import build_notebook_page
-        from viz.props_viz import build_props_board_page, build_matchup_page
+        from viz.props_viz import build_props_board_page
+        from viz.matchup_viz import build_matchup_page
 
         with console.status("[bold green]Building Wemby Lab…[/bold green]"):
             wemby_path = build_wemby_lab_page(games, player_logs, season=season, team_abbr=abbr)
@@ -118,11 +119,11 @@ def main() -> None:
             console.print(f"[green]Notebook[/green] → [cyan]{nb_path}[/cyan]")
             output_files.append(str(nb_path))
 
-        with console.status("[bold green]Building Props & Matchup Intel…[/bold green]"):
+        with console.status("[bold green]Building Props & Next Game…[/bold green]"):
             props_path = build_props_board_page(games, player_logs, season=season, team_abbr=abbr)
-            matchup_path = build_matchup_page(games, season=season, team_abbr=abbr)
+            matchup_path = build_matchup_page(games, player_logs, season=season, team_abbr=abbr)
             console.print(f"[green]Player Props[/green] → [cyan]{props_path}[/cyan]")
-            console.print(f"[green]Matchup Intel[/green] → [cyan]{matchup_path}[/cyan]")
+            console.print(f"[green]Next Game[/green] → [cyan]{matchup_path}[/cyan]")
             output_files.append(str(props_path))
             output_files.append(str(matchup_path))
 

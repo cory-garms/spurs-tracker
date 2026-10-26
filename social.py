@@ -26,7 +26,7 @@ import config
 from config import TEAM_ABBR, SEASON, season_str
 from data.fetcher import Fetcher
 from analysis.wemby import get_wemby_logs, stocks_distribution, defensive_impact_summary
-from analysis.beautiful_game import team_ball_movement_summary, player_pass_contributors
+from analysis.performers import game_performers
 from analysis.standings import season_record
 from analysis.rodeo import segment_rodeo_games, rodeo_split_metrics
 
@@ -77,27 +77,28 @@ def generate_postgame_tweet(games: pd.DataFrame, player_logs: pd.DataFrame, site
     last_game = f_games.iloc[-1]
     game_n = len(f_games)
     rec = season_record(f_games)
-    bg = team_ball_movement_summary(f_games, player_logs)
 
     res = last_game["result"]
     pts = int(last_game["pts"])
     opp_pts = int(last_game["opp_pts"])
     opp = last_game.get("opponent_abbr", "OPP")
-    date_s = last_game.get("game_date", "")
 
-    passers = player_pass_contributors(player_logs, min_games=1)
-    top_passer = passers.iloc[0]["player_name"] if not passers.empty else "Spurs"
-    top_ast = passers.iloc[0]["ast_pg"] if not passers.empty else 0
+    # Headline whoever had the best night by Game Score, not a fixed star
+    perf = game_performers(player_logs, last_game["game_id"]) if not player_logs.empty else {}
+    spotlight = ""
+    if perf.get("player_of_the_game"):
+        p = perf["player_of_the_game"]
+        spotlight += f"⭐ Player of the Game: {p['player_name']}, {p['line']}\n"
+    if perf.get("breakout"):
+        b = perf["breakout"]
+        spotlight += f"🔥 Breakout: {b['player_name']}, {b['line']}\n"
 
     tweet = (
         f"🔨 THE STONECUTTER'S LEDGER • GAME {game_n}\n\n"
         f"FINAL: Spurs {pts}, {opp} {opp_pts} ({res})\n"
-        f"Record: {rec.get('wins', 0)}-{rec.get('losses', 0)} ({rec.get('win_pct', 0.0):.3f})\n"
-        f"• Net Rating: {rec.get('net_rtg', 0.0):+.1f}\n"
-        f"• Beautiful Game Index: {bg.get('beautiful_game_index', 0.0):.0f}/100\n"
-        f"• Assisted Basket Rate: {bg.get('assisted_fg_pct', 0.0) * 100:.1f}%\n\n"
-        f"Another blow on the rock.\n"
-        f"📊 {site_url}/dashboard.html\n"
+        f"Record: {rec.get('wins', 0)}-{rec.get('losses', 0)}\n\n"
+        f"{spotlight}\n"
+        f"📊 {site_url}/dashboard.html#spotlight\n"
         f"#GoSpursGo #PoundTheRock"
     )
     return tweet
