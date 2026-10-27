@@ -161,14 +161,18 @@ def build(
         )
 
     # Synergy rows
+    from viz.avatars import avatar_html, player_link
     syn_rows = ""
     if not synergies.empty:
         for _, s in synergies.iterrows():
+            p1, p2 = s.get("player_1", ""), s.get("player_2", "")
+            pair = (f'<span class="duo">{avatar_html(p1, "sm")}{avatar_html(p2, "sm")}</span>'
+                    f'{player_link(p1, p1.split()[-1])} + {player_link(p2, p2.split()[-1])}')
             pm = float(s.get("net_pm_pg", 0.0))
             pm_color = theme.FIESTA_TEAL if pm > 0 else theme.FIESTA_FUSCHIA
             syn_rows += f"""
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: {theme.FONT_MONO}; font-size: 0.8rem;">
-              <span style="color: {theme.COURT_WHITE};">{s.get('player_1', '')} + {s.get('player_2', '')}</span>
+              <span class="with-avatar" style="color: {theme.COURT_WHITE}; font-size: 0.95rem;">{pair}</span>
               <span style="font-weight: 700; color: {pm_color};">{pm:+.2f} +/-</span>
             </div>
             """
@@ -323,7 +327,7 @@ def build(
 def _spotlight_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
     """Player of the Game, Breakout and Hot Hand, ranked by Game Score so anyone can headline."""
     from analysis.performers import MIN_BASELINE_GAMES, game_performers, hot_hand
-    from viz.avatars import avatar_html
+    from viz.avatars import avatar_html, player_link
 
     if player_logs.empty:
         return ""
@@ -339,7 +343,7 @@ def _spotlight_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
             matchup = f'{g["result"]} {int(g["pts"])}-{int(g["opp_pts"])} {"vs." if g["home_away"] == "H" else "@"} {g["opponent_abbr"]}'
 
     def tile(kicker: str, color: str, name: str, line: str, foot: str) -> str:
-        who = name if name == "&mdash;" else f'<span class="with-avatar">{avatar_html(name, "lg")}<span>{name}</span></span>'
+        who = name if name == "&mdash;" else f'<span class="with-avatar">{avatar_html(name, "lg")}<span>{player_link(name)}</span></span>'
         return f"""
         <div style="background: {theme.SHADOW_BLACK}; border: 1px solid {theme.COURT_LINE}; border-left: 6px solid {color}; padding: 16px;">
           <div style="font-family: {theme.FONT_HEADING}; font-size: 1.05rem; letter-spacing: 0.14em; text-transform: uppercase; color: {color};">{kicker}</div>

@@ -27,7 +27,8 @@ sys.path.insert(0, str(ROOT))
 from viz.avatars import PLAYER_EMBLEMS  # noqa: E402  (needs the repo root on the path)
 SRC = ROOT / "docs" / "img" / "players_src"
 OUT = ROOT / "docs" / "img" / "players"
-SIZE = 320           # px; displayed at up to ~76px, so this covers 4x screens
+SIZE = 320           # px; displayed at up to ~160px, so this covers 2x screens
+ROUND_SIZE = 96      # px; transparent-cornered copy for chart labels, which can't round with CSS
 MAX_TRIM = 0.2       # never trim more than 20% from any side
 BORDER_FRAC = 0.6    # a row/column is border if this share of its pixels look like border
 
@@ -103,7 +104,19 @@ def process(src: Path, force: bool = False) -> Path | None:
     im = _square(_trim_border(im)).resize((SIZE, SIZE), Image.LANCZOS)
     OUT.mkdir(parents=True, exist_ok=True)
     im.save(out, "WEBP", quality=82, method=6)
+    _round_copy(im, OUT / f"{slug}_round.png")
     return out
+
+
+def _round_copy(im: Image.Image, out: Path) -> None:
+    """Circle-cropped PNG with transparent corners (drawn at 4x then downsampled for a smooth edge)."""
+    from PIL import ImageDraw
+    big = ROUND_SIZE * 4
+    mask = Image.new("L", (big, big), 0)
+    ImageDraw.Draw(mask).ellipse([0, 0, big - 1, big - 1], fill=255)
+    rgba = im.resize((big, big), Image.LANCZOS).convert("RGBA")
+    rgba.putalpha(mask)
+    rgba.resize((ROUND_SIZE, ROUND_SIZE), Image.LANCZOS).save(out, "PNG", optimize=True)
 
 
 def main() -> int:

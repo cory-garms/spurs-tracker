@@ -14,6 +14,7 @@ env/
 docs/img/*
 !docs/img/loteria/
 !docs/img/players/
+!docs/img/og/
 output/
 
 # OS

@@ -21,7 +21,7 @@ from analysis.wemby import get_wemby_logs, stocks_distribution
 from analysis.rodeo import segment_rodeo_games, rodeo_split_metrics
 from analysis.performers import game_performers, hot_hand
 from data.schedule import load_schedule, next_game, now_utc
-from viz.avatars import avatar_src
+from viz.avatars import avatar_html, avatar_src, player_link
 
 
 def _last_game(games: pd.DataFrame) -> dict:
@@ -78,10 +78,11 @@ def _size(stat: str) -> str:
 
 
 def _card(num: int, slug: str, name: str, href: str, color: str, ink: str,
-          stat: str, caption: str, blurb: str, badges: list[tuple[str, str]] | None = None,
+          stat: str, caption: str, tag: str, tip: str, badges: list[tuple[str, str]] | None = None,
           medallion_img: str | None = None) -> str:
     """
-    One Lotería card. `stat`/`caption` is the headline number; `badges` optionally
+    One Lotería card. `tag` is the short caption under the card and `tip` the hover
+    text. `stat`/`caption` is the headline number; `badges` optionally
     replaces it on illustrated cards with several small medallions; `medallion_img`
     fills the medallion with a player emblem, with the stat moved to a ribbon below.
     """
@@ -97,7 +98,7 @@ def _card(num: int, slug: str, name: str, href: str, color: str, ink: str,
             )
             stamps = f'<div class="medallions {place}">{minis}</div>'
         elif medallion_img:
-            # The emblem carries the card; the ribbon names the player (the blurb explains why)
+            # The emblem carries the card; the ribbon names the player (the hover text explains why)
             stamps = (f'<div class="medallion photo {place}"><img src="{medallion_img}" alt="" title="{caption}">'
                       f'<div class="ribbon"><span class="stat">{stat}</span></div></div>')
         else:
@@ -112,13 +113,13 @@ def _card(num: int, slug: str, name: str, href: str, color: str, ink: str,
     # Cream numerals get an ink drop shadow; ink numerals on light cards stand on their own
     shadow = "transparent" if ink == theme.LOTERIA_INK else theme.LOTERIA_INK
     return f"""
-      <a class="loteria" href="{href}" style="--c:{color}; --ink:{ink}; --sh:{shadow};">
+      <a class="loteria" href="{href}" title="{escape(tip, quote=True)}" style="--c:{color}; --ink:{ink}; --sh:{shadow};">
         <div class="frame">
           <div class="num">{num}</div>
           {art}
           <div class="name">{name}</div>
         </div>
-        <p class="blurb">{blurb}</p>
+        <p class="tag">{tag}</p>
       </a>"""
 
 
@@ -146,10 +147,6 @@ def _index_css() -> str:
       font-size: clamp(0.7rem, 2vw, 0.85rem); letter-spacing: 0.3em; text-transform: uppercase;
       margin-top: 6px; opacity: 0.85;
     }}
-    .hq-hero .lede {{
-      max-width: 640px; margin: 14px auto 0; color: {t.LOTERIA_CREAM}; opacity: 0.9;
-      font-size: clamp(0.9rem, 2vw, 1.02rem); line-height: 1.55;
-    }}
 
     .scoreboard {{
       display: grid; grid-template-columns: repeat(4, 1fr);
@@ -170,6 +167,8 @@ def _index_css() -> str:
     }}
     .scoreboard .v.W {{ color: {t.FIESTA_TEAL}; text-shadow: 0 0 14px rgba(0, 178, 169, 0.5); }}
     .scoreboard .v.L {{ color: {t.FIESTA_FUSCHIA}; text-shadow: 0 0 14px rgba(239, 66, 111, 0.5); }}
+    .scoreboard .v.top {{ display: flex; align-items: center; justify-content: center; gap: 10px; }}
+    .scoreboard .v.top a.player-link {{ border-bottom: none; }}
     .scoreboard .sep {{ color: {t.COURT_LINE}; margin: 0 0.25em; text-shadow: none; }}
     .scoreboard .d {{ font-family: {t.FONT_MONO}; font-size: 0.78rem; color: {t.TEXT_MUTED}; }}
 
@@ -263,8 +262,10 @@ def _index_css() -> str:
       font-family: {t.FONT_WESTERN}; font-size: clamp(1.3rem, 3vw, 1.65rem); line-height: 1.1;
       text-align: center; border-top: 3px solid {t.LOTERIA_INK}; padding-top: 8px;
     }}
-    .loteria .blurb {{
-      color: {t.LOTERIA_CREAM}; font-size: 0.88rem; line-height: 1.45; margin-top: 14px; opacity: 0.92;
+    .loteria .tag {{
+      font-family: {t.FONT_HEADING}; font-weight: 600; font-size: 1.3rem; line-height: 1;
+      letter-spacing: 0.16em; text-transform: uppercase; text-align: center;
+      color: {t.MARIGOLD}; margin-top: 14px; text-shadow: 2px 2px 0 {t.LOTERIA_INK};
     }}
 
     footer {{ color: {t.LOTERIA_CREAM}; }}
@@ -291,7 +292,7 @@ def _index_css() -> str:
       .loteria .medallion.right {{ right: 5px; }}
       .loteria .caption {{ font-size: 0.6rem; letter-spacing: 0.08em; padding: 2px 5px; }}
       .loteria .name {{ font-size: 1.05rem; padding-top: 5px; }}
-      .loteria .blurb {{ font-size: 0.78rem; margin-top: 10px; }}
+      .loteria .tag {{ font-size: 1.05rem; letter-spacing: 0.1em; margin-top: 10px; }}
       .scoreboard {{ grid-template-columns: repeat(2, 1fr); row-gap: 10px; }}
       .scoreboard > div:nth-child(3) {{ border-left: none; }}
     }}
@@ -328,11 +329,11 @@ def build_index_page(
         opp_name = TEAMS[nxt["opponent"]]["name"].split()[-1]
         duelo_stat = f'{"vs." if nxt["is_home"] else "@"} {nxt["opponent"]}'
         duelo_caption = f'{nxt["tipoff_local"]:%a} {nxt["tipoff_local"]:%-I:%M %p}'
-        duelo_blurb = (f'Next up: {opp_name} {"at Spurs" if nxt["is_home"] else "host the Spurs"}, {nxt["when"]}. '
-                       f"Tale of the tape, recent form and players to watch.")
+        duelo_tag = f"Next up: {opp_name}"
+        duelo_tip = f'{nxt["when"]}. Tale of the tape, form and players to watch.'
     else:
         duelo_stat, duelo_caption = "—", "Season complete"
-        duelo_blurb = "The next-game preview returns with next season's schedule."
+        duelo_tag, duelo_tip = "Season complete", "Back with next season's schedule"
     potg = game_performers(player_logs).get("player_of_the_game") if not player_logs.empty else None
     hot = hot_hand(player_logs) if not player_logs.empty else {}
 
@@ -342,35 +343,32 @@ def build_index_page(
         (active_rrt["record"], "Rodeo record") if active_rrt.get("games") else ("FEB", "Hits the road")
     )
 
+    splits = (f"Home {rec.get('home_w', 0)}-{rec.get('home_l', 0)} &middot; Road {rec.get('away_w', 0)}-{rec.get('away_l', 0)}"
+              if rec else "No games yet")
     last_v = f'{last["result"]} {last["score"]}' if last else "—"
     last_d = f'{last["matchup"]} &middot; {last["date"]}' if last else "No games yet"
 
     pages = theme.PAGES
     deck = [
         ("dashboard", _card(1, "tablero", "El Tablero", pages["dashboard"][0], theme.FIESTA_TEAL, theme.LOTERIA_CREAM,
-              record, "Record",
-              "The season dashboard: four factors, rotation pairings, clutch ledger, scoring and defensive trends.")),
+              record, "Record", "The season so far", "Results, four factors, best duos and close games")),
         ("wemby", _card(2, "alien", "El Alien", pages["wemby"][0], theme.FIESTA_FUSCHIA, theme.LOTERIA_CREAM,
-              wemby_spg, "Stocks / game",
-              "The Wemby Lab: rim deterrence, stocks timeline, milestone watch and his best defensive nights.",
+              wemby_spg, "Stocks / game", "Wemby's lab", "Wemby's points, boards, blocks and steals",
               badges=[(wemby_ppg, "PTS"), (wemby_rpg, "REB"), (wemby_spg, "STOCKS")])),
         ("valiente", _card(7, "valiente", "El Valiente", pages["dashboard"][0] + "#spotlight",
               theme.ADOBE_TERRACOTTA, theme.LOTERIA_CREAM,
-              hot.get("last_name", "—"), f"Hot hand &middot; last {hot.get('window', 5)}",
-              f"Whoever is playing best right now: {hot['player_name']} leads the team in Game Score over the last "
-              f"{hot['window']} games ({hot['game_score']})." if hot else "Whoever is playing best right now, by Game Score.",
+              hot.get("last_name", "—"), f"Hot hand &middot; last {hot.get('window', 5)}", "Who's hot",
+              f"Best Game Score, last {hot['window']} games: {hot['player_name']} ({hot['game_score']})"
+              if hot else "Best Game Score over the last 5 games",
               medallion_img=avatar_src(hot["player_name"]) if hot else None)),
         ("rodeo", _card(3, "rodeo", "El Rodeo", pages["rodeo"][0], theme.FIESTA_ORANGE, theme.LOTERIA_CREAM,
-              rodeo_stat, rodeo_caption,
-              "The February Rodeo Road Trip, split against the championship-era trips since 2003.")),
+              rodeo_stat, rodeo_caption, "The road trip", "The February Rodeo Road Trip vs. the title-era trips")),
         ("notebook", _card(4, "libreta", "La Libreta", pages["notebook"][0], theme.LOTERIA_INK, theme.LOTERIA_CREAM,
-              "&#9998;", "Essays",
-              "The Notebook: living essays where every number is recomputed from the data at build time.")),
+              "&#9998;", "Essays", "Living essays", "Essays recomputed after every game")),
         ("matchup", _card(5, "duelo", "El Duelo", pages["matchup"][0], theme.MARIGOLD, theme.LOTERIA_INK,
-              duelo_stat, duelo_caption, duelo_blurb)),
+              duelo_stat, duelo_caption, duelo_tag, duelo_tip)),
         ("board", _card(6, "mercado", "El Mercado", pages["board"][0], theme.SPURS_SILVER, theme.LOTERIA_INK,
-              "O/U", "Prop board",
-              "Player prop hit rates from game logs. For fun and analysis, not betting advice.")),
+              "O/U", "Prop board", "Prop hit rates", "Hit rates vs. last season's lines. Not betting advice.")),
     ]
     featured = [card for slug, card in deck if slug not in theme.PAGES or theme.is_featured(slug)]
     cards = "".join(featured)
@@ -388,13 +386,7 @@ def build_index_page(
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spurs Stats HQ — San Antonio Spurs Analytics</title>
-  <meta name="description" content="{escape(description)}">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Spurs Stats HQ · {season_s} · {record}">
-  <meta property="og:description" content="{escape(description)}">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Spurs Stats HQ · {season_s} · {record}">
-  <meta name="twitter:description" content="{escape(description)}">
+  {theme.share_meta(f"Spurs Stats HQ · {season_s} · {record}", description)}
   {theme.FONTS_LINK}
   <style>
 {theme.page_css()}
@@ -408,15 +400,13 @@ def build_index_page(
       <h1>Spurs Stats HQ</h1>
       <div class="sub">&#9733; Putting hammer to stone since 2024 &#9733;</div>
       <div class="season">{season_s} season</div>
-      <p class="lede">The San Antonio Spurs, by the numbers: who's playing well, how the rotation
-        fits together and what happens in close games, rebuilt from the box scores after every game.</p>
     </section>
 
     <section class="scoreboard" aria-label="Season at a glance">
-      <div><div class="k">Record</div><div class="v">{record}</div><div class="d">{season_s}</div></div>
+      <div><div class="k">Record</div><div class="v">{record}</div><div class="d">{splits}</div></div>
       <div><div class="k">Last game</div><div class="v {last.get('result', '')}">{last_v}</div><div class="d">{last_d}</div></div>
       <div><div class="k">Streak</div><div class="v {streak[:1]}">{streak}</div><div class="d">current run</div></div>
-      <div><div class="k">Top performer</div><div class="v">{potg["last_name"] if potg else "—"}</div><div class="d">{potg["line"].replace(" · ", " &middot; ") if potg else "last game"}</div></div>
+      <div><div class="k">Top performer</div><div class="v top">{(avatar_html(potg["player_name"], "md") + player_link(potg["player_name"], potg["last_name"])) if potg else "—"}</div><div class="d">{potg["line"].replace(" · ", " &middot; ") if potg else "last game"}</div></div>
     </section>
 
     <main class="deck" style="--per-row:{per_row};">

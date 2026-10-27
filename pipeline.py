@@ -154,7 +154,14 @@ def run_pipeline(
             from viz.props_viz import build_props_board_page
             from viz.matchup_viz import build_matchup_page
             from viz.index_viz import build_index_page
+            from viz.share_images import build_share_images
 
+            # Preview images first: every page's share tags point at them
+            if team_abbr.upper() == config.TEAM_ABBR and season == config.SEASON:
+                build_share_images(games, player_logs, season, team_abbr)
+            # Roster and player pages next, so other pages can link player names to them
+            from viz.roster_viz import build_roster_pages
+            build_roster_pages(games, player_logs, roster, season, team_abbr)
             dash_path = build(games, player_logs, team_name, team_abbr, season)
             wemby_path = build_wemby_lab_page(games, player_logs, season, team_abbr)
             rodeo_path = build_rodeo_page(games, season, team_abbr)

@@ -171,6 +171,7 @@ def apply(fig, **extra):
 # the current season (config.SEASON) always publishes to these names.
 PAGES: dict[str, tuple[str, str]] = {
     "dashboard": ("dashboard.html",       "Dashboard"),
+    "roster":    ("roster.html",          "Roster"),
     "wemby":     ("wemby_lab.html",       "Wemby Lab"),
     "rodeo":     ("rodeo_road_trip.html", "Rodeo Road Trip"),
     "notebook":  ("notebook.html",        "Notebook"),
@@ -443,6 +444,37 @@ def _avatar_css() -> str:
     return avatar_css()
 
 
+def share_meta(title: str, description: str, image: str = "latest") -> str:
+    """Open Graph / Twitter tags so shared links unfurl with a preview card."""
+    import html as _html
+    import re as _re
+    from viz.share_images import og_image_url  # share_images imports theme
+
+    desc = _html.escape(_html.unescape(_re.sub(r"<[^>]+>", "", description)).strip(), quote=True)
+    title = _html.escape(_html.unescape(title), quote=True)
+    url = og_image_url(image)
+    tags = [
+        f'<meta name="description" content="{desc}">',
+        '<meta property="og:type" content="website">',
+        '<meta property="og:site_name" content="Spurs Stats HQ">',
+        f'<meta property="og:title" content="{title}">',
+        f'<meta property="og:description" content="{desc}">',
+        f'<meta name="twitter:title" content="{title}">',
+        f'<meta name="twitter:description" content="{desc}">',
+    ]
+    if url:
+        tags += [
+            f'<meta property="og:image" content="{url}">',
+            '<meta property="og:image:width" content="1200">',
+            '<meta property="og:image:height" content="630">',
+            '<meta name="twitter:card" content="summary_large_image">',
+            f'<meta name="twitter:image" content="{url}">',
+        ]
+    else:
+        tags.append('<meta name="twitter:card" content="summary">')
+    return "\n  ".join(tags)
+
+
 def page_footer() -> str:
     """Standard footer: Alamo seal, author credit and links."""
     return f"""
@@ -467,15 +499,18 @@ def page_html(
     current_slug: str = "dashboard",
     badge: str = f"{config.season_str(config.SEASON)} Season",
     games_played: int | None = None,
+    og_image: str = "latest",
 ) -> str:
     """Wrap content in the official Spurs HTML shell."""
     note = early_season_note(games_played) if games_played is not None else ""
+    share = share_meta(f"{title} · Spurs Stats HQ", subtitle, og_image)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title} — San Antonio Spurs Analytics</title>
+  {share}
   {FONTS_LINK}
   <style>
 {page_css()}

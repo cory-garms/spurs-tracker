@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Victor Wembanyama — San Antonio Spurs Analytics</title>
+  <meta name="description" content="#1 · F-C · 3 yrs exp · El Alien">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Spurs Stats HQ">
+  <meta property="og:title" content="Victor Wembanyama · Spurs Stats HQ">
+  <meta property="og:description" content="#1 · F-C · 3 yrs exp · El Alien">
+  <meta name="twitter:title" content="Victor Wembanyama · Spurs Stats HQ">
+  <meta name="twitter:description" content="#1 · F-C · 3 yrs exp · El Alien">
+  <meta property="og:image" content="https://corygarms.com/spurs-tracker/img/og/latest.png?v=cdad7899">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://corygarms.com/spurs-tracker/img/og/latest.png?v=cdad7899">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@400;600;700;800&family=Bowlby+One&family=Courier+Prime:wght@400;700&family=Rye&family=Share+Tech+Mono&family=Teko:wght@500;600;700&family=VT323&display=swap" rel="stylesheet">
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background:
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 12px),
+        #0B0E11;
+      color: #F6F8FA;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+    .sarape-band {
+      height: 18px; background: linear-gradient(#00B2A9 0 33.3%, #EF426F 33.3% 66.6%, #FF8200 66.6%);
+      transform: skewY(-0.8deg); margin: 10px -20px 0;
+    }
+    .page { padding: clamp(12px, 3vw, 28px); max-width: 1440px; margin: 0 auto; }
+
+    /* ---- Navigation ---- */
+    .nav-bar { margin-bottom: 28px; }
+    .nav-pages { display: flex; flex-wrap: wrap; gap: 10px; }
+    @media (max-width: 640px) {
+      /* One swipeable row on phones instead of three wrapped rows */
+      .nav-pages {
+        flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+        padding: 2px 8px 8px 2px; margin: 0 -12px 0 0;
+      }
+      .nav-pages::-webkit-scrollbar { display: none; }
+      .nav-page { flex: 0 0 auto; }
+    }
+    .nav-page {
+      color: #F6F8FA; text-decoration: none;
+      font-family: 'Teko', sans-serif; font-size: 1.1rem; line-height: 1;
+      font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 9px 14px 7px;
+      background: #161A1F;
+      border: 2px solid #28313A;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    }
+    a.nav-page:hover {
+      border-color: #F6F8FA; transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 #00B2A9;
+    }
+    .nav-page.current {
+      background: #F6F8FA; border-color: #F6F8FA; color: #0B0E11;
+      box-shadow: 4px 4px 0 #EF426F;
+      cursor: default;
+    }
+    .nav-page.index-link { color: #F2C14E; background: transparent; border-color: transparent; }
+    .nav-page.index-link:hover { box-shadow: none; transform: none; color: #F6F8FA; }
+
+    /* ---- Alamo Heritage & Architecture ---- */
+    .alamo-header-wrap { margin-bottom: 36px; position: relative; }
+    .alamo-roofline-crown {
+      width: clamp(140px, 30vw, 240px); height: 18px;
+      margin: 0 auto -2px; display: block; position: relative; z-index: 2;
+    }
+    .alamo-roofline-crown svg { width: 100%; height: 100%; display: block; }
+    .alamo-meta-banner {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Teko', sans-serif; font-size: 1.05rem; font-weight: 600; line-height: 1;
+      letter-spacing: 0.22em; text-transform: uppercase; color: #FF8200;
+      margin-bottom: 12px;
+    }
+    .alamo-icon-svg {
+      width: 22px; height: 12px; display: inline-block; vertical-align: middle;
+      color: #FF8200; flex-shrink: 0;
+    }
+    .alamo-footer-seal {
+      display: flex; justify-content: center; align-items: center; margin-bottom: 14px;
+    }
+    .alamo-footer-seal .alamo-icon-svg { width: 44px; height: 22px; color: #C4CED4; }
+
+    /* ---- Header ---- */
+    header {
+      background: #161A1F;
+      border: 2px solid #F6F8FA;
+      box-shadow: 8px 8px 0 #EF426F, 16px 16px 0 #00B2A9;
+      padding: clamp(18px, 3.5vw, 30px);
+      position: relative;
+      margin-right: 16px;
+    }
+    header h1 {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px;
+      line-height: 1;
+    }
+    header h1 .title-text {
+      font-family: 'Bowlby One', sans-serif;
+      font-size: clamp(1.7rem, 5vw, 3.2rem);
+      font-weight: 400;
+      text-transform: uppercase;
+      color: #F6F8FA;
+      transform: skewX(-9deg);
+      text-shadow: 3px 3px 0 #EF426F, 6px 6px 0 #00B2A9;
+    }
+    header h1 .badge {
+      font-family: 'VT323', monospace; font-size: 1.35rem; line-height: 1;
+      color: #FF8200; border: 2px solid #FF8200; background: transparent;
+      padding: 3px 10px 1px; text-shadow: 0 0 10px rgba(255, 130, 0, 0.5);
+    }
+    header p {
+      color: #C4CED4; margin-top: 14px;
+      font-size: clamp(0.9rem, 2vw, 1.05rem); line-height: 1.5;
+    }
+
+    /* ---- Cards ---- */
+    .chart-section, .card {
+      --accent: #00B2A9;
+      background: #161A1F;
+      border: 2px solid rgba(246, 248, 250, 0.85);
+      padding: clamp(14px, 3vw, 22px);
+      margin: 0 8px 32px 0;
+      box-shadow: 8px 8px 0 var(--accent);
+    }
+    .chart-section:nth-of-type(3n+2), .card:nth-of-type(3n+2) { --accent: #EF426F; }
+    .chart-section:nth-of-type(3n), .card:nth-of-type(3n) { --accent: #FF8200; }
+    .chart-title, .card h2 {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(1.35rem, 3vw, 1.7rem);
+      font-weight: 600; line-height: 1;
+      color: #F6F8FA;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #28313A;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .chart-title::before, .card h2::before {
+      content: ""; flex: 0 0 auto; width: 14px; height: 14px; margin-right: -2px;
+      background: linear-gradient(#00B2A9 0 33.3%, #EF426F 33.3% 66.6%, #FF8200 66.6%); order: -1;
+    }
+    .chart-title > :not(:first-child):last-child, .card h2 > :not(:first-child):last-child { margin-left: auto; }
+
+    /* ---- Badges ---- */
+    .badge {
+      display: inline-block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      background: #1D232A;
+      border: 1px solid #8A9399;
+      color: #F6F8FA;
+      text-transform: uppercase;
+    }
+    .badge.teal { background: rgba(0, 178, 169, 0.15); border-color: #00B2A9; color: #00B2A9; }
+    .badge.fuschia { background: rgba(239, 66, 111, 0.15); border-color: #EF426F; color: #EF426F; }
+    .badge.small-sample {
+      font-family: 'Courier Prime', monospace; font-size: 0.72rem; text-transform: none; letter-spacing: 0;
+      color: #F2C14E; border: 1px dashed #F2C14E; background: rgba(242, 193, 78, 0.08);
+      white-space: normal; line-height: 1.35;
+    }
+    .early-season {
+      border: 2px dashed #F2C14E; background: rgba(242, 193, 78, 0.07); color: #F6F8FA;
+      padding: 12px 16px; margin: 0 8px 28px 0; font-size: 0.92rem; line-height: 1.5;
+    }
+    .early-season strong { color: #F2C14E; font-family: 'Teko', sans-serif; font-size: 1.15rem;
+      font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 4px; }
+    .badge.orange { background: rgba(255, 130, 0, 0.15); border-color: #FF8200; color: #FF8200; }
+
+    /* ---- Footer ---- */
+    footer {
+      text-align: center; color: #9DA7B0;
+      font-size: 0.85rem; margin-top: 56px; padding-top: 28px;
+      position: relative;
+    }
+    footer::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+      background: repeating-linear-gradient(90deg, #00B2A9 0 60px, #EF426F 60px 120px, #FF8200 120px 180px);
+    }
+    footer .credit {
+      font-family: 'Teko', sans-serif; font-size: 1.35rem; font-weight: 600; line-height: 1.1;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #F6F8FA;
+    }
+    footer .links { margin-top: 8px; font-family: 'Courier Prime', monospace; font-size: 0.85rem; }
+    footer .links span { margin: 0 8px; color: #9DA7B0; }
+    footer a { color: #F2C14E; text-decoration: none; }
+    footer a:hover, footer a:focus-visible { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      header { box-shadow: 6px 6px 0 #EF426F, 12px 12px 0 #00B2A9; margin-right: 12px; }
+      .chart-section, .card { box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }
+    }
+    
+    .avatar {
+      display: inline-block; flex: 0 0 auto; border-radius: 50%; object-fit: cover; vertical-align: middle;
+      border: 2px solid #F4EAD5; outline: 2px solid #1B1712;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45); background: #1D232A;
+    }
+    .avatar-sm { width: 30px; height: 30px; border-width: 1.5px; outline-width: 1.5px; box-shadow: 2px 2px 0 rgba(0,0,0,0.45); }
+    .avatar-md { width: 48px; height: 48px; }
+    .avatar-lg { width: 76px; height: 76px; border-width: 3px; }
+    .avatar-xl { width: 160px; height: 160px; border-width: 4px; outline-width: 3px; box-shadow: 8px 8px 0 rgba(0,0,0,0.5); }
+    .avatar-xl.avatar-initials { font-size: 3.4rem; }
+    a.player-link { color: inherit; text-decoration: none; border-bottom: 1px dashed currentColor; }
+    a.player-link:hover, a.player-link:focus-visible { color: #F2C14E; border-bottom-style: solid; }
+    .avatar-initials {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #1B1712; color: var(--av); font-family: 'Alfa Slab One', serif; line-height: 1;
+    }
+    .avatar-sm.avatar-initials { font-size: 0.72rem; }
+    .avatar-md.avatar-initials { font-size: 1.05rem; }
+    .avatar-lg.avatar-initials { font-size: 1.6rem; }
+    .with-avatar { display: flex; align-items: center; gap: 10px; }
+    .duo { display: inline-flex; flex: 0 0 auto; }
+    .duo .avatar + .avatar { margin-left: -8px; }
+    
+    
+  </style>
+</head>
+<body>
+  <div class="sarape-band" aria-hidden="true"></div>
+  <div class="page">
+  <nav class="nav-bar"><div class="nav-pages"><a href="index.html" class="nav-page index-link">← Spurs Stats HQ</a> <a href="dashboard.html" class="nav-page">Dashboard</a> <a href="roster.html" class="nav-page">Roster</a> <a href="wemby_lab.html" class="nav-page">Wemby Lab</a> <a href="notebook.html" class="nav-page">Notebook</a> <a href="matchup.html" class="nav-page">Next Game</a> <a href="props_board.html" class="nav-page">Props</a></div></nav>
+  <div class="alamo-header-wrap">
+    <div class="alamo-roofline-crown">
+      <svg class="alamo-roofline-svg" viewBox="0 0 120 18" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18 Z" fill="#161A1F"/><path d="M 0 18 L 14 18 L 14 12 L 30 12 L 30 8 C 36 8 40 6 44 4 C 50 4 54 0 60 0 C 66 0 70 4 76 4 C 80 6 84 8 90 8 L 90 12 L 106 12 L 106 18 L 120 18" stroke="#28313A" stroke-width="1" fill="none"/></svg>
+    </div>
+    <header>
+      <div class="alamo-meta-banner">
+        <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon"><path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/><path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/><path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/></svg>
+        <span>The Alamo City &bull; Mission San Antonio</span>
+      </div>
+      <h1><span class="title-text">Victor Wembanyama</span> <span class="badge">2026-27 Season</span></h1>
+      <p>#1 &middot; F-C &middot; 3 yrs exp &middot; El Alien</p>
+    </header>
+  </div>
+  <main>
+    <div class="early-season" role="note"><strong>Early season:</strong> 3 games played. Percentages and hit rates swing a lot this early; trend charts appear after 10 games.</div>
+    
+    <style>
+      .deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 22px; }
+      .pcard { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
+                background: #1D232A; border: 2px solid #28313A; padding: 20px 14px 16px;
+                color: inherit; text-decoration: none; transition: transform .12s ease, box-shadow .12s ease, border-color .12s; }
+      a.pcard:hover, a.pcard:focus-visible { border-color: #F6F8FA; transform: translate(-3px, -3px);
+                box-shadow: 6px 6px 0 #00B2A9; }
+      /* Jersey number in the card's corner, where a Lotería card prints its number */
+      .jersey { font-family: 'Bowlby One', sans-serif; line-height: 1; color: #F6F8FA;
+                 text-shadow: 2px 2px 0 #EF426F, 4px 4px 0 #00B2A9; }
+      .jersey .hash { font-size: 0.55em; vertical-align: 0.55em; margin-right: 1px; color: #C4CED4; text-shadow: none; }
+      .pcard .jersey { position: absolute; top: 10px; left: 14px; font-size: 2.6rem; }
+      .hero .jersey { font-size: 4.5rem; }
+      .pcard .emblem { font-family: 'Rye', serif; font-size: 1.25rem; color: #F2C14E; margin-top: 8px; min-height: 1.4em; }
+      .pcard .who { font-family: 'Teko', sans-serif; font-size: 1.45rem; font-weight: 600; letter-spacing: 0.04em;
+                     text-transform: uppercase; line-height: 1.05; }
+      .pcard .bio { font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; color: #9DA7B0; }
+      .pcard .line { font-family: 'VT323', monospace; font-size: 1.35rem; color: #FF8200; margin-top: 4px; }
+      .pcard .gs { font-size: 0.8rem; color: #C4CED4; }
+      .pcard.dim { opacity: 0.7; }
+      .hero { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+      .hero .emblem { font-family: 'Rye', serif; font-size: 2rem; color: #F2C14E; }
+      .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; flex: 1; min-width: 260px; }
+      .tile { background: #1D232A; border: 1px solid #28313A; padding: 10px; text-align: center; }
+      .tile .k { font-family: 'Teko', sans-serif; font-size: 1rem; letter-spacing: 0.12em; text-transform: uppercase; color: #C4CED4; }
+      .tile .v { font-family: 'VT323', monospace; font-size: 2rem; line-height: 1.05; color: #F6F8FA; }
+      .honors { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+      .log { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+      .log th, .log td { padding: 8px 8px; border-bottom: 1px solid #28313A; text-align: center; white-space: nowrap; }
+      .log th { font-family: 'Teko', sans-serif; font-size: 1.05rem; letter-spacing: 0.08em; color: #C4CED4; font-weight: 600; }
+      .log td { font-family: 'Share Tech Mono', monospace; }
+      .log td.first, .log th.first { text-align: left; }
+      .log .W { color: #00B2A9; } .log .L { color: #EF426F; }
+      .hero-id { display: flex; align-items: flex-start; gap: 14px; }
+      @media (max-width: 640px) { .hero-id { margin: 0 auto; } .hero .jersey { font-size: 3.4rem; } }
+      .back { display: inline-block; margin-bottom: 18px; font-family: 'Teko', sans-serif; font-size: 1.15rem;
+               letter-spacing: 0.08em; text-transform: uppercase; color: #F2C14E; text-decoration: none; }
+    </style>
+    <a class="back" href="roster.html">&larr; La Baraja</a>
+    <section class="card">
+      <div class="hero">
+        <div class="hero-id">
+          <div class="jersey"><span class="hash">#</span>1</div>
+          <div style="text-align: center;"><img class="avatar avatar-xl" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async">
+            <div class="emblem">El Alien</div></div>
+        </div>
+        <div class="tiles"><div class="tile"><div class="k">GP</div><div class="v">3</div></div><div class="tile"><div class="k">MIN</div><div class="v">31.7</div></div><div class="tile"><div class="k">PTS</div><div class="v">20.0</div></div><div class="tile"><div class="k">REB</div><div class="v">11.0</div></div><div class="tile"><div class="k">AST</div><div class="v">2.3</div></div><div class="tile"><div class="k">STL+BLK</div><div class="v">4.7</div></div><div class="tile"><div class="k">FG%</div><div class="v">36.5%</div></div><div class="tile"><div class="k">3P%</div><div class="v">25.0%</div></div><div class="tile"><div class="k">GmSc</div><div class="v">15.2</div></div></div>
+      </div>
+      
+    </section>
+    <section class="chart-section">
+      <h2 class="chart-title">Game Score by Game</h2>
+      <div style="height:340px; width:100%;">                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="gmsc_wembanyama" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("gmsc_wembanyama")) {                    Plotly.newPlot(                        "gmsc_wembanyama",                        [{"hovertemplate":"%{x}\u003cbr\u003eGame Score %{y}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["#EF426F","#EF426F","#00B2A9"]},"x":["Oct 20 vs OKC","Oct 23 vs HOU","Oct 24 @ DAL"],"y":{"dtype":"f8","bdata":"mpmZmZmZIkBmZmZmZmYxQGZmZmZm5jJA"},"type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05}}},"shapes":[{"line":{"color":"#F2C14E","dash":"dot"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":15.199999999999998,"y1":15.199999999999998,"yref":"y"}],"annotations":[{"showarrow":false,"text":"Season avg 15.2","x":1,"xanchor":"right","xref":"x domain","y":15.199999999999998,"yanchor":"bottom","yref":"y"}],"font":{"color":"#F6F8FA","family":"Share Tech Mono, monospace","size":12},"title":{},"xaxis":{"gridcolor":"#28313A","zerolinecolor":"#28313A","title":{"text":""},"automargin":true},"yaxis":{"gridcolor":"#28313A","zerolinecolor":"#28313A","title":{"text":"Game Score"},"automargin":true},"margin":{"l":60,"r":30,"t":24,"b":50},"legend":{"font":{"family":"Teko, sans-serif","size":16},"bgcolor":"rgba(0,0,0,0)","bordercolor":"#28313A"},"paper_bgcolor":"#161A1F","plot_bgcolor":"#0B0E11","showlegend":false,"height":340,"autosize":true},                        {"responsive": true, "displaylogo": false, "displayModeBar": false, "scrollZoom": false}                    )                };            </script>        </div>
+    </section>
+    <section class="card">
+      <h2>Game Log</h2>
+      <div style="overflow-x: auto;"><table class="log">
+        <thead><tr><th class="first">Date</th><th>Opp</th><th>Result</th><th>MIN</th><th>PTS</th><th>REB</th>
+          <th>AST</th><th>STL</th><th>BLK</th><th>FG</th><th>3PT</th><th>+/-</th><th>GmSc</th></tr></thead>
+        <tbody><tr><td class="first">Oct 24</td><td>@ DAL</td><td class="W">W 122-106</td><td>29</td><td>23</td><td>7</td><td>2</td><td>1</td><td>4</td><td>9-18</td><td>2-6</td><td>+32</td><td>18.9</td></tr><tr><td class="first">Oct 23</td><td>vs. HOU</td><td class="L">L 110-114</td><td>32</td><td>25</td><td>13</td><td>2</td><td>0</td><td>2</td><td>9-21</td><td>2-6</td><td>+3</td><td>17.4</td></tr><tr><td class="first">Oct 20</td><td>vs. OKC</td><td class="L">L 104-116</td><td>34</td><td>12</td><td>13</td><td>3</td><td>1</td><td>6</td><td>1-13</td><td>0-4</td><td>-2</td><td>9.3</td></tr></tbody></table></div>
+    </section>
+  </main>
+  
+    <footer>
+      <div class="alamo-footer-seal" aria-hidden="true">
+        <svg class="alamo-icon-svg" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Alamo Mission Icon"><path d="M 6 46 L 94 46 L 94 34 L 84 34 L 84 26 C 81 26 78 24 76 21 C 72 21 69 16 63 16 C 60 10 53 8 50 8 C 47 8 40 10 37 16 C 31 16 28 21 24 21 C 22 24 19 26 16 26 L 16 34 L 6 34 Z" fill="currentColor"/><path d="M 46 20 C 46 17 54 17 54 20 L 54 27 L 46 27 Z" fill="#0B0E11"/><path d="M 43 46 L 43 36 C 43 32 57 32 57 36 L 57 46 Z" fill="#0B0E11"/></svg>
+      </div>
+      <p class="credit">Created and Maintained by <a href="https://www.corygarms.com" target="_blank" rel="noopener">Cory Garms</a></p>
+      <p class="links">
+        <a href="https://x.com/cory_garms" target="_blank" rel="noopener">X / Twitter @cory_garms</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="https://github.com/cory-garms" target="_blank" rel="noopener">GitHub cory-garms</a>
+      </p>
+    </footer>
+    
+  </div>
+</body>
+</html>

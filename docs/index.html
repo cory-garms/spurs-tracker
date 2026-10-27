@@ -6,11 +6,16 @@
   <title>Spurs Stats HQ — San Antonio Spurs Analytics</title>
   <meta name="description" content="San Antonio Spurs 2026-27: 1-2. Who&#x27;s playing well, the rotation and close games, rebuilt after every game.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Spurs Stats HQ">
   <meta property="og:title" content="Spurs Stats HQ · 2026-27 · 1-2">
   <meta property="og:description" content="San Antonio Spurs 2026-27: 1-2. Who&#x27;s playing well, the rotation and close games, rebuilt after every game.">
-  <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Spurs Stats HQ · 2026-27 · 1-2">
   <meta name="twitter:description" content="San Antonio Spurs 2026-27: 1-2. Who&#x27;s playing well, the rotation and close games, rebuilt after every game.">
+  <meta property="og:image" content="https://corygarms.com/spurs-tracker/img/og/latest.png?v=cdad7899">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://corygarms.com/spurs-tracker/img/og/latest.png?v=cdad7899">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@400;600;700;800&family=Bowlby+One&family=Courier+Prime:wght@400;700&family=Rye&family=Share+Tech+Mono&family=Teko:wght@500;600;700&family=VT323&display=swap" rel="stylesheet">
@@ -209,6 +214,10 @@
     .avatar-sm { width: 30px; height: 30px; border-width: 1.5px; outline-width: 1.5px; box-shadow: 2px 2px 0 rgba(0,0,0,0.45); }
     .avatar-md { width: 48px; height: 48px; }
     .avatar-lg { width: 76px; height: 76px; border-width: 3px; }
+    .avatar-xl { width: 160px; height: 160px; border-width: 4px; outline-width: 3px; box-shadow: 8px 8px 0 rgba(0,0,0,0.5); }
+    .avatar-xl.avatar-initials { font-size: 3.4rem; }
+    a.player-link { color: inherit; text-decoration: none; border-bottom: 1px dashed currentColor; }
+    a.player-link:hover, a.player-link:focus-visible { color: #F2C14E; border-bottom-style: solid; }
     .avatar-initials {
       display: inline-flex; align-items: center; justify-content: center;
       background: #1B1712; color: var(--av); font-family: 'Alfa Slab One', serif; line-height: 1;
@@ -217,6 +226,8 @@
     .avatar-md.avatar-initials { font-size: 1.05rem; }
     .avatar-lg.avatar-initials { font-size: 1.6rem; }
     .with-avatar { display: flex; align-items: center; gap: 10px; }
+    .duo { display: inline-flex; flex: 0 0 auto; }
+    .duo .avatar + .avatar { margin-left: -8px; }
     
     
 
@@ -241,10 +252,6 @@
       font-size: clamp(0.7rem, 2vw, 0.85rem); letter-spacing: 0.3em; text-transform: uppercase;
       margin-top: 6px; opacity: 0.85;
     }
-    .hq-hero .lede {
-      max-width: 640px; margin: 14px auto 0; color: #F4EAD5; opacity: 0.9;
-      font-size: clamp(0.9rem, 2vw, 1.02rem); line-height: 1.55;
-    }
 
     .scoreboard {
       display: grid; grid-template-columns: repeat(4, 1fr);
@@ -265,6 +272,8 @@
     }
     .scoreboard .v.W { color: #00B2A9; text-shadow: 0 0 14px rgba(0, 178, 169, 0.5); }
     .scoreboard .v.L { color: #EF426F; text-shadow: 0 0 14px rgba(239, 66, 111, 0.5); }
+    .scoreboard .v.top { display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .scoreboard .v.top a.player-link { border-bottom: none; }
     .scoreboard .sep { color: #28313A; margin: 0 0.25em; text-shadow: none; }
     .scoreboard .d { font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; color: #9DA7B0; }
 
@@ -358,8 +367,10 @@
       font-family: 'Rye', serif; font-size: clamp(1.3rem, 3vw, 1.65rem); line-height: 1.1;
       text-align: center; border-top: 3px solid #1B1712; padding-top: 8px;
     }
-    .loteria .blurb {
-      color: #F4EAD5; font-size: 0.88rem; line-height: 1.45; margin-top: 14px; opacity: 0.92;
+    .loteria .tag {
+      font-family: 'Teko', sans-serif; font-weight: 600; font-size: 1.3rem; line-height: 1;
+      letter-spacing: 0.16em; text-transform: uppercase; text-align: center;
+      color: #F2C14E; margin-top: 14px; text-shadow: 2px 2px 0 #1B1712;
     }
 
     footer { color: #F4EAD5; }
@@ -386,7 +397,7 @@
       .loteria .medallion.right { right: 5px; }
       .loteria .caption { font-size: 0.6rem; letter-spacing: 0.08em; padding: 2px 5px; }
       .loteria .name { font-size: 1.05rem; padding-top: 5px; }
-      .loteria .blurb { font-size: 0.78rem; margin-top: 10px; }
+      .loteria .tag { font-size: 1.05rem; letter-spacing: 0.1em; margin-top: 10px; }
       .scoreboard { grid-template-columns: repeat(2, 1fr); row-gap: 10px; }
       .scoreboard > div:nth-child(3) { border-left: none; }
     }
@@ -400,66 +411,64 @@
       <h1>Spurs Stats HQ</h1>
       <div class="sub">&#9733; Putting hammer to stone since 2024 &#9733;</div>
       <div class="season">2026-27 season</div>
-      <p class="lede">The San Antonio Spurs, by the numbers: who's playing well, how the rotation
-        fits together and what happens in close games, rebuilt from the box scores after every game.</p>
     </section>
 
     <section class="scoreboard" aria-label="Season at a glance">
-      <div><div class="k">Record</div><div class="v">1-2</div><div class="d">2026-27</div></div>
+      <div><div class="k">Record</div><div class="v">1-2</div><div class="d">Home 0-2 &middot; Road 1-0</div></div>
       <div><div class="k">Last game</div><div class="v W">W 122-106</div><div class="d">@ DAL &middot; Oct 24</div></div>
       <div><div class="k">Streak</div><div class="v W">W1</div><div class="d">current run</div></div>
-      <div><div class="k">Top performer</div><div class="v">Fox</div><div class="d">19 PTS &middot; 9 AST &middot; 3 STL</div></div>
+      <div><div class="k">Top performer</div><div class="v top"><img class="avatar avatar-md" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><a class="player-link" href="player_fox.html">Fox</a></div><div class="d">19 PTS &middot; 9 AST &middot; 3 STL</div></div>
     </section>
 
     <main class="deck" style="--per-row:3;">
       
-      <a class="loteria" href="dashboard.html" style="--c:#00B2A9; --ink:#F4EAD5; --sh:#1B1712;">
+      <a class="loteria" href="dashboard.html" title="Results, four factors, best duos and close games" style="--c:#00B2A9; --ink:#F4EAD5; --sh:#1B1712;">
         <div class="frame">
           <div class="num">1</div>
           <div class="art has-img"><img src="img/loteria/tablero.webp" alt="" loading="lazy" decoding="async"><div class="medallion tablet"><div class="stat">1-2</div><div class="caption">Record</div></div></div>
           <div class="name">El Tablero</div>
         </div>
-        <p class="blurb">The season dashboard: four factors, rotation pairings, clutch ledger, scoring and defensive trends.</p>
+        <p class="tag">The season so far</p>
       </a>
-      <a class="loteria" href="wemby_lab.html" style="--c:#EF426F; --ink:#F4EAD5; --sh:#1B1712;">
+      <a class="loteria" href="wemby_lab.html" title="Wemby&#x27;s points, boards, blocks and steals" style="--c:#EF426F; --ink:#F4EAD5; --sh:#1B1712;">
         <div class="frame">
           <div class="num">2</div>
           <div class="art has-img"><img src="img/loteria/alien.webp" alt="" loading="lazy" decoding="async"><div class="medallions stack-right"><div class="medallion mini"><div class="stat">20.0</div><div class="caption">PTS</div></div><div class="medallion mini"><div class="stat">11.0</div><div class="caption">REB</div></div><div class="medallion mini"><div class="stat">4.7</div><div class="caption">STOCKS</div></div></div></div>
           <div class="name">El Alien</div>
         </div>
-        <p class="blurb">The Wemby Lab: rim deterrence, stocks timeline, milestone watch and his best defensive nights.</p>
+        <p class="tag">Wemby's lab</p>
       </a>
-      <a class="loteria" href="dashboard.html#spotlight" style="--c:#7A2E1F; --ink:#F4EAD5; --sh:#1B1712;">
+      <a class="loteria" href="dashboard.html#spotlight" title="Best Game Score, last 3 games: De&#x27;Aaron Fox (18.3)" style="--c:#7A2E1F; --ink:#F4EAD5; --sh:#1B1712;">
         <div class="frame">
           <div class="num">7</div>
           <div class="art has-img"><img src="img/loteria/valiente.webp" alt="" loading="lazy" decoding="async"><div class="medallion photo right"><img src="img/players/fox.webp" alt="" title="Hot hand &middot; last 3"><div class="ribbon"><span class="stat">Fox</span></div></div></div>
           <div class="name">El Valiente</div>
         </div>
-        <p class="blurb">Whoever is playing best right now: De'Aaron Fox leads the team in Game Score over the last 3 games (18.3).</p>
+        <p class="tag">Who's hot</p>
       </a>
-      <a class="loteria" href="notebook.html" style="--c:#1B1712; --ink:#F4EAD5; --sh:#1B1712;">
+      <a class="loteria" href="notebook.html" title="Essays recomputed after every game" style="--c:#1B1712; --ink:#F4EAD5; --sh:#1B1712;">
         <div class="frame">
           <div class="num">4</div>
           <div class="art has-img"><img src="img/loteria/libreta.webp" alt="" loading="lazy" decoding="async"><div class="medallion bottom"><div class="stat">&#9998;</div><div class="caption">Essays</div></div></div>
           <div class="name">La Libreta</div>
         </div>
-        <p class="blurb">The Notebook: living essays where every number is recomputed from the data at build time.</p>
+        <p class="tag">Living essays</p>
       </a>
-      <a class="loteria" href="matchup.html" style="--c:#F2C14E; --ink:#1B1712; --sh:transparent;">
+      <a class="loteria" href="matchup.html" title="Tuesday, Oct 27 · 7:00 PM CT. Tale of the tape, form and players to watch." style="--c:#F2C14E; --ink:#1B1712; --sh:transparent;">
         <div class="frame">
           <div class="num">5</div>
           <div class="art has-img"><img src="img/loteria/duelo.webp" alt="" loading="lazy" decoding="async"><div class="medallion top"><div class="stat long">vs. SAC</div><div class="caption">Tue 7:00 PM</div></div></div>
           <div class="name">El Duelo</div>
         </div>
-        <p class="blurb">Next up: Kings at Spurs, Tuesday, Oct 27 · 7:00 PM CT. Tale of the tape, recent form and players to watch.</p>
+        <p class="tag">Next up: Kings</p>
       </a>
-      <a class="loteria" href="props_board.html" style="--c:#C4CED4; --ink:#1B1712; --sh:transparent;">
+      <a class="loteria" href="props_board.html" title="Hit rates vs. last season&#x27;s lines. Not betting advice." style="--c:#C4CED4; --ink:#1B1712; --sh:transparent;">
         <div class="frame">
           <div class="num">6</div>
           <div class="art has-img"><img src="img/loteria/mercado.webp" alt="" loading="lazy" decoding="async"><div class="medallion center"><div class="stat">O/U</div><div class="caption">Prop board</div></div></div>
           <div class="name">El Mercado</div>
         </div>
-        <p class="blurb">Player prop hit rates from game logs. For fun and analysis, not betting advice.</p>
+        <p class="tag">Prop hit rates</p>
       </a>
     </main>
     

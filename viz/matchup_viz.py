@@ -15,7 +15,7 @@ import pandas as pd
 import config
 from config import TEAM_ABBR, SEASON, TEAMS, season_str
 from viz import theme
-from viz.avatars import avatar_html
+from viz.avatars import avatar_html, player_link
 from analysis.matchup_preview import (
     HOME_COURT_PTS, SHRINK_GAMES, last_season_series, players_to_watch, projection,
     spurs_players_from_logs, tale_of_the_tape,
@@ -92,7 +92,7 @@ def _players_list(items: list[dict], empty: str) -> str:
         return f'<p class="ng-empty">{empty}</p>'
     lis = "".join(
         f'<li class="ng-player with-avatar">{avatar_html(p["player_name"], "md")}'
-        f'<div><div class="who">{p["player_name"]}</div>'
+        f'<div><div class="who">{player_link(p["player_name"])}</div>'
         f'<div class="line">{p["line"]}</div></div>'
         f'<span class="sub">GmSc {p["game_score"]}</span></li>'
         for p in items
@@ -234,6 +234,7 @@ def build_matchup_page(
         current_slug="matchup",
         badge=f"vs. {opp}" if nxt["is_home"] else f"@ {opp}",
         games_played=games_played,
+        og_image="next",
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html, encoding="utf-8")

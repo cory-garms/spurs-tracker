@@ -606,7 +606,25 @@ def roster_production_matrix(player_logs: pd.DataFrame, team_name: str, top_n: i
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         height=max(400, len(agg) * 46 + 100),
     )
+    _add_emblem_labels(fig, agg["player_name"].tolist())
     return fig
+
+
+def _add_emblem_labels(fig: go.Figure, players: list[str]) -> None:
+    """Small round emblems beside the y-axis names; labels shift left to make room."""
+    from viz.avatars import avatar_round_src
+
+    images = []
+    for name in players:
+        src = avatar_round_src(name)
+        if src:
+            images.append(dict(
+                source=src, xref="x domain", yref="y", x=-0.004, y=name,
+                sizex=0.2, sizey=0.82, xanchor="right", yanchor="middle", sizing="contain", layer="above",
+            ))
+    if images:
+        fig.update_layout(images=images)
+        fig.update_yaxes(ticklabelstandoff=46)
 
 
 # ---------------------------------------------------------------------------

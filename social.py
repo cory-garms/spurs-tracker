@@ -32,7 +32,7 @@ from analysis.rodeo import segment_rodeo_games, rodeo_split_metrics
 
 console = Console()
 
-DEFAULT_SITE_URL = "https://corygarms.com/spurs-tracker"
+DEFAULT_SITE_URL = config.SITE_URL
 
 
 def generate_wemby_tweet(wemby_logs: pd.DataFrame, games: pd.DataFrame, site_url: str = DEFAULT_SITE_URL) -> str:
