@@ -150,7 +150,6 @@ def run_pipeline(
             from viz.dashboard import build
             from viz.wemby_viz import build_wemby_lab_page
             from viz.rodeo_viz import build_rodeo_page
-            from viz.notebook_viz import build_notebook_page
             from viz.props_viz import build_props_board_page
             from viz.matchup_viz import build_matchup_page
             from viz.index_viz import build_index_page
@@ -165,7 +164,6 @@ def run_pipeline(
             dash_path = build(games, player_logs, team_name, team_abbr, season)
             wemby_path = build_wemby_lab_page(games, player_logs, season, team_abbr)
             rodeo_path = build_rodeo_page(games, season, team_abbr)
-            nb_path = build_notebook_page(games, player_logs, roster, season, team_abbr)
             props_path = build_props_board_page(games, player_logs, season, team_abbr)
             matchup_path = build_matchup_page(games, player_logs, season, team_abbr)
             if team_abbr.upper() == config.TEAM_ABBR and season == config.SEASON:

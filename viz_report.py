@@ -100,7 +100,6 @@ def main() -> None:
 
         from viz.wemby_viz import build_wemby_lab_page
         from viz.rodeo_viz import build_rodeo_page
-        from viz.notebook_viz import build_notebook_page
         from viz.props_viz import build_props_board_page
         from viz.matchup_viz import build_matchup_page
 
@@ -113,11 +112,6 @@ def main() -> None:
             rodeo_path = build_rodeo_page(games, season=season, team_abbr=abbr)
             console.print(f"[green]Rodeo Road Trip[/green] → [cyan]{rodeo_path}[/cyan]")
             output_files.append(str(rodeo_path))
-
-        with console.status("[bold green]Building Living Notebook…[/bold green]"):
-            nb_path = build_notebook_page(games, player_logs, roster, season=season, team_abbr=abbr)
-            console.print(f"[green]Notebook[/green] → [cyan]{nb_path}[/cyan]")
-            output_files.append(str(nb_path))
 
         with console.status("[bold green]Building Props & Next Game…[/bold green]"):
             props_path = build_props_board_page(games, player_logs, season=season, team_abbr=abbr)

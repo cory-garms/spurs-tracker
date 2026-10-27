@@ -58,7 +58,7 @@ CARD_ART: dict[str, str] = {
     "tablero": "tablet",   # stamped on the carved tally face
     "alien":   "stack-right",  # several small badges up the right edge, below the ball
     "rodeo":   "left",
-    "libreta": "bottom",
+    "baraja":  "right",    # open black sky above the fanned cards
     "duelo":   "top",      # stands in for the sun, clear of both players
     "mercado": "center",   # papel picado spans both top corners
     "valiente": "right",
@@ -334,6 +334,7 @@ def build_index_page(
     else:
         duelo_stat, duelo_caption = "—", "Season complete"
         duelo_tag, duelo_tip = "Season complete", "Back with next season's schedule"
+    n_players = player_logs.loc[player_logs["min"] > 0, "player_name"].nunique() if not player_logs.empty else 0
     potg = game_performers(player_logs).get("player_of_the_game") if not player_logs.empty else None
     hot = hot_hand(player_logs) if not player_logs.empty else {}
 
@@ -363,8 +364,8 @@ def build_index_page(
               medallion_img=avatar_src(hot["player_name"]) if hot else None)),
         ("rodeo", _card(3, "rodeo", "El Rodeo", pages["rodeo"][0], theme.FIESTA_ORANGE, theme.LOTERIA_CREAM,
               rodeo_stat, rodeo_caption, "The road trip", "The February Rodeo Road Trip vs. the title-era trips")),
-        ("notebook", _card(4, "libreta", "La Libreta", pages["notebook"][0], theme.LOTERIA_INK, theme.LOTERIA_CREAM,
-              "&#9998;", "Essays", "Living essays", "Essays recomputed after every game")),
+        ("roster", _card(4, "baraja", "La Baraja", pages["roster"][0], theme.LOTERIA_INK, theme.LOTERIA_CREAM,
+              str(n_players), "Players used", "The roster", "Every player, his emblem and his season")),
         ("matchup", _card(5, "duelo", "El Duelo", pages["matchup"][0], theme.MARIGOLD, theme.LOTERIA_INK,
               duelo_stat, duelo_caption, duelo_tag, duelo_tip)),
         ("board", _card(6, "mercado", "El Mercado", pages["board"][0], theme.SPURS_SILVER, theme.LOTERIA_INK,

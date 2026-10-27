@@ -174,7 +174,6 @@ PAGES: dict[str, tuple[str, str]] = {
     "roster":    ("roster.html",          "Roster"),
     "wemby":     ("wemby_lab.html",       "Wemby Lab"),
     "rodeo":     ("rodeo_road_trip.html", "Rodeo Road Trip"),
-    "notebook":  ("notebook.html",        "Notebook"),
     "matchup":   ("matchup.html",         "Next Game"),
     "board":     ("props_board.html",     "Props"),
 }
