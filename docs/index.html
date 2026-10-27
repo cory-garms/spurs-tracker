@@ -201,6 +201,24 @@
       .chart-section, .card { box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }
     }
     
+    .avatar {
+      display: inline-block; flex: 0 0 auto; border-radius: 50%; object-fit: cover; vertical-align: middle;
+      border: 2px solid #F4EAD5; outline: 2px solid #1B1712;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45); background: #1D232A;
+    }
+    .avatar-sm { width: 30px; height: 30px; border-width: 1.5px; outline-width: 1.5px; box-shadow: 2px 2px 0 rgba(0,0,0,0.45); }
+    .avatar-md { width: 48px; height: 48px; }
+    .avatar-lg { width: 76px; height: 76px; border-width: 3px; }
+    .avatar-initials {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #1B1712; color: var(--av); font-family: 'Alfa Slab One', serif; line-height: 1;
+    }
+    .avatar-sm.avatar-initials { font-size: 0.72rem; }
+    .avatar-md.avatar-initials { font-size: 1.05rem; }
+    .avatar-lg.avatar-initials { font-size: 1.6rem; }
+    .with-avatar { display: flex; align-items: center; gap: 10px; }
+    
+    
 
     html, body {
       background:
@@ -281,11 +299,11 @@
     .loteria .art.has-img {
       position: relative; overflow: hidden; display: block; background: var(--c);
     }
-    .loteria .art.has-img img {
+    .loteria .art.has-img > img {
       position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
       transition: transform 0.25s ease;
     }
-    .loteria:hover .art.has-img img { transform: scale(1.04); }
+    .loteria:hover .art.has-img > img { transform: scale(1.04); }
     .loteria .medallion {
       position: absolute; top: 8px; width: 42%; aspect-ratio: 1;
       border-radius: 50%; background: #1B1712; color: #F4EAD5;
@@ -307,6 +325,14 @@
     .loteria .medallion.mini:nth-child(even) { transform: rotate(5deg); }
     .loteria .medallion.mini .stat { font-size: clamp(0.85rem, 1.5vw, 1.05rem); }
     .loteria .medallion.mini .caption { font-size: 0.5rem; letter-spacing: 0.08em; }
+    .loteria .medallion.photo { padding: 0; overflow: visible; }
+    .loteria .medallion.photo img { position: static; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .loteria .medallion.photo .ribbon {
+      position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%); white-space: nowrap;
+      background: #1B1712; border: 2px solid #F4EAD5; padding: 2px 8px;
+      display: flex; align-items: baseline; gap: 6px;
+    }
+    .loteria .medallion.photo .ribbon .stat { font-size: 0.95rem; text-shadow: none; }
     .loteria .medallion.center { left: 50%; top: 44%; transform: translate(-50%, -50%) rotate(-4deg); }
     .loteria .medallion .stat {
       font-size: clamp(1.3rem, 2.6vw, 1.75rem); text-shadow: 2px 2px 0 var(--c);
@@ -406,7 +432,7 @@
       <a class="loteria" href="dashboard.html#spotlight" style="--c:#7A2E1F; --ink:#F4EAD5; --sh:#1B1712;">
         <div class="frame">
           <div class="num">7</div>
-          <div class="art has-img"><img src="img/loteria/valiente.webp" alt="" loading="lazy" decoding="async"><div class="medallion right"><div class="stat">Fox</div><div class="caption">Hot hand &middot; last 3</div></div></div>
+          <div class="art has-img"><img src="img/loteria/valiente.webp" alt="" loading="lazy" decoding="async"><div class="medallion photo right"><img src="img/players/fox.webp" alt="" title="Hot hand &middot; last 3"><div class="ribbon"><span class="stat">Fox</span></div></div></div>
           <div class="name">El Valiente</div>
         </div>
         <p class="blurb">Whoever is playing best right now: De'Aaron Fox leads the team in Game Score over the last 3 games (18.3).</p>

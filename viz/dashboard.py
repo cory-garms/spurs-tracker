@@ -323,6 +323,7 @@ def build(
 def _spotlight_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
     """Player of the Game, Breakout and Hot Hand, ranked by Game Score so anyone can headline."""
     from analysis.performers import MIN_BASELINE_GAMES, game_performers, hot_hand
+    from viz.avatars import avatar_html
 
     if player_logs.empty:
         return ""
@@ -338,10 +339,11 @@ def _spotlight_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
             matchup = f'{g["result"]} {int(g["pts"])}-{int(g["opp_pts"])} {"vs." if g["home_away"] == "H" else "@"} {g["opponent_abbr"]}'
 
     def tile(kicker: str, color: str, name: str, line: str, foot: str) -> str:
+        who = name if name == "&mdash;" else f'<span class="with-avatar">{avatar_html(name, "lg")}<span>{name}</span></span>'
         return f"""
         <div style="background: {theme.SHADOW_BLACK}; border: 1px solid {theme.COURT_LINE}; border-left: 6px solid {color}; padding: 16px;">
           <div style="font-family: {theme.FONT_HEADING}; font-size: 1.05rem; letter-spacing: 0.14em; text-transform: uppercase; color: {color};">{kicker}</div>
-          <div style="font-family: {theme.FONT_DISPLAY}; font-size: 1.5rem; line-height: 1.1; margin: 6px 0 4px; color: {theme.COURT_WHITE};">{name}</div>
+          <div style="font-family: {theme.FONT_DISPLAY}; font-size: 1.5rem; line-height: 1.1; margin: 10px 0 8px; color: {theme.COURT_WHITE};">{who}</div>
           <div style="font-family: {theme.FONT_LED}; font-size: 1.6rem; color: {theme.FIESTA_ORANGE};">{line}</div>
           <div style="font-size: 0.82rem; color: {theme.TEXT_MUTED}; margin-top: 4px;">{foot}</div>
         </div>"""

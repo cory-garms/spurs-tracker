@@ -194,6 +194,24 @@
       .chart-section, .card { box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }
     }
     
+    .avatar {
+      display: inline-block; flex: 0 0 auto; border-radius: 50%; object-fit: cover; vertical-align: middle;
+      border: 2px solid #F4EAD5; outline: 2px solid #1B1712;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45); background: #1D232A;
+    }
+    .avatar-sm { width: 30px; height: 30px; border-width: 1.5px; outline-width: 1.5px; box-shadow: 2px 2px 0 rgba(0,0,0,0.45); }
+    .avatar-md { width: 48px; height: 48px; }
+    .avatar-lg { width: 76px; height: 76px; border-width: 3px; }
+    .avatar-initials {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #1B1712; color: var(--av); font-family: 'Alfa Slab One', serif; line-height: 1;
+    }
+    .avatar-sm.avatar-initials { font-size: 0.72rem; }
+    .avatar-md.avatar-initials { font-size: 1.05rem; }
+    .avatar-lg.avatar-initials { font-size: 1.6rem; }
+    .with-avatar { display: flex; align-items: center; gap: 10px; }
+    
+    
   </style>
 </head>
 <body>
@@ -249,7 +267,7 @@
           <tbody>
             
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Devin Vassell</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span>Devin Vassell</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">14.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">9.3 &plusmn; 2.1</td>
@@ -258,7 +276,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Dylan Harper</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><span>Dylan Harper</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">11.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">20.0 &plusmn; 2.0</td>
@@ -267,7 +285,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Victor Wembanyama</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><span>Victor Wembanyama</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">24.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">20.0 &plusmn; 7.0</td>
@@ -276,7 +294,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Victor Wembanyama</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><span>Victor Wembanyama</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Blocks</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">3.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">4.0 &plusmn; 2.0</td>
@@ -285,7 +303,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">De'Aaron Fox</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span>De'Aaron Fox</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">18.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">17.3 &plusmn; 2.9</td>
@@ -294,7 +312,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">De'Aaron Fox</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span>De'Aaron Fox</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Assists</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">6.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">8.3 &plusmn; 1.2</td>
@@ -303,7 +321,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Stephon Castle</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/castle.webp" alt="El Castillo emblem for Stephon Castle" title="El Castillo" loading="lazy" decoding="async"><span>Stephon Castle</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">16.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">19.3 &plusmn; 4.5</td>
@@ -312,7 +330,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Stephon Castle</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/castle.webp" alt="El Castillo emblem for Stephon Castle" title="El Castillo" loading="lazy" decoding="async"><span>Stephon Castle</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">3-Pointers Made</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">1.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">3.7 &plusmn; 1.2</td>
@@ -321,7 +339,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Julian Champagnie</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/champagnie.webp" alt="La Botella emblem for Julian Champagnie" title="La Botella" loading="lazy" decoding="async"><span>Julian Champagnie</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">11.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">8.7 &plusmn; 3.1</td>
@@ -330,7 +348,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Julian Champagnie</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/champagnie.webp" alt="La Botella emblem for Julian Champagnie" title="La Botella" loading="lazy" decoding="async"><span>Julian Champagnie</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">3-Pointers Made</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">2.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">2.3 &plusmn; 0.6</td>
@@ -339,7 +357,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Keldon Johnson</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/johnson.webp" alt="El Mesteño emblem for Keldon Johnson" title="El Mesteño" loading="lazy" decoding="async"><span>Keldon Johnson</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">12.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">8.3 &plusmn; 1.5</td>
@@ -348,7 +366,7 @@
         </tr>
         
         <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #F6F8FA;">Luke Kornet</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/kornet.webp" alt="El Elotote emblem for Luke Kornet" title="El Elotote" loading="lazy" decoding="async"><span>Luke Kornet</span></span></td>
           <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">6.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
           <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">3.7 &plusmn; 3.5</td>

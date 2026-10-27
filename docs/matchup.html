@@ -194,6 +194,24 @@
       .chart-section, .card { box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }
     }
     
+    .avatar {
+      display: inline-block; flex: 0 0 auto; border-radius: 50%; object-fit: cover; vertical-align: middle;
+      border: 2px solid #F4EAD5; outline: 2px solid #1B1712;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45); background: #1D232A;
+    }
+    .avatar-sm { width: 30px; height: 30px; border-width: 1.5px; outline-width: 1.5px; box-shadow: 2px 2px 0 rgba(0,0,0,0.45); }
+    .avatar-md { width: 48px; height: 48px; }
+    .avatar-lg { width: 76px; height: 76px; border-width: 3px; }
+    .avatar-initials {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #1B1712; color: var(--av); font-family: 'Alfa Slab One', serif; line-height: 1;
+    }
+    .avatar-sm.avatar-initials { font-size: 0.72rem; }
+    .avatar-md.avatar-initials { font-size: 1.05rem; }
+    .avatar-lg.avatar-initials { font-size: 1.6rem; }
+    .with-avatar { display: flex; align-items: center; gap: 10px; }
+    
+    
   </style>
 </head>
 <body>
@@ -241,6 +259,7 @@
       .ng-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
       .ng-list li { display: flex; align-items: baseline; gap: 10px; background: #1D232A;
                      border: 1px solid #28313A; padding: 8px 12px; }
+      .ng-list li.with-avatar { align-items: center; }
       .ng-list .wl { font-family: 'VT323', monospace; font-size: 1.4rem; width: 1.2em; }
       .ng-list .wl.W { color: #00B2A9; } .ng-list .wl.L { color: #EF426F; }
       .ng-list .main { font-family: 'Share Tech Mono', monospace; }
@@ -289,8 +308,8 @@
       <h2>Players to Watch</h2>
       <p class="ng-empty" style="margin: -6px 0 12px;">Top three on each side by average Game Score this season.</p>
       <div class="ng-cols">
-        <div><h3>Spurs</h3><ul class="ng-list"><li class="ng-player"><div><div class="who">De'Aaron Fox</div><div class="line">17.3 PTS · 4.7 REB · 8.3 AST</div></div><span class="sub">GmSc 18.3</span></li><li class="ng-player"><div><div class="who">Victor Wembanyama</div><div class="line">20.0 PTS · 11.0 REB · 2.3 AST</div></div><span class="sub">GmSc 15.2</span></li><li class="ng-player"><div><div class="who">Dylan Harper</div><div class="line">20.0 PTS · 5.0 REB · 3.0 AST</div></div><span class="sub">GmSc 13.7</span></li></ul></div>
-        <div><h3>Kings</h3><ul class="ng-list"><li class="ng-player"><div><div class="who">Domantas Sabonis</div><div class="line">18.7 PTS · 17.3 REB · 7.0 AST</div></div><span class="sub">GmSc 22.2</span></li><li class="ng-player"><div><div class="who">Zach LaVine</div><div class="line">29.0 PTS · 3.7 REB · 3.3 AST</div></div><span class="sub">GmSc 20.0</span></li><li class="ng-player"><div><div class="who">Precious Achiuwa</div><div class="line">13.7 PTS · 7.0 REB · 1.0 AST</div></div><span class="sub">GmSc 13.1</span></li></ul></div>
+        <div><h3>Spurs</h3><ul class="ng-list"><li class="ng-player with-avatar"><img class="avatar avatar-md" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><div><div class="who">De'Aaron Fox</div><div class="line">17.3 PTS · 4.7 REB · 8.3 AST</div></div><span class="sub">GmSc 18.3</span></li><li class="ng-player with-avatar"><img class="avatar avatar-md" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><div><div class="who">Victor Wembanyama</div><div class="line">20.0 PTS · 11.0 REB · 2.3 AST</div></div><span class="sub">GmSc 15.2</span></li><li class="ng-player with-avatar"><img class="avatar avatar-md" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><div><div class="who">Dylan Harper</div><div class="line">20.0 PTS · 5.0 REB · 3.0 AST</div></div><span class="sub">GmSc 13.7</span></li></ul></div>
+        <div><h3>Kings</h3><ul class="ng-list"><li class="ng-player with-avatar"><span class="avatar avatar-md avatar-initials" style="--av:#00B2A9;" title="Domantas Sabonis" aria-hidden="true">DS</span><div><div class="who">Domantas Sabonis</div><div class="line">18.7 PTS · 17.3 REB · 7.0 AST</div></div><span class="sub">GmSc 22.2</span></li><li class="ng-player with-avatar"><span class="avatar avatar-md avatar-initials" style="--av:#F2C14E;" title="Zach LaVine" aria-hidden="true">ZL</span><div><div class="who">Zach LaVine</div><div class="line">29.0 PTS · 3.7 REB · 3.3 AST</div></div><span class="sub">GmSc 20.0</span></li><li class="ng-player with-avatar"><span class="avatar avatar-md avatar-initials" style="--av:#F2C14E;" title="Precious Achiuwa" aria-hidden="true">PA</span><div><div class="who">Precious Achiuwa</div><div class="line">13.7 PTS · 7.0 REB · 1.0 AST</div></div><span class="sub">GmSc 13.1</span></li></ul></div>
       </div>
     </section>
     <section class="card">

@@ -15,6 +15,7 @@ import pandas as pd
 import config
 from config import TEAM_ABBR, SEASON, TEAMS, season_str
 from viz import theme
+from viz.avatars import avatar_html
 from analysis.matchup_preview import (
     HOME_COURT_PTS, SHRINK_GAMES, last_season_series, players_to_watch, projection,
     spurs_players_from_logs, tale_of_the_tape,
@@ -62,6 +63,7 @@ def _css() -> str:
       .ng-list {{ list-style: none; display: flex; flex-direction: column; gap: 8px; }}
       .ng-list li {{ display: flex; align-items: baseline; gap: 10px; background: {t.SHADOW_BLACK};
                      border: 1px solid {t.COURT_LINE}; padding: 8px 12px; }}
+      .ng-list li.with-avatar {{ align-items: center; }}
       .ng-list .wl {{ font-family: {t.FONT_LED}; font-size: 1.4rem; width: 1.2em; }}
       .ng-list .wl.W {{ color: {t.FIESTA_TEAL}; }} .ng-list .wl.L {{ color: {t.FIESTA_FUSCHIA}; }}
       .ng-list .main {{ font-family: {t.FONT_MONO}; }}
@@ -89,7 +91,8 @@ def _players_list(items: list[dict], empty: str) -> str:
     if not items:
         return f'<p class="ng-empty">{empty}</p>'
     lis = "".join(
-        f'<li class="ng-player"><div><div class="who">{p["player_name"]}</div>'
+        f'<li class="ng-player with-avatar">{avatar_html(p["player_name"], "md")}'
+        f'<div><div class="who">{p["player_name"]}</div>'
         f'<div class="line">{p["line"]}</div></div>'
         f'<span class="sub">GmSc {p["game_score"]}</span></li>'
         for p in items

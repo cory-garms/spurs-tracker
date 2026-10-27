@@ -194,6 +194,24 @@
       .chart-section, .card { box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }
     }
     
+    .avatar {
+      display: inline-block; flex: 0 0 auto; border-radius: 50%; object-fit: cover; vertical-align: middle;
+      border: 2px solid #F4EAD5; outline: 2px solid #1B1712;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45); background: #1D232A;
+    }
+    .avatar-sm { width: 30px; height: 30px; border-width: 1.5px; outline-width: 1.5px; box-shadow: 2px 2px 0 rgba(0,0,0,0.45); }
+    .avatar-md { width: 48px; height: 48px; }
+    .avatar-lg { width: 76px; height: 76px; border-width: 3px; }
+    .avatar-initials {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #1B1712; color: var(--av); font-family: 'Alfa Slab One', serif; line-height: 1;
+    }
+    .avatar-sm.avatar-initials { font-size: 0.72rem; }
+    .avatar-md.avatar-initials { font-size: 1.05rem; }
+    .avatar-lg.avatar-initials { font-size: 1.6rem; }
+    .with-avatar { display: flex; align-items: center; gap: 10px; }
+    
+    
   </style>
 </head>
 <body>
@@ -338,19 +356,19 @@
         
         <div style="background: #1D232A; border: 1px solid #28313A; border-left: 6px solid #00B2A9; padding: 16px;">
           <div style="font-family: 'Teko', sans-serif; font-size: 1.05rem; letter-spacing: 0.14em; text-transform: uppercase; color: #00B2A9;">Player of the Game</div>
-          <div style="font-family: 'Bowlby One', sans-serif; font-size: 1.5rem; line-height: 1.1; margin: 6px 0 4px; color: #F6F8FA;">De'Aaron Fox</div>
+          <div style="font-family: 'Bowlby One', sans-serif; font-size: 1.5rem; line-height: 1.1; margin: 10px 0 8px; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-lg" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span>De'Aaron Fox</span></span></div>
           <div style="font-family: 'VT323', monospace; font-size: 1.6rem; color: #FF8200;">19 PTS · 9 AST · 3 STL</div>
           <div style="font-size: 0.82rem; color: #9DA7B0; margin-top: 4px;">W 122-106 @ DAL &middot; Game Score 21.8</div>
         </div>
         <div style="background: #1D232A; border: 1px solid #28313A; border-left: 6px solid #EF426F; padding: 16px;">
           <div style="font-family: 'Teko', sans-serif; font-size: 1.05rem; letter-spacing: 0.14em; text-transform: uppercase; color: #EF426F;">Breakout</div>
-          <div style="font-family: 'Bowlby One', sans-serif; font-size: 1.5rem; line-height: 1.1; margin: 6px 0 4px; color: #F6F8FA;">&mdash;</div>
+          <div style="font-family: 'Bowlby One', sans-serif; font-size: 1.5rem; line-height: 1.1; margin: 10px 0 8px; color: #F6F8FA;">&mdash;</div>
           <div style="font-family: 'VT323', monospace; font-size: 1.6rem; color: #FF8200;"></div>
           <div style="font-size: 0.82rem; color: #9DA7B0; margin-top: 4px;"><span class="badge small-sample" title="Small sample: expect this to move a lot">Flags a player well above his own average once players have 5 games</span></div>
         </div>
         <div style="background: #1D232A; border: 1px solid #28313A; border-left: 6px solid #FF8200; padding: 16px;">
           <div style="font-family: 'Teko', sans-serif; font-size: 1.05rem; letter-spacing: 0.14em; text-transform: uppercase; color: #FF8200;">Hot Hand &middot; last 3</div>
-          <div style="font-family: 'Bowlby One', sans-serif; font-size: 1.5rem; line-height: 1.1; margin: 6px 0 4px; color: #F6F8FA;">De'Aaron Fox</div>
+          <div style="font-family: 'Bowlby One', sans-serif; font-size: 1.5rem; line-height: 1.1; margin: 10px 0 8px; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-lg" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span>De'Aaron Fox</span></span></div>
           <div style="font-family: 'VT323', monospace; font-size: 1.6rem; color: #FF8200;">17.3 PTS · 4.7 REB · 8.3 AST</div>
           <div style="font-size: 0.82rem; color: #9DA7B0; margin-top: 4px;">Average Game Score 18.3 over his last 3 games</div>
         </div>

@@ -15,6 +15,7 @@ import plotly.graph_objects as go
 import config
 from config import TEAM_ABBR, SEASON, season_str
 from viz import theme
+from viz.avatars import avatar_html
 from analysis.wemby import get_wemby_logs
 
 
@@ -146,7 +147,7 @@ def build_props_board_page(
 
         prop_rows += f"""
         <tr style="border-bottom: 1px solid {theme.COURT_LINE};">
-          <td style="padding: 10px 12px; font-weight: 700; color: {theme.COURT_WHITE};">{player_name}</td>
+          <td style="padding: 8px 12px; font-weight: 700; color: {theme.COURT_WHITE};"><span class="with-avatar">{avatar_html(player_name, "sm")}<span>{player_name}</span></span></td>
           <td style="padding: 10px 12px; color: {theme.SPURS_SILVER};">{prop_name}</td>
           <td style="padding: 10px 12px; font-family: {theme.FONT_MONO}; font-weight: 700; color: {theme.FIESTA_ORANGE};">{line} <span style="font-weight: 400; font-size: 0.75rem; color: {theme.TEXT_MUTED};">{basis}</span></td>
           <td style="padding: 10px 12px; font-family: {theme.FONT_MONO};">{avg_val:.1f} &plusmn; {std_val:.1f}</td>

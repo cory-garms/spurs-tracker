@@ -21,6 +21,7 @@ from analysis.wemby import get_wemby_logs, stocks_distribution
 from analysis.rodeo import segment_rodeo_games, rodeo_split_metrics
 from analysis.performers import game_performers, hot_hand
 from data.schedule import load_schedule, next_game, now_utc
+from viz.avatars import avatar_src
 
 
 def _last_game(games: pd.DataFrame) -> dict:
@@ -77,10 +78,12 @@ def _size(stat: str) -> str:
 
 
 def _card(num: int, slug: str, name: str, href: str, color: str, ink: str,
-          stat: str, caption: str, blurb: str, badges: list[tuple[str, str]] | None = None) -> str:
+          stat: str, caption: str, blurb: str, badges: list[tuple[str, str]] | None = None,
+          medallion_img: str | None = None) -> str:
     """
     One Lotería card. `stat`/`caption` is the headline number; `badges` optionally
-    replaces it on illustrated cards with several small medallions.
+    replaces it on illustrated cards with several small medallions; `medallion_img`
+    fills the medallion with a player emblem, with the stat moved to a ribbon below.
     """
     src = _art_src(slug)
     size = _size(stat)
@@ -93,6 +96,10 @@ def _card(num: int, slug: str, name: str, href: str, color: str, ink: str,
                 for v, c in badges
             )
             stamps = f'<div class="medallions {place}">{minis}</div>'
+        elif medallion_img:
+            # The emblem carries the card; the ribbon names the player (the blurb explains why)
+            stamps = (f'<div class="medallion photo {place}"><img src="{medallion_img}" alt="" title="{caption}">'
+                      f'<div class="ribbon"><span class="stat">{stat}</span></div></div>')
         else:
             stamps = (f'<div class="medallion {place}">'
                       f'<div class="stat{size}">{stat}</div><div class="caption">{caption}</div></div>')
@@ -197,11 +204,11 @@ def _index_css() -> str:
     .loteria .art.has-img {{
       position: relative; overflow: hidden; display: block; background: var(--c);
     }}
-    .loteria .art.has-img img {{
+    .loteria .art.has-img > img {{
       position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
       transition: transform 0.25s ease;
     }}
-    .loteria:hover .art.has-img img {{ transform: scale(1.04); }}
+    .loteria:hover .art.has-img > img {{ transform: scale(1.04); }}
     .loteria .medallion {{
       position: absolute; top: 8px; width: 42%; aspect-ratio: 1;
       border-radius: 50%; background: {t.LOTERIA_INK}; color: {t.LOTERIA_CREAM};
@@ -223,6 +230,14 @@ def _index_css() -> str:
     .loteria .medallion.mini:nth-child(even) {{ transform: rotate(5deg); }}
     .loteria .medallion.mini .stat {{ font-size: clamp(0.85rem, 1.5vw, 1.05rem); }}
     .loteria .medallion.mini .caption {{ font-size: 0.5rem; letter-spacing: 0.08em; }}
+    .loteria .medallion.photo {{ padding: 0; overflow: visible; }}
+    .loteria .medallion.photo img {{ position: static; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }}
+    .loteria .medallion.photo .ribbon {{
+      position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%); white-space: nowrap;
+      background: {t.LOTERIA_INK}; border: 2px solid {t.LOTERIA_CREAM}; padding: 2px 8px;
+      display: flex; align-items: baseline; gap: 6px;
+    }}
+    .loteria .medallion.photo .ribbon .stat {{ font-size: 0.95rem; text-shadow: none; }}
     .loteria .medallion.center {{ left: 50%; top: 44%; transform: translate(-50%, -50%) rotate(-4deg); }}
     .loteria .medallion .stat {{
       font-size: clamp(1.3rem, 2.6vw, 1.75rem); text-shadow: 2px 2px 0 var(--c);
@@ -343,7 +358,8 @@ def build_index_page(
               theme.ADOBE_TERRACOTTA, theme.LOTERIA_CREAM,
               hot.get("last_name", "—"), f"Hot hand &middot; last {hot.get('window', 5)}",
               f"Whoever is playing best right now: {hot['player_name']} leads the team in Game Score over the last "
-              f"{hot['window']} games ({hot['game_score']})." if hot else "Whoever is playing best right now, by Game Score.")),
+              f"{hot['window']} games ({hot['game_score']})." if hot else "Whoever is playing best right now, by Game Score.",
+              medallion_img=avatar_src(hot["player_name"]) if hot else None)),
         ("rodeo", _card(3, "rodeo", "El Rodeo", pages["rodeo"][0], theme.FIESTA_ORANGE, theme.LOTERIA_CREAM,
               rodeo_stat, rodeo_caption,
               "The February Rodeo Road Trip, split against the championship-era trips since 2003.")),

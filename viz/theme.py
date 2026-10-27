@@ -434,7 +434,13 @@ def page_css() -> str:
       header {{ box-shadow: 6px 6px 0 {FIESTA_FUSCHIA}, 12px 12px 0 {FIESTA_TEAL}; margin-right: 12px; }}
       .chart-section, .card {{ box-shadow: 6px 6px 0 var(--accent); margin-right: 6px; }}
     }}
+    {_avatar_css()}
     """
+
+
+def _avatar_css() -> str:
+    from viz.avatars import avatar_css  # avatars imports theme, so resolve at call time
+    return avatar_css()
 
 
 def page_footer() -> str:
