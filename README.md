@@ -1,153 +1,83 @@
-# spurs-tracker
+# Spurs Tracker
 
-NBA analytics suite for the San Antonio Spurs — built as a public portfolio demo for [corygarms.com](https://corygarms.com).
+San Antonio Spurs analytics and a static Plotly website for [corygarms.com/spurs-tracker](https://corygarms.com/spurs-tracker). Python fetches NBA statistics, caches Parquet snapshots, computes analytics, and generates HTML, JSON, and social preview images without an application server.
 
-Mirrors the architecture of [sox-tracker](https://github.com/cgarms/sox-tracker) (MLB Red Sox) with NBA-specific adaptations.
+## Setup
 
----
-
-## What it does
-
-Fetches data from the **NBA Stats API** (free, no key required), caches it as Parquet files, and produces:
-
-- **Terminal dashboard** — Rich-formatted tables via `report.py`
-- **Interactive HTML dashboard** — 9 Plotly charts via `viz_report.py`
-- **GitHub Actions daily refresh** — auto-fetches and commits updated data at 8 AM ET
-
----
-
-## Quick start
+Use Python 3.10+ in an isolated environment:
 
 ```bash
-# Install
-pip install -r requirements.txt
-
-# Fetch a complete season (2024-25)
-python fetch.py --team SAS --season 2024
-
-# Terminal dashboard
-python report.py --team SAS --season 2024
-
-# Interactive HTML dashboard
-python viz_report.py --team SAS --season 2024 --open
+python3 -m venv .spursEnv
+source .spursEnv/bin/activate
+python -m pip install -r requirements-dev.txt
 ```
 
----
+Runtime dependencies are in `requirements.txt`; the development file also installs pytest and HTTP testing helpers. Optional PNG chart exports require Kaleido. An isolated environment avoids conflicts between system pandas and NumPy installations.
 
-## CLI reference
+## Refresh and build
 
-### `fetch.py`
-
-```
-python fetch.py                          # SAS, current season
-python fetch.py --team GSW --season 2024 # switch team / season
-python fetch.py --refresh                # force re-fetch (ignore cache)
-python fetch.py --list-teams             # show all 30 team abbreviations
-```
-
-### `report.py`
-
-```
-python report.py                         # all sections
-python report.py --section overview
-python report.py --section offense
-python report.py --section defense
-python report.py --section players
-python report.py --section streaks
-python report.py --section standings
-```
-
-### `viz_report.py`
-
-```
-python viz_report.py                     # build HTML dashboard
-python viz_report.py --open              # build + open in browser
-python viz_report.py --history           # include historical win% chart
-python viz_report.py --pace 2014 2016    # overlay past seasons
-python viz_report.py --png               # export PNGs (requires kaleido)
-```
-
----
-
-## Dashboard sections
-
-| # | Section | Data |
-|---|---|---|
-| 1 | Season Timeline (cumulative W-L) | games |
-| 2 | Rolling Win% (5-game, 10-game) | games |
-| 3 | Score Margin per Game | games |
-| 4 | Streak Timeline | games |
-| 5 | Scoring Trend (rolling pts + opp pts) | games |
-| 6 | Player Stats Heatmap (z-score) | player_game_log |
-| 7 | Hot / Cold Tracker | player_game_log |
-| 8 | Shot Efficiency (USG% vs TS%) | player_game_log |
-| 9 | Defensive Rating Trend | games |
-
----
-
-## Project structure
-
-```
-spurs_tracker/
-├── config.py              # team selection, paths, API constants
-├── fetch.py               # CLI: fetch + cache
-├── report.py              # CLI: terminal dashboard
-├── viz_report.py          # CLI: HTML dashboard
-├── CONFIGURE.md           # switching to other teams
-├── requirements.txt
-├── client/
-│   └── nba_client.py      # NBA Stats API wrapper
-├── data/
-│   ├── schema.py          # canonical DataFrame schemas
-│   ├── roster.py          # roster fetch + caching
-│   ├── fetcher.py         # orchestrator: fetch all → cache → load
-│   └── cache/             # .parquet files (gitignored)
-├── analysis/
-│   ├── standings.py       # record, splits, pythagorean, conference standings
-│   ├── offense.py         # scoring, shooting, hot/cold, starter/bench
-│   ├── defense.py         # defensive ratings, player defense stats
-│   ├── players.py         # usage, double-doubles, consistency
-│   ├── streaks.py         # win/loss streaks, back-to-backs, monthly splits
-│   └── history.py         # multi-season records, pace comparison
-├── viz/
-│   ├── charts.py          # individual Plotly chart functions (dark theme)
-│   ├── dashboard.py       # combined HTML dashboard builder
-│   └── exports.py         # save_html(), save_png()
-├── notebooks/
-│   └── demo.ipynb         # interactive walkthrough
-└── .github/workflows/
-    └── refresh.yml        # daily cron data refresh
-```
-
----
-
-## Switching teams
-
-See [CONFIGURE.md](CONFIGURE.md) for full instructions. The short version:
+Defaults in `config.py` are SAS and **2026–27 regular season**. Season arguments use the starting year.
 
 ```bash
-python fetch.py --team LAL --season 2024
-python report.py --team LAL --season 2024
+# Incremental game ingestion, league ratings, schedule, next-opponent stats,
+# cache validation, JSON export, complete site, and social generator check.
+python pipeline.py --team SAS --season 2026 --refresh
+
+# Rebuild existing caches.
+python pipeline.py --team SAS --season 2026 --skip-fetch
+
+# Verify.
+python -m pytest
 ```
 
-Supports all 30 NBA teams. See `python fetch.py --list-teams`.
+The pipeline defaults to cached data. Its `--refresh` enables incremental ingestion; it does not replace all historical boxscores. Remote failures may fall back to existing caches: inspect warnings and verify the latest game date before publishing. Missing league caches may cause build-time analysis to request data even when ingestion is skipped.
 
----
+Individual entry points:
 
-## Data source
+```bash
+# Force a complete boxscore refetch and league ratings refresh.
+python fetch.py --team SAS --season 2026 --refresh --league
+python report.py --team SAS --season 2026
+python viz_report.py --team SAS --season 2026 --open
+python fetch.py --list-teams
+```
 
-All data comes from the public [NBA Stats API](https://stats.nba.com/stats/).
-No API key required. A 0.6-second delay between requests respects rate limits.
+`fetch.py` also supports `--preseason` and `--playoffs`. The master pipeline uses regular-season caches. `viz_report.py` supports `--history`, `--pace 2014 2016`, and optional `--png`; use the master pipeline for the complete landing page, roster/player pages, JSON, and share-image build.
 
----
+## Site and architecture
 
-## GitHub Actions setup
+The site includes a landing page, season dashboard, roster and individual player pages, Wemby Lab, Rodeo Road Trip splits, props, matchup previews, and data-driven notebook essays. Shared styling, navigation, small-sample notices, and seasonal page visibility live in `viz/theme.py`.
 
-1. Push this repo to GitHub
-2. Go to **Settings → Variables → Actions**
-3. Add `TEAM_ABBR` (e.g. `SAS`) and `SEASON` (e.g. `2025`)
-4. The workflow runs daily at 8 AM ET
+| Location | Responsibility |
+| --- | --- |
+| `config.py` | Team/season defaults, paths, request settings, public site URL |
+| `client/` | NBA Stats HTTP client, browser headers, throttling, retries |
+| `data/` | Ingestion, schemas, roster, league ratings, schedule, validation, export |
+| `data/cache/` | Versioned current and historical Parquet snapshots |
+| `analysis/` | Records, offense/defense, players, predictions, Four Factors, clutch, lineups, Spurs metrics |
+| `viz/` | Plotly charts, HTML builders, theme, avatars, share images |
+| `blog/`, `posts/` | Generated analytical essays and editorial source material |
+| `assets/` | Fonts and supporting visual assets |
+| `docs/` | Generated static website, images, and JSON |
+| `tests/` | Analysis, navigation, theme, pages, images, and schedule coverage |
+| `pipeline.py` | Complete ingestion and site build orchestration |
+| `fetch.py`, `report.py`, `viz_report.py`, `social.py` | Individual command-line tools |
 
----
+Stats come from `stats.nba.com`; schedules come from `cdn.nba.com`. No API key is required. Statistics requests use browser headers, a 0.6-second delay, and retries. Cache names generally follow `{table}_{team_id}_{season}.parquet`; league ratings and schedules use season-only keys.
 
-*Built with Python, Pandas, Plotly, and Rich.*
+`docs/data/` contains predictions, Four Factors, roster pulse, clutch, and summary JSON. Cache validation checks readability, empty tables, critical columns, and critical nulls; it does not enforce full schema types. The pipeline requires PASS for every inspected cache in the selected season, including other teams' caches.
+
+All 30 teams are registered for ingestion and basic reporting. Several specialized pages and JSON fields remain Spurs-specific. Current configured pages use stable filenames; historical or alternate-team registered pages receive team/season suffixes. See [CONFIGURE.md](CONFIGURE.md).
+
+## Automation and publishing
+
+A local build updates `docs/`; publishing depends on committing/pushing output and the repository's static-hosting configuration.
+
+Two GitHub Actions workflows currently coexist:
+
+- `pipeline.yml`: daily at **05:00 UTC**, builds the complete site and runs tests, then commits `docs/` and `data/cache/`. Scheduled runs use cached data; manual `refresh_remote` enables remote ingestion. Defaults come from `config.py`.
+- `refresh.yml`: daily at **12:00 UTC**, fetches using repository variables `TEAM_ABBR` and `SEASON` (fallback SAS/2025), then builds explicitly for SAS/2025 and commits only `docs/`.
+
+The older workflow therefore does not refresh the configured 2026–27 landing page. UTC schedules shift relative to local time during daylight-saving changes.
+
+`SPURS_BLUEPRINT.md` and `handoff.md` retain historical planning context. This README and the implementation describe the current operating workflow.
