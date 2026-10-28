@@ -32,7 +32,8 @@ PLAYER_EMBLEMS: dict[str, tuple[str, str]] = {
     "Julian Champagnie": ("champagnie", "La Botella"),
     "Keldon Johnson":    ("johnson",    "El Mesteño"),
     "Luke Kornet":       ("kornet",     "El Elotote"),
-    "Carter Bryant":     ("bryant",     "La Supernova"),
+    "Carter Bryant":     ("bryant",     "El Cobrador"),
+    "Tarris Reed Jr.":   ("tarris-reed-jr", "El Oso"),
     "Harrison Barnes":   ("barnes",     "El Tío"),
 }
 

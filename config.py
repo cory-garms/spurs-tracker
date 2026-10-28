@@ -5,7 +5,7 @@ SEASON      = 2026          # pass to season_str() → "2026-27"
 SEASON_TYPE = "Regular Season"
 
 # Public address of the published site (link previews need absolute image URLs)
-SITE_URL = "https://corygarms.com/spurs-tracker"
+SITE_URL = "https://porvida.corygarms.com"
 
 BASE_DIR   = Path(__file__).parent
 CACHE_DIR  = BASE_DIR / "data" / "cache"

@@ -41,3 +41,11 @@ Registered pages for the configured team and season use stable filenames. Other 
 The older `.github/workflows/refresh.yml` runs at 12:00 UTC. Repository variables `TEAM_ABBR` and `SEASON` affect only its fetch step, with fallbacks SAS/2025. Its build step is hardcoded to SAS/2025 and it commits only `docs/`. Repository variables do not change the master workflow's defaults.
 
 Both schedules stay fixed in UTC through daylight-saving changes. Local builds update files only; publishing uses the repository's static-hosting deployment process. Keep `SITE_URL` consistent with the public hosting address.
+
+## Custom domain and HTTPS
+
+The site uses `porvida.corygarms.com`, recorded in `docs/CNAME`. Its DNS CNAME should point to `cory-garms.github.io`. `config.SITE_URL` is `https://porvida.corygarms.com` for generated share-image URLs.
+
+GitHub Pages provisions the custom-domain TLS certificate. In repository **Settings → Pages**, confirm the custom domain passes its DNS check and enable **Enforce HTTPS** when available. This redirects HTTP requests to HTTPS. Changing HTML or `SITE_URL` alone does not provision a certificate or enable that redirect.
+
+If HTTPS reports a certificate hostname mismatch, check certificate provisioning in Pages settings. GitHub documents provisioning delays and DNS troubleshooting in [Securing your GitHub Pages site with HTTPS](https://docs.github.com/en/pages/getting-started-with-github-pages/securing-your-github-pages-site-with-https).

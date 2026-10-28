@@ -1,6 +1,6 @@
 # Spurs Tracker
 
-San Antonio Spurs analytics and a static Plotly website for [corygarms.com/spurs-tracker](https://corygarms.com/spurs-tracker). Python fetches NBA statistics, caches Parquet snapshots, computes analytics, and generates HTML, JSON, and social preview images without an application server.
+La Tabla Spurs is a San Antonio Spurs analytics site at [porvida.corygarms.com](https://porvida.corygarms.com). Python fetches NBA statistics, caches Parquet snapshots, computes analytics, and generates HTML, JSON, and social preview images without an application server.
 
 ## Setup
 

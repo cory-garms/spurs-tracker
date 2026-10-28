@@ -11,6 +11,7 @@ env/
 .ipynb_checkpoints/
 
 # PNG exports and full-resolution art originals stay local; the web-sized card art is published
+assets/incoming/
 docs/img/*
 !docs/img/loteria/
 !docs/img/players/
