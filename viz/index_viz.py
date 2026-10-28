@@ -1,5 +1,5 @@
 """
-Spurs Stats HQ Landing Page — the Lotería board.
+La Tabla Spurs Landing Page — the Lotería board.
 
 Generates docs/index.html: a live scoreboard strip (record, last result, streak,
 Wemby's line) above a deck of Lotería cards, one per page in the suite. Every
@@ -306,7 +306,7 @@ def build_index_page(
     team_abbr: str = TEAM_ABBR,
     output_path: Path | None = None,
 ) -> Path:
-    """Build and write the Spurs Stats HQ landing page."""
+    """Build and write the La Tabla Spurs landing page."""
     if output_path is None:
         output_path = config.OUTPUT_DIR / "index.html"
 
@@ -386,8 +386,8 @@ def build_index_page(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spurs Stats HQ — San Antonio Spurs Analytics</title>
-  {theme.share_meta(f"Spurs Stats HQ · {season_s} · {record}", description)}
+  <title>La Tabla Spurs — San Antonio Spurs Analytics</title>
+  {theme.share_meta(f"La Tabla Spurs · {season_s} · {record}", description)}
   {theme.FONTS_LINK}
   <style>
 {theme.page_css()}
@@ -398,7 +398,7 @@ def build_index_page(
   <div class="sarape-band" aria-hidden="true"></div>
   <div class="page">
     <section class="hq-hero">
-      <h1>Spurs Stats HQ</h1>
+      <h1>La Tabla Spurs</h1>
       <div class="sub">&#9733; Putting hammer to stone since 2024 &#9733;</div>
       <div class="season">{season_s} season</div>
     </section>

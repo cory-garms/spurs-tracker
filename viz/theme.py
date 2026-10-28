@@ -235,7 +235,7 @@ def page_path(slug: str, team_abbr: str = config.TEAM_ABBR, season: int = config
 
 def nav_bar(current_slug: str, today: date | None = None) -> str:
     """One row of links: back to HQ, then every page that's in season."""
-    links = ['<a href="index.html" class="nav-page index-link">← Spurs Stats HQ</a>']
+    links = ['<a href="index.html" class="nav-page index-link">← La Tabla Spurs</a>']
     for slug, (filename, label) in PAGES.items():
         if slug == current_slug:
             links.append(f'<span class="nav-page current" aria-current="page">{label}</span>')
@@ -455,7 +455,7 @@ def share_meta(title: str, description: str, image: str = "latest") -> str:
     tags = [
         f'<meta name="description" content="{desc}">',
         '<meta property="og:type" content="website">',
-        '<meta property="og:site_name" content="Spurs Stats HQ">',
+        '<meta property="og:site_name" content="La Tabla Spurs">',
         f'<meta property="og:title" content="{title}">',
         f'<meta property="og:description" content="{desc}">',
         f'<meta name="twitter:title" content="{title}">',
@@ -502,7 +502,7 @@ def page_html(
 ) -> str:
     """Wrap content in the official Spurs HTML shell."""
     note = early_season_note(games_played) if games_played is not None else ""
-    share = share_meta(f"{title} · Spurs Stats HQ", subtitle, og_image)
+    share = share_meta(f"{title} · La Tabla Spurs", subtitle, og_image)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
