@@ -209,15 +209,6 @@
       "combined_pts_pg": 25.0
     },
     {
-      "player_1": "Julian Champagnie",
-      "player_2": "Stephon Castle",
-      "pairing": "Champagnie + Castle",
-      "games_together": 5,
-      "est_shared_min_pg": 27.6,
-      "net_pm_pg": 4.1,
-      "combined_pts_pg": 29.0
-    },
-    {
       "player_1": "Dylan Harper",
       "player_2": "Keldon Johnson",
       "pairing": "Harper + Johnson",
@@ -225,6 +216,15 @@
       "est_shared_min_pg": 22.1,
       "net_pm_pg": 4.1,
       "combined_pts_pg": 26.8
+    },
+    {
+      "player_1": "Julian Champagnie",
+      "player_2": "Stephon Castle",
+      "pairing": "Champagnie + Castle",
+      "games_together": 5,
+      "est_shared_min_pg": 27.6,
+      "net_pm_pg": 4.1,
+      "combined_pts_pg": 29.0
     },
     {
       "player_1": "Devin Vassell",
