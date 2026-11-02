@@ -278,10 +278,6 @@ def _index_css() -> str:
       letter-spacing: 0.16em; text-transform: uppercase; text-align: center;
       color: {t.MARIGOLD}; margin-top: 14px; text-shadow: 2px 2px 0 {t.LOTERIA_INK};
     }}
-    .honors-link {{ text-align: center; margin: 28px 0 0; font-family: {t.FONT_TYPE}; }}
-    .honors-link a {{ color: {t.LOTERIA_CREAM}; text-underline-offset: 4px; }}
-    .honors-link a:hover {{ color: {t.MARIGOLD}; }}
-
     footer {{ color: {t.LOTERIA_CREAM}; }}
     footer .credit {{ color: {t.LOTERIA_CREAM}; }}
     .alamo-footer-seal .alamo-icon-svg {{ color: {t.LOTERIA_CREAM}; }}
@@ -428,7 +424,6 @@ def build_index_page(
     <main class="deck" style="--per-row:{per_row};">
       {cards}
     </main>
-    <p class="honors-link"><a href="{pages['dashboard'][0]}#honor-roll">El Valiente &amp; El Compinche &middot; Full season honors &rarr;</a></p>
     {theme.page_footer()}
   </div>
 </body>

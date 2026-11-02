@@ -65,7 +65,7 @@ def test_missing_latest_box_score_does_not_reuse_previous_games_spotlight(season
     assert dashboard._spotlight_html(games, logs[logs["game_id"] == "G1"]) == ""
 
 
-def test_home_page_highlights_latest_valiente_and_links_full_awards_log(season_data, tmp_path, monkeypatch):
+def test_home_page_highlights_latest_valiente_without_compinche_promotion(season_data, tmp_path, monkeypatch):
     monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
     monkeypatch.setattr(index_viz, "load_schedule", lambda season: pd.DataFrame())
     games, logs = season_data
@@ -75,7 +75,7 @@ def test_home_page_highlights_latest_valiente_and_links_full_awards_log(season_d
     assert '<div class="name">El Compinche</div>' not in html
     assert "Last game&#x27;s top Game Score: De&#x27;Aaron Fox" in html
     assert "Last game&#x27;s top teammate:" not in html
-    assert 'href="dashboard.html#honor-roll"' in html
+    assert 'href="dashboard.html#honor-roll"' not in html
     assert "Who's hot" not in html
 
 
@@ -84,5 +84,5 @@ def test_home_page_handles_no_games_or_player_logs(tmp_path, monkeypatch):
     monkeypatch.setattr(index_viz, "load_schedule", lambda season: pd.DataFrame())
     games = pd.DataFrame(columns=["status", "game_date", "result"])
     html = index_viz.build_index_page(games, pd.DataFrame()).read_text()
-    assert "El Valiente" in html and "El Compinche" in html
+    assert "El Valiente" in html and "El Compinche" not in html
     assert "Player of the Game appears after a completed box score" in html
