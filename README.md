@@ -69,6 +69,15 @@ Stats come from `stats.nba.com`; schedules come from `cdn.nba.com`. No API key i
 
 All 30 teams are registered for ingestion and basic reporting. Several specialized pages and JSON fields remain Spurs-specific. Current configured pages use stable filenames; historical or alternate-team registered pages receive team/season suffixes. See [CONFIGURE.md](CONFIGURE.md).
 
+## Game honors
+
+The **Player Spotlight** awards **El Valiente** (Player of the Game) to the highest
+Game Score and **El Compinche** (Sidekick) to the highest-ranked teammate in each
+completed game. Ties go to minutes played, then player name. The dashboard's
+**Season Honors** table records both honorees for every game, with stat lines,
+Game Scores, and player links. The home page links to the full log, and player
+pages tally both awards. Honors rebuild from cached box scores, including past games.
+
 ## Automation and publishing
 
 A local build updates `docs/`; publishing depends on committing/pushing output and the repository's static-hosting configuration.

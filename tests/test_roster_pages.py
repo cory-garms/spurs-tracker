@@ -56,8 +56,25 @@ def test_player_page_shows_honors_and_game_log(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
     roster_viz.build_roster_pages(_games(), _logs(), _roster())
     html = (tmp_path / "player_fox.html").read_text()
-    assert "Player of the Game &times;2" in html
+    assert "El Valiente &middot; Player of the Game &times;2" in html
     assert "Game Log" in html and "#4 &middot; G &middot; 9 yrs exp" in html
+
+
+def test_compinche_honors_appear_on_player_page_and_roster(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
+    roster_viz.build_roster_pages(_games(), _logs(), _roster())
+    player = (tmp_path / "player_tarris-reed-jr.html").read_text()
+    assert "El Compinche &middot; Sidekick &times;2" in player
+    assert "Player of the Game &times;" not in player
+    assert "Compinche &times;2" in (tmp_path / "roster.html").read_text()
+
+
+def test_unfinished_games_do_not_count_as_player_honors():
+    games = _games()
+    games.loc[games["game_id"] == "G2", "status"] = "Scheduled"
+    honors = roster_viz._honors(games, _logs())
+    assert honors["De'Aaron Fox"]["player_of_the_game"] == 1
+    assert honors["Tarris Reed Jr."]["compinche"] == 1
 
 
 def test_rookie_label(tmp_path, monkeypatch):

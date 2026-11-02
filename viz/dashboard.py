@@ -11,6 +11,7 @@ version always matches the installed package.  Never hardcode a CDN version stri
 
 from __future__ import annotations
 
+from html import escape
 from pathlib import Path
 
 import pandas as pd
@@ -296,7 +297,7 @@ def build(
     </div>
     """
 
-    divs_html = command_center_html + _spotlight_html(games, player_logs)
+    divs_html = command_center_html + _spotlight_html(games, player_logs) + _season_honors_html(games, player_logs)
     for i, (title, fig, height) in enumerate(figures):
         div_id    = title.lower().replace(" ", "_").replace("/", "_").replace("%", "pct")
         include_js = "cdn" if i == 0 else False
@@ -325,22 +326,28 @@ def build(
 
 
 def _spotlight_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
-    """Player of the Game, Breakout and Hot Hand, ranked by Game Score so anyone can headline."""
+    """Valiente, Compinche, Breakout and Hot Hand from completed games."""
     from analysis.performers import MIN_BASELINE_GAMES, game_performers, hot_hand
     from viz.avatars import avatar_html, player_link
 
-    if player_logs.empty:
+    if player_logs.empty or games.empty:
         return ""
-    perf = game_performers(player_logs)
+    finals = games[games["status"] == "Final"].sort_values(["game_date", "game_id"])
+    if finals.empty:
+        return ""
+    player_logs = player_logs[player_logs["game_id"].isin(finals["game_id"])]
+    perf = game_performers(player_logs, finals.iloc[-1]["game_id"])
     hot = hot_hand(player_logs)
     potg = perf.get("player_of_the_game")
+    if not potg:
+        return ""
 
-    matchup = ""
-    if potg is not None and not games.empty:
-        g = games[games["game_id"] == potg["game_id"]]
-        if not g.empty:
-            g = g.iloc[0]
-            matchup = f'{g["result"]} {int(g["pts"])}-{int(g["opp_pts"])} {"vs." if g["home_away"] == "H" else "@"} {g["opponent_abbr"]}'
+    g = finals.iloc[-1]
+    date = pd.to_datetime(g["game_date"])
+    matchup = escape(
+        f'{date:%b} {date.day} · {g["result"]} {int(g["pts"])}-{int(g["opp_pts"])} '
+        f'{"vs." if g["home_away"] == "H" else "@"} {g["opponent_abbr"]}'
+    )
 
     def tile(kicker: str, color: str, name: str, line: str, foot: str) -> str:
         who = name if name == "&mdash;" else f'<span class="with-avatar">{avatar_html(name, "lg")}<span>{player_link(name)}</span></span>'
@@ -352,10 +359,15 @@ def _spotlight_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
           <div style="font-size: 0.82rem; color: {theme.TEXT_MUTED}; margin-top: 4px;">{foot}</div>
         </div>"""
 
-    tiles = []
-    if potg:
-        tiles.append(tile("Player of the Game", theme.FIESTA_TEAL, potg["player_name"], potg["line"],
-                          f'{matchup} &middot; Game Score {potg["game_score"]}'))
+    tiles = [tile("El Valiente &middot; Player of the Game", theme.FIESTA_TEAL, potg["player_name"], potg["line"],
+                  f'{matchup} &middot; Game Score {potg["game_score"]}')]
+    compinche = perf.get("compinche")
+    if compinche:
+        tiles.append(tile("El Compinche &middot; Sidekick", theme.FIESTA_ORANGE, compinche["player_name"], compinche["line"],
+                          f'{matchup} &middot; Game Score {compinche["game_score"]}'))
+    else:
+        tiles.append(tile("El Compinche &middot; Sidekick", theme.FIESTA_ORANGE, "&mdash;", "",
+                          "No eligible teammate in this box score."))
     if perf.get("breakout"):
         b = perf["breakout"]
         tiles.append(tile("Breakout", theme.FIESTA_FUSCHIA, b["player_name"], b["line"],
@@ -374,13 +386,94 @@ def _spotlight_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
     <section class="card" id="spotlight">
       <h2>Player Spotlight</h2>
       <p style="color: {theme.TEXT_MUTED}; font-size: 0.88rem; margin: -6px 0 14px;">
-        Ranked by Game Score, a one-number box score rating, so whoever had the big night gets the headline.
+        Last game: El Valiente had the highest Game Score, a one-number box score rating.
+        El Compinche is the top teammate alongside him.
+        <a href="#honor-roll" style="color: {theme.FIESTA_TEAL};">See every game's honorees &darr;</a>
       </p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 14px;">
         {"".join(tiles)}
       </div>
     </section>
     """
+
+
+def _season_honors_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
+    """Running Valiente and Compinche table, including games awaiting box scores."""
+    from analysis.performers import season_game_honors
+    from viz.avatars import avatar_html, player_link
+
+    history = season_game_honors(games, player_logs)
+
+    def honoree(honor: dict | None, missing: str) -> str:
+        if not honor:
+            return f'<span class="honor-note">{missing}</span>'
+        return (
+            f'<span class="with-avatar">{avatar_html(honor["player_name"], "sm")}'
+            f'<span>{player_link(honor["player_name"])}</span></span>'
+            f'<div class="honor-note">{escape(honor["line"])} &middot; GmSc {honor["game_score"]:.1f}</div>'
+        )
+
+    rows = []
+    for game in history:
+        date = pd.to_datetime(game["game_date"])
+        result = escape(game["result"])
+        rows.append(
+            f'<tr data-game-id="{escape(str(game["game_id"]), quote=True)}">'
+            f'<th scope="row"><time datetime="{date:%Y-%m-%d}">{date:%b} {date.day}</time></th>'
+            f'<td>{"vs." if game["home_away"] == "H" else "@"} {escape(game["opponent_abbr"])}'
+            f'<div class="honor-note {result}">{result} {int(game["pts"])}-{int(game["opp_pts"])}</div></td>'
+            f'<td class="honoree valiente"><div class="honor-label" aria-hidden="true">El Valiente</div>'
+            f'{honoree(game.get("player_of_the_game"), "Box score pending")}</td>'
+            f'<td class="honoree compinche"><div class="honor-label" aria-hidden="true">El Compinche</div>'
+            f'{honoree(game.get("compinche"), "No eligible teammate" if game.get("player_of_the_game") else "Box score pending")}</td>'
+            '</tr>'
+        )
+    table = f"""
+      <div class="honors-scroll" role="region" aria-label="Season game honors" tabindex="0">
+        <table class="honors-table">
+          <thead><tr><th scope="col">Date</th><th scope="col">Game</th>
+            <th scope="col">El Valiente <span>Player of the Game</span></th>
+            <th scope="col">El Compinche <span>Sidekick</span></th></tr></thead>
+          <tbody>{"".join(rows)}</tbody>
+        </table>
+      </div>""".strip() if rows else '<p class="honor-note">Honors appear after the first completed game.</p>'
+    return f"""
+    <style>
+      #honor-roll .honors-scroll {{ overflow: auto; max-height: 560px; }}
+      #honor-roll .honors-scroll:focus-visible {{ outline: 2px solid {theme.FIESTA_TEAL}; outline-offset: 3px; }}
+      #honor-roll .honors-table {{ width: 100%; min-width: 660px; border-collapse: collapse; text-align: left; }}
+      #honor-roll th, #honor-roll td {{ padding: 12px; border-bottom: 1px solid {theme.COURT_LINE}; vertical-align: top; }}
+      #honor-roll thead th {{ position: sticky; top: 0; z-index: 1; background: {theme.SHADOW_BLACK}; font-family: {theme.FONT_HEADING}; font-size: 1.15rem; }}
+      #honor-roll thead th:nth-child(3) {{ color: {theme.FIESTA_TEAL}; }}
+      #honor-roll thead th:nth-child(4) {{ color: {theme.FIESTA_ORANGE}; }}
+      #honor-roll thead span {{ display: block; color: {theme.TEXT_MUTED}; font-size: 0.85rem; }}
+      #honor-roll tbody th {{ white-space: nowrap; font-family: {theme.FONT_MONO}; font-weight: normal; }}
+      #honor-roll .honor-note {{ color: {theme.TEXT_MUTED}; font-size: 0.8rem; margin-top: 5px; }}
+      #honor-roll .honor-label {{ display: none; }}
+      #honor-roll .W {{ color: {theme.WIN}; }}
+      #honor-roll .L {{ color: {theme.LOSS}; }}
+      @media (max-width: 640px) {{
+        #honor-roll .honors-table {{ display: block; min-width: 0; }}
+        #honor-roll thead {{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }}
+        #honor-roll tbody {{ display: block; }}
+        #honor-roll tbody tr {{ display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid {theme.COURT_LINE}; }}
+        #honor-roll tbody th, #honor-roll td {{ padding: 0; border: 0; min-width: 0; }}
+        #honor-roll td:nth-child(2) {{ text-align: right; }}
+        #honor-roll .honoree {{ grid-column: 1 / -1; }}
+        #honor-roll .honor-label {{ display: block; color: {theme.FIESTA_TEAL}; font-family: {theme.FONT_HEADING}; font-size: 1.1rem; margin-bottom: 6px; }}
+        #honor-roll .compinche .honor-label {{ color: {theme.FIESTA_ORANGE}; }}
+        #honor-roll .with-avatar {{ overflow-wrap: anywhere; }}
+      }}
+    </style>
+    <section class="card" id="honor-roll">
+      <h2>El Valiente &amp; El Compinche &middot; Season Honors</h2>
+      <p class="honor-note" style="margin-bottom: 16px;">
+        Every completed game, newest first. The two highest Game Scores earn the honors;
+        ties go to minutes played, then name. Players must have played to qualify.
+      </p>
+      {table}
+    </section>
+    """.rstrip() + "\n"
 
 
 # ---------------------------------------------------------------------------

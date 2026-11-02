@@ -19,7 +19,7 @@ from viz import theme
 from analysis.standings import season_record
 from analysis.wemby import get_wemby_logs, stocks_distribution
 from analysis.rodeo import segment_rodeo_games, rodeo_split_metrics
-from analysis.performers import game_performers, hot_hand
+from analysis.performers import season_game_honors
 from data.schedule import load_schedule, next_game, now_utc
 from viz.avatars import avatar_html, avatar_src, player_link
 
@@ -108,6 +108,9 @@ def _card(num: int, slug: str, name: str, href: str, color: str, ink: str,
             f'<div class="art has-img">'
             f'<img src="{src}" alt="" loading="lazy" decoding="async">{stamps}</div>'
         )
+    elif medallion_img:
+        art = (f'<div class="art emblem-art"><img src="{medallion_img}" alt="" loading="lazy" decoding="async">'
+               f'<div class="stat{size}">{stat}</div><div class="caption">{caption}</div></div>')
     else:
         art = f'<div class="art"><div class="stat{size}">{stat}</div><div class="caption">{caption}</div></div>'
     # Cream numerals get an ink drop shadow; ink numerals on light cards stand on their own
@@ -167,7 +170,10 @@ def _index_css() -> str:
     }}
     .scoreboard .v.W {{ color: {t.FIESTA_TEAL}; text-shadow: 0 0 14px rgba(0, 178, 169, 0.5); }}
     .scoreboard .v.L {{ color: {t.FIESTA_FUSCHIA}; text-shadow: 0 0 14px rgba(239, 66, 111, 0.5); }}
-    .scoreboard .v.top {{ display: flex; align-items: center; justify-content: center; gap: 10px; }}
+    .scoreboard .v.top {{
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      font-size: clamp(1rem, 2.7vw, 1.6rem); overflow-wrap: anywhere;
+    }}
     .scoreboard .v.top a.player-link {{ border-bottom: none; }}
     .scoreboard .sep {{ color: {t.COURT_LINE}; margin: 0 0.25em; text-shadow: none; }}
     .scoreboard .d {{ font-family: {t.FONT_MONO}; font-size: 0.78rem; color: {t.TEXT_MUTED}; }}
@@ -206,6 +212,11 @@ def _index_css() -> str:
     .loteria .art.has-img > img {{
       position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
       transition: transform 0.25s ease;
+    }}
+    .loteria .art.emblem-art > img {{
+      width: 65%; aspect-ratio: 1; object-fit: cover; border-radius: 50%;
+      border: 3px solid {t.LOTERIA_CREAM}; outline: 2px solid {t.LOTERIA_INK};
+      box-shadow: 4px 4px 0 {t.LOTERIA_INK}; margin-bottom: 10px;
     }}
     .loteria:hover .art.has-img > img {{ transform: scale(1.04); }}
     .loteria .medallion {{
@@ -267,6 +278,9 @@ def _index_css() -> str:
       letter-spacing: 0.16em; text-transform: uppercase; text-align: center;
       color: {t.MARIGOLD}; margin-top: 14px; text-shadow: 2px 2px 0 {t.LOTERIA_INK};
     }}
+    .honors-link {{ text-align: center; margin: 28px 0 0; font-family: {t.FONT_TYPE}; }}
+    .honors-link a {{ color: {t.LOTERIA_CREAM}; text-underline-offset: 4px; }}
+    .honors-link a:hover {{ color: {t.MARIGOLD}; }}
 
     footer {{ color: {t.LOTERIA_CREAM}; }}
     footer .credit {{ color: {t.LOTERIA_CREAM}; }}
@@ -335,8 +349,9 @@ def build_index_page(
         duelo_stat, duelo_caption = "—", "Season complete"
         duelo_tag, duelo_tip = "Season complete", "Back with next season's schedule"
     n_players = player_logs.loc[player_logs["min"] > 0, "player_name"].nunique() if not player_logs.empty else 0
-    potg = game_performers(player_logs).get("player_of_the_game") if not player_logs.empty else None
-    hot = hot_hand(player_logs) if not player_logs.empty else {}
+    history = season_game_honors(games, player_logs)
+    latest = history[0] if history else {}
+    potg, compinche = latest.get("player_of_the_game"), latest.get("compinche")
 
     rodeo = rodeo_split_metrics(segment_rodeo_games(games)) if not games.empty else {}
     active_rrt = rodeo.get("Active RRT", {}) if isinstance(rodeo, dict) else {}
@@ -358,10 +373,16 @@ def build_index_page(
               badges=[(wemby_ppg, "PTS"), (wemby_rpg, "REB"), (wemby_spg, "STOCKS")])),
         ("valiente", _card(7, "valiente", "El Valiente", pages["dashboard"][0] + "#spotlight",
               theme.ADOBE_TERRACOTTA, theme.LOTERIA_CREAM,
-              hot.get("last_name", "—"), f"Hot hand &middot; last {hot.get('window', 5)}", "Who's hot",
-              f"Best Game Score, last {hot['window']} games: {hot['player_name']} ({hot['game_score']})"
-              if hot else "Best Game Score over the last 5 games",
-              medallion_img=avatar_src(hot["player_name"]) if hot else None)),
+              escape(potg["last_name"]) if potg else "—", "Last game", "Player of the Game",
+              f"Last game's top Game Score: {potg['player_name']} ({potg['game_score']})"
+              if potg else "Player of the Game appears after a completed box score",
+              medallion_img=avatar_src(potg["player_name"]) if potg else None)),
+        ("compinche", _card(8, "compinche", "El Compinche", pages["dashboard"][0] + "#spotlight",
+              theme.FIESTA_ORANGE, theme.LOTERIA_CREAM,
+              escape(compinche["last_name"]) if compinche else "—", "Last game", "Sidekick of the Game",
+              f"Last game's top teammate: {compinche['player_name']} (Game Score {compinche['game_score']})"
+              if compinche else "Sidekick appears when two teammates have played",
+              medallion_img=avatar_src(compinche["player_name"]) if compinche else None)),
         ("rodeo", _card(3, "rodeo", "El Rodeo", pages["rodeo"][0], theme.FIESTA_ORANGE, theme.LOTERIA_CREAM,
               rodeo_stat, rodeo_caption, "The road trip", "The February Rodeo Road Trip vs. the title-era trips")),
         ("roster", _card(4, "baraja", "La Baraja", pages["roster"][0], theme.LOTERIA_INK, theme.LOTERIA_CREAM,
@@ -373,7 +394,7 @@ def build_index_page(
     ]
     featured = [card for slug, card in deck if slug not in theme.PAGES or theme.is_featured(slug)]
     cards = "".join(featured)
-    # One row of up to five cards; a sixth splits the deck into two even rows of three
+    # Up to five cards fit one row; larger decks split across two rows.
     per_row = len(featured) if len(featured) <= 5 else -(-len(featured) // 2)
 
     description = (
@@ -407,12 +428,13 @@ def build_index_page(
       <div><div class="k">Record</div><div class="v">{record}</div><div class="d">{splits}</div></div>
       <div><div class="k">Last game</div><div class="v {last.get('result', '')}">{last_v}</div><div class="d">{last_d}</div></div>
       <div><div class="k">Streak</div><div class="v {streak[:1]}">{streak}</div><div class="d">current run</div></div>
-      <div><div class="k">Top performer</div><div class="v top">{(avatar_html(potg["player_name"], "md") + player_link(potg["player_name"], potg["last_name"])) if potg else "—"}</div><div class="d">{potg["line"].replace(" · ", " &middot; ") if potg else "last game"}</div></div>
+      <div><div class="k">El Valiente</div><div class="v top">{(avatar_html(potg["player_name"], "md") + player_link(potg["player_name"], potg["last_name"])) if potg else "—"}</div><div class="d">{potg["line"].replace(" · ", " &middot; ") if potg else "last game"}</div></div>
     </section>
 
     <main class="deck" style="--per-row:{per_row};">
       {cards}
     </main>
+    <p class="honors-link"><a href="{pages['dashboard'][0]}#honor-roll">El Valiente &amp; El Compinche &middot; Full season honors &rarr;</a></p>
     {theme.page_footer()}
   </div>
 </body>

@@ -4,7 +4,8 @@ Standout Performances — who actually had the big night.
 Ranks every player by John Hollinger's Game Score, a single-number box score
 summary, so the spotlight follows the production rather than the name:
 
-  - Player of the Game: highest Game Score in a game
+  - El Valiente / Player of the Game: highest Game Score in a game
+  - El Compinche / Sidekick: highest Game Score among his teammates
   - Breakout: the player furthest above their own season norm (needs a baseline)
   - Hot Hand: best average Game Score over the team's last N games
 
@@ -36,9 +37,11 @@ def game_score(logs: pd.DataFrame) -> pd.Series:
 
 
 def _played(player_logs: pd.DataFrame) -> pd.DataFrame:
+    if player_logs.empty:
+        return pd.DataFrame()
     f = player_logs[player_logs["min"] > 0].copy()
     f["gmsc"] = game_score(f)
-    return f.sort_values("game_date")
+    return f.sort_values(["game_date", "game_id"]).reset_index(drop=True)
 
 
 def stat_line(row: pd.Series, parts: int = 3) -> str:
@@ -67,11 +70,47 @@ def _summary(row: pd.Series, **extra) -> dict:
     }
 
 
+def _game_honors(game: pd.DataFrame) -> dict:
+    """Select two different players; ties go to minutes played, then name."""
+    if game.empty:
+        return {}
+    ranked = game.sort_values(["gmsc", "min", "player_name"], ascending=[False, False, True])
+    valiente = ranked.iloc[0]
+    honors = {"player_of_the_game": _summary(valiente)}
+    teammates = ranked[ranked["player_name"] != valiente["player_name"]]
+    if not teammates.empty:
+        honors["compinche"] = _summary(teammates.iloc[0])
+    return honors
+
+
+def season_game_honors(games: pd.DataFrame, player_logs: pd.DataFrame) -> list[dict]:
+    """Valiente and Compinche for every completed game, newest first.
+
+    Games without player box scores still appear, with no awards assigned.
+    Rankings use each game's production, independent of later season averages.
+    """
+    if games.empty:
+        return []
+    finals = games[games["status"] == "Final"].sort_values(
+        ["game_date", "game_id"], ascending=False,
+    )
+    if finals.empty:
+        return []
+    played = pd.DataFrame()
+    if not player_logs.empty:
+        played = _played(player_logs[player_logs["game_id"].isin(finals["game_id"])])
+    honors = {
+        gid: _game_honors(game)
+        for gid, game in played.groupby("game_id", sort=False)
+    } if not played.empty else {}
+    return [{**game, **honors.get(game["game_id"], {})} for game in finals.to_dict("records")]
+
+
 def game_performers(player_logs: pd.DataFrame, game_id: str | None = None) -> dict:
     """
-    Player of the Game and (if anyone qualifies) a Breakout for one game,
-    defaulting to the most recent. Breakout is never the Player of the Game,
-    so the spotlight reaches a second player.
+    Valiente, Compinche and (if anyone qualifies) a Breakout for one game,
+    defaulting to the most recent. Compinche is always a different player from
+    Valiente and needs no season baseline. Breakout excludes Valiente, too.
     """
     f = _played(player_logs)
     if f.empty:
@@ -82,13 +121,13 @@ def game_performers(player_logs: pd.DataFrame, game_id: str | None = None) -> di
     if game.empty:
         return {}
 
-    potg = game.loc[game["gmsc"].idxmax()]
-    result = {"player_of_the_game": _summary(potg)}
+    result = _game_honors(game)
+    valiente_name = result["player_of_the_game"]["player_name"]
 
     game_date = game["game_date"].iloc[0]
     prior = f[f["game_date"] < game_date].groupby("player_name")["gmsc"].agg(["mean", "count"])
     prior = prior[prior["count"] >= MIN_BASELINE_GAMES]
-    candidates = game[game["player_name"].isin(prior.index) & (game["player_name"] != potg["player_name"])].copy()
+    candidates = game[game["player_name"].isin(prior.index) & (game["player_name"] != valiente_name)].copy()
     if not candidates.empty:
         candidates["above"] = candidates["gmsc"] - candidates["player_name"].map(prior["mean"])
         best = candidates.loc[candidates["above"].idxmax()]

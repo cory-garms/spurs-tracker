@@ -40,15 +40,19 @@ def _season_table(player_logs: pd.DataFrame) -> pd.DataFrame:
     return agg
 
 
-def _honors(player_logs: pd.DataFrame) -> dict[str, dict[str, int]]:
-    """Player of the Game and Breakout counts per player across the season."""
+def _honors(games: pd.DataFrame, player_logs: pd.DataFrame) -> dict[str, dict[str, int]]:
+    """Valiente, Compinche and Breakout counts across completed games."""
     counts: dict[str, dict[str, int]] = {}
-    for gid in player_logs.drop_duplicates("game_id")["game_id"]:
+    if games.empty or player_logs.empty:
+        return counts
+    game_ids = games.loc[games["status"] == "Final", "game_id"].unique()
+    player_logs = player_logs[player_logs["game_id"].isin(game_ids)]
+    for gid in game_ids:
         perf = game_performers(player_logs, gid)
-        for key in ("player_of_the_game", "breakout"):
+        for key in ("player_of_the_game", "compinche", "breakout"):
             if key in perf:
                 name = perf[key]["player_name"]
-                counts.setdefault(name, {"player_of_the_game": 0, "breakout": 0})[key] += 1
+                counts.setdefault(name, {"player_of_the_game": 0, "compinche": 0, "breakout": 0})[key] += 1
     return counts
 
 
@@ -157,7 +161,9 @@ def build_player_page(name: str, player_logs: pd.DataFrame, games: pd.DataFrame,
     h = honors.get(name, {})
     badges = []
     if h.get("player_of_the_game"):
-        badges.append(f'<span class="badge teal">Player of the Game &times;{h["player_of_the_game"]}</span>')
+        badges.append(f'<span class="badge teal">El Valiente &middot; Player of the Game &times;{h["player_of_the_game"]}</span>')
+    if h.get("compinche"):
+        badges.append(f'<span class="badge orange">El Compinche &middot; Sidekick &times;{h["compinche"]}</span>')
     if h.get("breakout"):
         badges.append(f'<span class="badge fuschia">Breakout &times;{h["breakout"]}</span>')
     honors_html = f'<div class="honors">{"".join(badges)}</div>' if badges else ""
@@ -220,7 +226,7 @@ def build_roster_pages(games: pd.DataFrame, player_logs: pd.DataFrame, roster: p
         return []  # player pages use flat, season-less filenames; only the live season gets them
     season_s = season_str(season)
     table = _season_table(player_logs) if not player_logs.empty else pd.DataFrame()
-    honors = _honors(player_logs) if not player_logs.empty else {}
+    honors = _honors(games, player_logs) if not player_logs.empty else {}
 
     names = list(table.sort_values("min", ascending=False).index) if not table.empty else []
     others = [n for n in (roster["player_name"].tolist() if not roster.empty else []) if n not in names]
@@ -235,6 +241,9 @@ def build_roster_pages(games: pd.DataFrame, player_logs: pd.DataFrame, roster: p
             line = f"{r['pts']:.1f} PTS · {r['reb']:.1f} REB · {r['ast']:.1f} AST"
             potg = honors.get(n, {}).get("player_of_the_game", 0)
             gs = f"GmSc {r['gmsc']:.1f} &middot; {int(r['gp'])} GP" + (f" &middot; &#9733;&times;{potg}" if potg else "")
+            compinche = honors.get(n, {}).get("compinche", 0)
+            if compinche:
+                gs += f" &middot; Compinche &times;{compinche}"
             dim = ""
         else:
             line, gs, dim = "&nbsp;", "Yet to play", " dim"
@@ -249,7 +258,7 @@ def build_roster_pages(games: pd.DataFrame, player_logs: pd.DataFrame, roster: p
       <h2>The Deck</h2>
       <p style="color: {theme.TEXT_MUTED}; font-size: 0.9rem; margin: -6px 0 18px;">
         Every player gets a Lotería emblem. Ordered by minutes per game; tap a card for his season.
-        &#9733; counts Player of the Game honors.</p>
+        &#9733; counts El Valiente (Player of the Game) honors; Compinche counts sidekick honors.</p>
       <div class="deck-grid">{"".join(card(n) for n in names)}</div>
     </section>"""
     if others:
