@@ -351,7 +351,7 @@ def build_index_page(
     n_players = player_logs.loc[player_logs["min"] > 0, "player_name"].nunique() if not player_logs.empty else 0
     history = season_game_honors(games, player_logs)
     latest = history[0] if history else {}
-    potg, compinche = latest.get("player_of_the_game"), latest.get("compinche")
+    potg = latest.get("player_of_the_game")
 
     rodeo = rodeo_split_metrics(segment_rodeo_games(games)) if not games.empty else {}
     active_rrt = rodeo.get("Active RRT", {}) if isinstance(rodeo, dict) else {}
@@ -377,12 +377,6 @@ def build_index_page(
               f"Last game's top Game Score: {potg['player_name']} ({potg['game_score']})"
               if potg else "Player of the Game appears after a completed box score",
               medallion_img=avatar_src(potg["player_name"]) if potg else None)),
-        ("compinche", _card(8, "compinche", "El Compinche", pages["dashboard"][0] + "#spotlight",
-              theme.FIESTA_ORANGE, theme.LOTERIA_CREAM,
-              escape(compinche["last_name"]) if compinche else "—", "Last game", "Sidekick of the Game",
-              f"Last game's top teammate: {compinche['player_name']} (Game Score {compinche['game_score']})"
-              if compinche else "Sidekick appears when two teammates have played",
-              medallion_img=avatar_src(compinche["player_name"]) if compinche else None)),
         ("rodeo", _card(3, "rodeo", "El Rodeo", pages["rodeo"][0], theme.FIESTA_ORANGE, theme.LOTERIA_CREAM,
               rodeo_stat, rodeo_caption, "The road trip", "The February Rodeo Road Trip vs. the title-era trips")),
         ("roster", _card(4, "baraja", "La Baraja", pages["roster"][0], theme.LOTERIA_INK, theme.LOTERIA_CREAM,
