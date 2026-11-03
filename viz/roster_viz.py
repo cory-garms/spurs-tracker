@@ -163,7 +163,7 @@ def build_player_page(name: str, player_logs: pd.DataFrame, games: pd.DataFrame,
     if h.get("player_of_the_game"):
         badges.append(f'<span class="badge teal">El Valiente &middot; Player of the Game &times;{h["player_of_the_game"]}</span>')
     if h.get("compinche"):
-        badges.append(f'<span class="badge orange">El Compinche &middot; Sidekick &times;{h["compinche"]}</span>')
+        badges.append(f'<span class="badge orange">El Compinche &middot; Wingman &times;{h["compinche"]}</span>')
     if h.get("breakout"):
         badges.append(f'<span class="badge fuschia">Breakout &times;{h["breakout"]}</span>')
     honors_html = f'<div class="honors">{"".join(badges)}</div>' if badges else ""
@@ -258,7 +258,7 @@ def build_roster_pages(games: pd.DataFrame, player_logs: pd.DataFrame, roster: p
       <h2>The Deck</h2>
       <p style="color: {theme.TEXT_MUTED}; font-size: 0.9rem; margin: -6px 0 18px;">
         Every player gets a Lotería emblem. Ordered by minutes per game; tap a card for his season.
-        &#9733; counts El Valiente (Player of the Game) honors; Compinche counts sidekick honors.</p>
+        &#9733; counts El Valiente (Player of the Game) honors; Compinche counts wingman honors.</p>
       <div class="deck-grid">{"".join(card(n) for n in names)}</div>
     </section>"""
     if others:

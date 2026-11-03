@@ -72,7 +72,7 @@ All 30 teams are registered for ingestion and basic reporting. Several specializ
 ## Game honors
 
 The **Player Spotlight** awards **El Valiente** (Player of the Game) to the highest
-Game Score and **El Compinche** (Sidekick) to the highest-ranked teammate in each
+Game Score and **El Compinche** (Wingman) to the highest-ranked teammate in each
 completed game. Ties go to minutes played, then player name. The dashboard's
 **Season Honors** table records both honorees for every game, with stat lines,
 Game Scores, and player links. The home page links to the full log, and player

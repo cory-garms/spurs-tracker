@@ -38,7 +38,7 @@ def test_dashboard_build_includes_latest_pair_and_all_games(season_data, tmp_pat
     html = output.read_text()
     spotlight = html.split('id="spotlight"', 1)[1].split("</section>", 1)[0]
     assert "El Valiente &middot; Player of the Game" in spotlight
-    assert "El Compinche &middot; Sidekick" in spotlight
+    assert "El Compinche &middot; Wingman" in spotlight
     assert spotlight.index("De&#x27;Aaron Fox") < spotlight.index("Victor Wembanyama")
     assert 'href="player_fox.html"' in spotlight
     assert 'href="#honor-roll"' in spotlight

@@ -64,7 +64,7 @@ def test_compinche_honors_appear_on_player_page_and_roster(tmp_path, monkeypatch
     monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
     roster_viz.build_roster_pages(_games(), _logs(), _roster())
     player = (tmp_path / "player_tarris-reed-jr.html").read_text()
-    assert "El Compinche &middot; Sidekick &times;2" in player
+    assert "El Compinche &middot; Wingman &times;2" in player
     assert "Player of the Game &times;" not in player
     assert "Compinche &times;2" in (tmp_path / "roster.html").read_text()
 

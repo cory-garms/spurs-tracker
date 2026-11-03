@@ -5,7 +5,7 @@ Ranks every player by John Hollinger's Game Score, a single-number box score
 summary, so the spotlight follows the production rather than the name:
 
   - El Valiente / Player of the Game: highest Game Score in a game
-  - El Compinche / Sidekick: highest Game Score among his teammates
+  - El Compinche / Wingman: highest Game Score among his teammates
   - Breakout: the player furthest above their own season norm (needs a baseline)
   - Hot Hand: best average Game Score over the team's last N games
 

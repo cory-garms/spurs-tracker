@@ -363,10 +363,10 @@ def _spotlight_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
                   f'{matchup} &middot; Game Score {potg["game_score"]}')]
     compinche = perf.get("compinche")
     if compinche:
-        tiles.append(tile("El Compinche &middot; Sidekick", theme.FIESTA_ORANGE, compinche["player_name"], compinche["line"],
+        tiles.append(tile("El Compinche &middot; Wingman", theme.FIESTA_ORANGE, compinche["player_name"], compinche["line"],
                           f'{matchup} &middot; Game Score {compinche["game_score"]}'))
     else:
-        tiles.append(tile("El Compinche &middot; Sidekick", theme.FIESTA_ORANGE, "&mdash;", "",
+        tiles.append(tile("El Compinche &middot; Wingman", theme.FIESTA_ORANGE, "&mdash;", "",
                           "No eligible teammate in this box score."))
     if perf.get("breakout"):
         b = perf["breakout"]
@@ -433,7 +433,7 @@ def _season_honors_html(games: pd.DataFrame, player_logs: pd.DataFrame) -> str:
         <table class="honors-table">
           <thead><tr><th scope="col">Date</th><th scope="col">Game</th>
             <th scope="col">El Valiente <span>Player of the Game</span></th>
-            <th scope="col">El Compinche <span>Sidekick</span></th></tr></thead>
+            <th scope="col">El Compinche <span>Wingman</span></th></tr></thead>
           <tbody>{"".join(rows)}</tbody>
         </table>
       </div>""".strip() if rows else '<p class="honor-note">Honors appear after the first completed game.</p>'
