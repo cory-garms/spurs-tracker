@@ -109,7 +109,8 @@ when replacing art so existing player-page links keep working.
 ## Automation and publishing
 
 The landing page uses the transparent GSG card logo above its title. Default
-social previews use the GSG banner on a dark 1200 × 630 canvas. Published assets,
+social preview metadata points directly to `la_tabla_gsg_logo_with_banner.png`.
+An optional composed version is available on a dark 1200 × 630 canvas. Published assets,
 typography, and rebuild guidance are in [the brand reference](marketing/brand.md).
 Game-specific previews remain available, but page metadata defaults to the site
 banner. Edit source templates before rebuilding generated output.

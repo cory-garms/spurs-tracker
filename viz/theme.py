@@ -86,7 +86,7 @@ ALERT = FIESTA_ORANGE
 # ---------------------------------------------------------------------------
 # Typography
 # ---------------------------------------------------------------------------
-FAVICON_LINK = '<link rel="icon" type="image/png" href="favicon.png?v=gsg1">'
+FAVICON_LINK = '<link rel="icon" type="image/png" href="favicon.png?v=gsg2">'
 
 FONTS_LINK = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
@@ -449,7 +449,7 @@ def share_meta(title: str, description: str, image: str = "site") -> str:
     """Open Graph / Twitter tags so shared links unfurl with a preview card."""
     import html as _html
     import re as _re
-    from viz.share_images import og_image_url  # share_images imports theme
+    from viz.share_images import og_image_url, og_image_size  # share_images imports theme
 
     desc = _html.escape(_html.unescape(_re.sub(r"<[^>]+>", "", description)).strip(), quote=True)
     title = _html.escape(_html.unescape(title), quote=True)
@@ -464,10 +464,11 @@ def share_meta(title: str, description: str, image: str = "site") -> str:
         f'<meta name="twitter:description" content="{desc}">',
     ]
     if url:
+        width, height = og_image_size(image)
         tags += [
             f'<meta property="og:image" content="{url}">',
-            '<meta property="og:image:width" content="1200">',
-            '<meta property="og:image:height" content="630">',
+            f'<meta property="og:image:width" content="{width}">',
+            f'<meta property="og:image:height" content="{height}">',
             '<meta name="twitter:card" content="summary_large_image">',
             f'<meta name="twitter:image" content="{url}">',
         ]

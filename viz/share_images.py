@@ -207,10 +207,21 @@ def render_site_preview() -> Path:
     return out
 
 
-def og_image_url(name: str = "latest") -> str | None:
+def _share_image_path(name: str) -> Path:
+    if name == "site":
+        return config.OUTPUT_DIR / "img/la_tabla_gsg_logo_with_banner.png"
+    return config.OUTPUT_DIR / OG_DIR / f"{name}.png"
+
+
+def og_image_size(name: str = "site") -> tuple[int, int]:
+    with Image.open(_share_image_path(name)) as image:
+        return image.size
+
+
+def og_image_url(name: str = "site") -> str | None:
     """Absolute URL for a preview image, versioned by content so platforms refresh it."""
-    path = config.OUTPUT_DIR / OG_DIR / f"{name}.png"
+    path = _share_image_path(name)
     if not path.exists():
         return None
     digest = hashlib.md5(path.read_bytes()).hexdigest()[:8]
-    return f"{config.SITE_URL}/{OG_DIR}/{name}.png?v={digest}"
+    return f"{config.SITE_URL}/{path.relative_to(config.OUTPUT_DIR).as_posix()}?v={digest}"

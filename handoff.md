@@ -38,10 +38,16 @@ The prior branding commit is `585fb34`. Default page metadata now uses the site
 banner. Eleven share-image/theme tests passed during that change.
 See [brand reference](marketing/brand.md) for asset paths and rebuilding guidance.
 
-Favicon follow-up: `assets/incoming/LTS_favicon.png` is copied unchanged to
-`docs/favicon.png`. Both page templates link it through `theme.FAVICON_LINK`;
-existing generated HTML includes the link too. This follow-up is local until
-committed and pushed; it is separate from the already-deployed GSG logo update.
+Social preview follow-up: default metadata and `og_image_url()` reference
+`img/la_tabla_gsg_logo_with_banner.png` directly, with its actual dimensions and
+content hash. The optional composed `img/og/site.png` is no longer the metadata
+target. A regression check covers the presence of a competing POTG image.
+X rendering of previously shared URLs remains external to this site deployment.
+
+Favicon follow-up: `docs/favicon.png` is now a tightly framed enlargement of
+`assets/incoming/LTS_favicon.png`, with reduced padding. Both templates link it
+through `theme.FAVICON_LINK`, version `gsg2`; existing generated HTML includes
+the link too. The original incoming artwork remains unchanged.
 
 No new analytics integration, mailing list, or sponsor placement is implemented
 by the initiative documentation. Existing site functionality remains the baseline.

@@ -69,17 +69,18 @@ Both schedules stay fixed in UTC through daylight-saving changes. Local builds u
 
 ## Branding and social previews
 
-`docs/favicon.png` is the supplied `assets/incoming/LTS_favicon.png`, published
-unchanged. `viz/theme.py` defines `FAVICON_LINK`, used in both the shared shell and
+`docs/favicon.png` is a tightly framed enlargement of the supplied
+`assets/incoming/LTS_favicon.png`. `viz/theme.py` defines `FAVICON_LINK`, used in both the shared shell and
 the standalone landing page. Keep its version query and generated HTML in sync
 when replacing the favicon. Browser tab icons are separate from social previews.
 
 Keep `docs/img/la_tabla_gsg_logo_card_only.png` above the landing title and use
 `docs/img/la_tabla_gsg_logo_with_banner.png` for site branding on social channels.
 Both are published transparent PNGs; `.gitignore` explicitly permits them.
-`viz/share_images.py` builds `img/og/site.png`; the shared shell and landing page
-reference a content-hashed absolute URL. The pipeline generates previews before
-HTML, so rebuild both when changing artwork. See [brand guidance](marketing/brand.md).
+The shared shell and landing page reference the original banner directly, using
+a content-hashed absolute URL and its actual dimensions. `viz/share_images.py`
+also builds the optional composed `img/og/site.png` asset. Regenerate metadata
+when changing the banner. See [brand guidance](marketing/brand.md).
 
 Social campaign links use `utm_campaign=sponsor_sprint_202611`,
 `utm_medium=social`, channel-specific `utm_source`, and content IDs from

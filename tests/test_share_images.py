@@ -20,9 +20,24 @@ def test_site_preview_uses_published_logo(tmp_path, monkeypatch):
         assert preview.size == (1200, 630)
         background = Image.new("RGB", (1, 1), theme.FROST_BANK_FLOOR).getpixel((0, 0))
         assert preview.convert("RGB").getpixel((0, 0)) == background
-    assert '/img/og/site.png?v=' in share_images.og_image_url("site")
+    assert '/img/la_tabla_gsg_logo_with_banner.png?v=' in share_images.og_image_url("site")
     assert share_images.og_image_url("site") in theme.share_meta("La Tabla Spurs", "Basketball", "site")
     assert share_images.og_image_url("site") in theme.share_meta("La Tabla Spurs", "Basketball")
+
+
+def test_default_thumbnail_is_original_banner_even_with_game_card(tmp_path, monkeypatch):
+    source = config.OUTPUT_DIR / "img/la_tabla_gsg_logo_with_banner.png"
+    (tmp_path / "img").mkdir()
+    shutil.copyfile(source, tmp_path / "img/la_tabla_gsg_logo_with_banner.png")
+    monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
+    share_images.render_latest_game(_games(), _logs(), tmp_path / "img/og/latest.png")
+    meta = theme.share_meta("La Tabla Spurs", "Basketball")
+    assert share_images.og_image_url() == share_images.og_image_url("site")
+    assert meta.count('/img/la_tabla_gsg_logo_with_banner.png?v=') == 2
+    assert 'latest.png' not in meta and 'site.png' not in meta
+    width, height = share_images.og_image_size()
+    assert f'property="og:image:width" content="{width}"' in meta
+    assert f'property="og:image:height" content="{height}"' in meta
 
 
 def _games():
