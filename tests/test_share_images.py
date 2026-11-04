@@ -11,15 +11,18 @@ from viz import share_images, theme
 
 
 def test_site_preview_uses_published_logo(tmp_path, monkeypatch):
-    source = config.OUTPUT_DIR / "img/la_tabla_logo.jpeg"
+    source = config.OUTPUT_DIR / "img/la_tabla_gsg_logo_with_banner.png"
     (tmp_path / "img").mkdir()
-    shutil.copyfile(source, tmp_path / "img/la_tabla_logo.jpeg")
+    shutil.copyfile(source, tmp_path / "img/la_tabla_gsg_logo_with_banner.png")
     monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
     out = share_images.render_site_preview()
     with Image.open(out) as preview:
         assert preview.size == (1200, 630)
+        background = Image.new("RGB", (1, 1), theme.FROST_BANK_FLOOR).getpixel((0, 0))
+        assert preview.convert("RGB").getpixel((0, 0)) == background
     assert '/img/og/site.png?v=' in share_images.og_image_url("site")
     assert share_images.og_image_url("site") in theme.share_meta("La Tabla Spurs", "Basketball", "site")
+    assert share_images.og_image_url("site") in theme.share_meta("La Tabla Spurs", "Basketball")
 
 
 def _games():
@@ -59,8 +62,8 @@ def test_image_url_is_absolute_and_versioned(tmp_path, monkeypatch):
 
 def test_share_meta_uses_large_card_only_when_image_exists(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
-    assert 'content="summary"' in theme.share_meta("T", "<b>desc</b>")
+    assert 'content="summary"' in theme.share_meta("T", "<b>desc</b>", "latest")
     share_images.render_latest_game(_games(), _logs(), tmp_path / "img/og/latest.png")
-    meta = theme.share_meta("T", "<b>desc</b> &middot; more")
+    meta = theme.share_meta("T", "<b>desc</b> &middot; more", "latest")
     assert "summary_large_image" in meta and 'property="og:image"' in meta
     assert 'content="desc · more"' in meta  # tags stripped, entities decoded

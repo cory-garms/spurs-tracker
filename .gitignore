@@ -17,6 +17,8 @@ docs/img/*
 !docs/img/players/
 !docs/img/og/
 !docs/img/la_tabla_logo.jpeg
+!docs/img/la_tabla_gsg_logo_card_only.png
+!docs/img/la_tabla_gsg_logo_with_banner.png
 output/
 
 # OS

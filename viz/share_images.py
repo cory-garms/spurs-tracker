@@ -195,17 +195,12 @@ def build_share_images(games: pd.DataFrame, player_logs: pd.DataFrame,
 
 
 def render_site_preview() -> Path:
-    """Build the site's evergreen card using the published, unmodified logo."""
-    im, d = _canvas()
-    with Image.open(config.OUTPUT_DIR / "img/la_tabla_logo.jpeg") as source:
-        logo = source.convert("RGB")
-        logo.thumbnail((570, 570), Image.Resampling.LANCZOS)
-        im.paste(logo, ((600 - logo.width) // 2, (H - logo.height) // 2))
-    d.text((600, 170), "LA TABLA", font=_font("Rye-Regular.ttf", 64), fill=theme.LOTERIA_CREAM)
-    d.text((600, 255), "SPURS", font=_font("Rye-Regular.ttf", 88), fill=theme.LOTERIA_CREAM)
-    d.text((600, 390), "SAN ANTONIO BASKETBALL", font=_font("Teko[wght].ttf", 38, 600), fill=theme.FIESTA_TEAL)
-    d.text((600, 440), "Stats. Stories. Pound the Rock.", font=_font("Teko[wght].ttf", 32, 500), fill=theme.SPURS_SILVER)
-    _url(d)
+    """Fit the transparent banner on a solid background for social cards."""
+    im = Image.new("RGB", (W, H), theme.FROST_BANK_FLOOR)
+    with Image.open(config.OUTPUT_DIR / "img/la_tabla_gsg_logo_with_banner.png") as source:
+        logo = source.convert("RGBA")
+        logo = logo.resize((1120, round(logo.height * 1120 / logo.width)), Image.Resampling.LANCZOS)
+        im.paste(logo, ((W - logo.width) // 2, (H - logo.height) // 2), logo)
     out = config.OUTPUT_DIR / OG_DIR / "site.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     im.save(out, optimize=True)

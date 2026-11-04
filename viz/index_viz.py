@@ -409,7 +409,7 @@ def build_index_page(
   <div class="sarape-band" aria-hidden="true"></div>
   <div class="page">
     <section class="hq-hero">
-      <img src="img/la_tabla_logo.jpeg" alt="La Tabla Spurs logo" width="160" height="160" style="display:block;margin:0 auto 16px;max-width:100%;height:auto;">
+      <img src="img/la_tabla_gsg_logo_card_only.png" alt="La Tabla Spurs GSG card logo" width="220" height="293" style="display:block;margin:0 auto 16px;max-width:100%;height:auto;">
       <h1>La Tabla Spurs</h1>
       <div class="sub">&#9733; Putting hammer to stone since 2024 &#9733;</div>
       <div class="season">{season_s} season</div>

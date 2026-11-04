@@ -234,7 +234,7 @@ def build_matchup_page(
         current_slug="matchup",
         badge=f"vs. {opp}" if nxt["is_home"] else f"@ {opp}",
         games_played=games_played,
-        og_image="next",
+        og_image="site",
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html, encoding="utf-8")

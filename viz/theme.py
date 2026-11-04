@@ -443,7 +443,7 @@ def _avatar_css() -> str:
     return avatar_css()
 
 
-def share_meta(title: str, description: str, image: str = "latest") -> str:
+def share_meta(title: str, description: str, image: str = "site") -> str:
     """Open Graph / Twitter tags so shared links unfurl with a preview card."""
     import html as _html
     import re as _re
@@ -498,7 +498,7 @@ def page_html(
     current_slug: str = "dashboard",
     badge: str = f"{config.season_str(config.SEASON)} Season",
     games_played: int | None = None,
-    og_image: str = "latest",
+    og_image: str = "site",
 ) -> str:
     """Wrap content in the official Spurs HTML shell."""
     note = early_season_note(games_played) if games_played is not None else ""
