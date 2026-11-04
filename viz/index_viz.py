@@ -398,7 +398,7 @@ def build_index_page(
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>La Tabla Spurs — San Antonio Spurs Analytics</title>
-  {theme.share_meta(f"La Tabla Spurs · {season_s} · {record}", description)}
+  {theme.share_meta("La Tabla Spurs — San Antonio Spurs Analytics", description, "site")}
   {theme.FONTS_LINK}
   <style>
 {theme.page_css()}
@@ -409,6 +409,7 @@ def build_index_page(
   <div class="sarape-band" aria-hidden="true"></div>
   <div class="page">
     <section class="hq-hero">
+      <img src="img/la_tabla_logo.jpeg" alt="La Tabla Spurs logo" width="160" height="160" style="display:block;margin:0 auto 16px;max-width:100%;height:auto;">
       <h1>La Tabla Spurs</h1>
       <div class="sub">&#9733; Putting hammer to stone since 2024 &#9733;</div>
       <div class="season">{season_s} season</div>

@@ -2,6 +2,7 @@
 Link-Preview Images — what a shared link looks like on Reddit, X and Discord.
 
 Draws 1200x630 PNGs at build time with Pillow:
+  - img/og/site.png: the La Tabla Spurs logo and site identity
   - img/og/latest.png: last result, record and the Player of the Game's emblem
   - img/og/next.png:   the next game, tip time and the projection
 
@@ -85,7 +86,7 @@ def _url(d: ImageDraw.ImageDraw) -> None:
 
 
 def _header(d: ImageDraw.ImageDraw, x: int, kicker: str) -> None:
-    d.text((x, 60), "Spurs Stats HQ", font=_font("Rye-Regular.ttf", 46), fill=theme.LOTERIA_CREAM)
+    d.text((x, 60), "La Tabla Spurs", font=_font("Rye-Regular.ttf", 46), fill=theme.LOTERIA_CREAM)
     d.text((x, 128), kicker, font=_font("Teko[wght].ttf", 34, 600), fill=theme.SPURS_SILVER)
 
 
@@ -186,10 +187,29 @@ def build_share_images(games: pd.DataFrame, player_logs: pd.DataFrame,
     """Render every preview image; returns the paths written."""
     base = config.OUTPUT_DIR / OG_DIR
     written = [
+        render_site_preview(),
         render_latest_game(games, player_logs, base / "latest.png"),
         render_next_game(player_logs, season, team_abbr, base / "next.png"),
     ]
     return [p for p in written if p]
+
+
+def render_site_preview() -> Path:
+    """Build the site's evergreen card using the published, unmodified logo."""
+    im, d = _canvas()
+    with Image.open(config.OUTPUT_DIR / "img/la_tabla_logo.jpeg") as source:
+        logo = source.convert("RGB")
+        logo.thumbnail((570, 570), Image.Resampling.LANCZOS)
+        im.paste(logo, ((600 - logo.width) // 2, (H - logo.height) // 2))
+    d.text((600, 170), "LA TABLA", font=_font("Rye-Regular.ttf", 64), fill=theme.LOTERIA_CREAM)
+    d.text((600, 255), "SPURS", font=_font("Rye-Regular.ttf", 88), fill=theme.LOTERIA_CREAM)
+    d.text((600, 390), "SAN ANTONIO BASKETBALL", font=_font("Teko[wght].ttf", 38, 600), fill=theme.FIESTA_TEAL)
+    d.text((600, 440), "Stats. Stories. Pound the Rock.", font=_font("Teko[wght].ttf", 32, 500), fill=theme.SPURS_SILVER)
+    _url(d)
+    out = config.OUTPUT_DIR / OG_DIR / "site.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    im.save(out, optimize=True)
+    return out
 
 
 def og_image_url(name: str = "latest") -> str | None:

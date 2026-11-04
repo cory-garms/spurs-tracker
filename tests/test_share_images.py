@@ -3,10 +3,23 @@
 from __future__ import annotations
 
 import pandas as pd
+import shutil
 from PIL import Image
 
 import config
 from viz import share_images, theme
+
+
+def test_site_preview_uses_published_logo(tmp_path, monkeypatch):
+    source = config.OUTPUT_DIR / "img/la_tabla_logo.jpeg"
+    (tmp_path / "img").mkdir()
+    shutil.copyfile(source, tmp_path / "img/la_tabla_logo.jpeg")
+    monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
+    out = share_images.render_site_preview()
+    with Image.open(out) as preview:
+        assert preview.size == (1200, 630)
+    assert '/img/og/site.png?v=' in share_images.og_image_url("site")
+    assert share_images.og_image_url("site") in theme.share_meta("La Tabla Spurs", "Basketball", "site")
 
 
 def _games():
