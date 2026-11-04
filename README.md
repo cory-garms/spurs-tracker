@@ -1,4 +1,4 @@
-# Spurs Tracker
+# La Tabla Spurs
 
 La Tabla Spurs is a San Antonio Spurs analytics site at [porvida.corygarms.com](https://porvida.corygarms.com). Python fetches NBA statistics, caches Parquet snapshots, computes analytics, and generates HTML, JSON, and social preview images without an application server.
 
@@ -75,8 +75,19 @@ The **Player Spotlight** awards **El Valiente** (Player of the Game) to the high
 Game Score and **El Compinche** (Wingman) to the highest-ranked teammate in each
 completed game. Ties go to minutes played, then player name. The dashboard's
 **Season Honors** table records both honorees for every game, with stat lines,
-Game Scores, and player links. The home page links to the full log, and player
-pages tally both awards. Honors rebuild from cached box scores, including past games.
+Game Scores, and player links, at `dashboard.html#honor-roll`. Player pages tally
+both awards. The landing page intentionally has no separate Compinche card or
+season-honors link. Honors rebuild from cached box scores, including past games;
+games with missing box scores appear without awards.
+
+## Player emblems
+
+Player artwork and Spanish emblem names are registered in `viz/avatars.py`.
+Carter Bryant is **El Cobrador** and Tarris Reed Jr. is **El Oso**. Publish optimized
+WebP avatars and circular chart PNGs under `docs/img/players/`; keep original art
+local in the ignored `assets/incoming/` or `docs/img/players_src/` folders. The
+existing `scripts/prep_art.py` handles asset preparation. Preserve player slugs
+when replacing art so existing player-page links keep working.
 
 ## Automation and publishing
 
@@ -89,4 +100,6 @@ Two GitHub Actions workflows currently coexist:
 
 The older workflow therefore does not refresh the configured 2026–27 landing page. UTC schedules shift relative to local time during daylight-saving changes.
 
-`SPURS_BLUEPRINT.md` and `handoff.md` retain historical planning context. This README and the implementation describe the current operating workflow.
+See [handoff.md](handoff.md) for the latest session checkpoint and next-session
+instructions. Its original blueprint and `SPURS_BLUEPRINT.md` retain historical
+planning context; this README and the implementation describe the current workflow.

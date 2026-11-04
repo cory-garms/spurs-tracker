@@ -1,3 +1,88 @@
+# La Tabla Spurs — Current Handoff
+
+Updated November 3, 2026. Read this checkpoint before the historical blueprint below.
+
+## Site and repository
+
+- Public name: **La Tabla Spurs**. “Por vida” is the domain/slogan, not the site name.
+- URL: https://porvida.corygarms.com (GitHub Pages). HTTPS enforcement is enabled;
+  certificate validation and HTTP-to-HTTPS redirection were verified October 28.
+- Repository: `git@github.com:cory-garms/spurs-tracker.git`, branch `master`.
+- Latest application/data commit at this checkpoint: `03840fa` — refreshed after
+  the Jazz win and changed the Compinche translation to **Wingman**.
+- Python environment: `.spursEnv`; use its interpreter or activate it. The system
+  Python previously failed with incompatible pandas/NumPy binaries.
+
+## Latest refresh — November 3
+
+Pulled the other agent's November 2 changes before refreshing. The current cache
+includes the November 2 home win over Utah, **119–97**, game `0022600168`.
+The Spurs are **5–2**, with **five consecutive wins**.
+
+- El Valiente / Player of the Game: **Dylan Harper**, 17 PTS · 8 AST · 7 REB,
+  Game Score 19.7.
+- El Compinche / **Wingman**: **Stephon Castle**, 16 PTS · 5 REB · 4 AST,
+  Game Score 12.6.
+- Breakout: Luke Kornet, Game Score 11.5, 8.7 above his earlier average.
+- Next game as of this checkpoint: Dallas at home, November 4, 8:30 PM CT,
+  Frost Bank Center, ESPN. Opponent player cache and league ratings were refreshed.
+  Injury and lineup changes are not tracked live.
+
+Rebuilt HTML pages, analytical JSON, roster/player pages, and share images.
+Verified latest game date/opponent/result, player scoring total, unique game and
+player-game rows, JSON record, and landing-page score. **89 tests passed** after
+changing Sidekick to Wingman; `git diff --check` also passed. Commit `03840fa` was
+pushed to origin/master.
+
+## Preserve these design decisions
+
+- `analysis/performers.py` ranks El Valiente and El Compinche by Game Score,
+  then minutes played, then player name. Awards go to different players.
+- `season_game_honors()` drives the dashboard history at
+  `dashboard.html#honor-roll`; it includes completed games in reverse order,
+  retaining games with missing player boxscores without assigning awards.
+- Player pages tally both honors. The November 2 changes intentionally removed
+  the separate Compinche landing card and season-honors link from the landing page.
+- Translate Compinche as **Wingman**, never Sidekick.
+- Carter Bryant's emblem is **El Cobrador** (`bryant` slug); Tarris Reed Jr.'s is
+  **El Oso** (`tarris-reed-jr` slug). WebP and circular PNG assets are published;
+  full-resolution originals remain ignored locally in `assets/incoming/`.
+
+## Preserved local work
+
+A stash named **Preserve local POTG tracker before syncing November updates**
+contains the older uncommitted tracker from October 29. It was deliberately not
+reapplied: the newer November 2 season-honors implementation supersedes it, and
+restoring the old landing-page link would undo a later user change. The stash
+remains available as a backup. Inspect by message before use; its numeric index
+can change. No active feature work depends on restoring it.
+
+## Next session
+
+1. Read `.agents/AGENTS.md`; inspect status and sync remote changes before editing.
+   Automated builds can commit while sessions are idle.
+2. Use `.spursEnv/bin/python pipeline.py --team SAS --season 2026 --refresh`
+   for the next postgame update. `--refresh` here is incremental ingestion;
+   `fetch.py --refresh` performs a full replacement fetch.
+3. Verify freshness and scoring totals, then run `.spursEnv/bin/python -m pytest`
+   and `git diff --check`. Regenerate conflicting generated files after integrating
+   upstream changes rather than reverting newer source/design decisions.
+4. Commit and push the approved site update. Verify deployment separately if needed.
+
+No additional feature work was requested at session close. Known operational
+limitations: scheduled master-pipeline runs rebuild caches without fetching;
+legacy `refresh.yml` still builds SAS/2025; validation does not enforce full schema
+types and the pipeline can report success after ingestion falls back to old caches.
+These are documented limitations, not fixes completed in this session.
+
+---
+
+# Historical blueprint (retained for context)
+
+The material below predates the current implementation. Its old season, output
+paths, initial setup steps, and feature plans are not the current operating guide.
+Use README.md, CONFIGURE.md, and the checkpoint above for ongoing work.
+
 # Spurs Tracker — Agent Handoff & Blueprint
 
 **Project owner:** Cory Garms (corygarms.com)

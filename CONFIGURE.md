@@ -8,6 +8,12 @@ Other settings include `SITE_URL` for absolute share-image URLs, `CACHE_DIR` (`d
 
 ## Refresh the current site
 
+Sync `master` before refreshing, especially after work in another session or an
+automated build. Check `git status --short`, preserve any local work, then use
+`git pull --ff-only origin master` when the branch can fast-forward. Resolve any
+divergence deliberately; generated pages can be rebuilt from the merged code and
+latest caches. Do not restore older stashed generators over newer site changes.
+
 Activate `.spursEnv` and install dependencies as described in [README.md](README.md), then run:
 
 ```bash
@@ -16,6 +22,13 @@ python -m pytest
 ```
 
 This incrementally fetches game data and refreshes league ratings, the schedule, and next-opponent player statistics before rebuilding the site. Check fallback warnings and the latest cached game date: a successful build alone does not establish data freshness.
+
+Before publishing, confirm the expected game date, opponent and result, reconcile
+player points with the final team score, and check the landing-page record and
+next-game preview. Run the tests and `git diff --check`, then commit and push the
+updated `data/cache/` and `docs/` along with any source changes. GitHub Pages
+publishes asynchronously after the push. If an automated commit arrives first,
+fetch and integrate it, then regenerate output before retrying the push.
 
 Use `python pipeline.py --skip-fetch` to rebuild existing caches. For a full boxscore replacement, run `python fetch.py --team SAS --season 2026 --refresh --league`, then rebuild with the pipeline. Standalone fetching does not refresh the schedule or next-opponent player cache.
 
@@ -45,6 +58,10 @@ Both schedules stay fixed in UTC through daylight-saving changes. Local builds u
 ## Custom domain and HTTPS
 
 The site uses `porvida.corygarms.com`, recorded in `docs/CNAME`. Its DNS CNAME should point to `cory-garms.github.io`. `config.SITE_URL` is `https://porvida.corygarms.com` for generated share-image URLs.
+
+The public site name is **La Tabla Spurs**; “por vida” is the domain/slogan.
+HTTPS enforcement was enabled and verified during the October 28 session:
+HTTPS returned 200 with certificate validation, and HTTP redirected with 301.
 
 GitHub Pages provisions the custom-domain TLS certificate. In repository **Settings → Pages**, confirm the custom domain passes its DNS check and enable **Enforce HTTPS** when available. This redirects HTTP requests to HTTPS. Changing HTML or `SITE_URL` alone does not provision a certificate or enable that redirect.
 
