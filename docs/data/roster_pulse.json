@@ -146,15 +146,6 @@
       "combined_pts_pg": 29.4
     },
     {
-      "player_1": "Keldon Johnson",
-      "player_2": "Victor Wembanyama",
-      "pairing": "Johnson + Wembanyama",
-      "games_together": 7,
-      "est_shared_min_pg": 22.7,
-      "net_pm_pg": 6.93,
-      "combined_pts_pg": 35.0
-    },
-    {
       "player_1": "Devin Vassell",
       "player_2": "Julian Champagnie",
       "pairing": "Vassell + Champagnie",
@@ -162,6 +153,15 @@
       "est_shared_min_pg": 27.4,
       "net_pm_pg": 6.93,
       "combined_pts_pg": 23.0
+    },
+    {
+      "player_1": "Keldon Johnson",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Johnson + Wembanyama",
+      "games_together": 7,
+      "est_shared_min_pg": 22.7,
+      "net_pm_pg": 6.93,
+      "combined_pts_pg": 35.0
     },
     {
       "player_1": "Dylan Harper",
