@@ -30,3 +30,6 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Private sponsor correspondence and audience exports
+marketing/private/

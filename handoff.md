@@ -1,6 +1,50 @@
 # La Tabla Spurs — Current Handoff
 
-Updated November 3, 2026. Read this checkpoint before the historical blueprint below.
+Updated November 4, 2026. Read the active initiative and checkpoint before the
+historical material below.
+
+## Active initiative — audience growth and sponsorship
+
+The next two weeks, **November 5–18**, focus on systematic social distribution,
+measurable traffic, and preparation/outreach for a paid sponsor this season.
+The source of truth is [marketing/README.md](marketing/README.md), with:
+
+- [Daily tasks, owners, due dates and exit criteria](marketing/sprint-2026-11-05.md).
+- [Fourteen-day social calendar](marketing/social-calendar.md): daily primary
+  posts, four visual adaptations, two weekly analyses, and up to two permitted
+  native Reddit contributions. Publishing remains Cory's manual task.
+  The immediate [r/NBASpurs update](posts/2026-11-04-community-update.md) follows
+  Cory's prior introduction and describes verified new features. Do not confuse
+  r/NBASpurs with r/sanantoniospurs; confirm existing moderator permission before
+  any self-promotional submission.
+- [Measurement guide](marketing/measurement.md) and [scorecard](marketing/scorecard.csv).
+  Cory will inspect Vercel. Production is documented as GitHub Pages; validate
+  tracking on `porvida.corygarms.com` before claiming traffic or attribution.
+- [Prospects](marketing/prospects.csv), [media kit](marketing/media-kit.md), and
+  [outreach drafts](marketing/outreach.md). Ten qualified prospects and six actual
+  approaches are sprint targets; Ledger is a parallel prospect, not a signed sponsor.
+
+Planning materials have been created; execution tasks are pending. No outreach
+or social publication has occurred through this documentation work. Traffic,
+contacts, and sponsor interest must not be fabricated. Price range $500–$1,000
+is a local 30-day pilot hypothesis, pending baseline and Cory's selection.
+Private correspondence and exports belong in ignored `marketing/private/`.
+
+## Branding checkpoint — November 4
+
+Commit `6926a0c` was pushed to `master`; production HTML was verified with the
+new GSG card logo above the landing title and banner-based social preview.
+The prior branding commit is `585fb34`. Default page metadata now uses the site
+banner. Eleven share-image/theme tests passed during that change.
+See [brand reference](marketing/brand.md) for asset paths and rebuilding guidance.
+
+Favicon follow-up: `assets/incoming/LTS_favicon.png` is copied unchanged to
+`docs/favicon.png`. Both page templates link it through `theme.FAVICON_LINK`;
+existing generated HTML includes the link too. This follow-up is local until
+committed and pushed; it is separate from the already-deployed GSG logo update.
+
+No new analytics integration, mailing list, or sponsor placement is implemented
+by the initiative documentation. Existing site functionality remains the baseline.
 
 ## Site and repository
 
@@ -8,7 +52,7 @@ Updated November 3, 2026. Read this checkpoint before the historical blueprint b
 - URL: https://porvida.corygarms.com (GitHub Pages). HTTPS enforcement is enabled;
   certificate validation and HTTP-to-HTTPS redirection were verified October 28.
 - Repository: `git@github.com:cory-garms/spurs-tracker.git`, branch `master`.
-- Latest application/data commit at this checkpoint: `03840fa` — refreshed after
+- Latest data-refresh commit at the November 3 checkpoint: `03840fa` — refreshed after
   the Jazz win and changed the Compinche translation to **Wingman**.
 - Python environment: `.spursEnv`; use its interpreter or activate it. The system
   Python previously failed with incompatible pandas/NumPy binaries.
@@ -61,6 +105,8 @@ can change. No active feature work depends on restoring it.
 
 1. Read `.agents/AGENTS.md`; inspect status and sync remote changes before editing.
    Automated builds can commit while sessions are idle.
+   Start growth work with A1 in the sprint plan: Cory's production-domain analytics
+   verification. Maintain the social calendar and scorecard as tasks execute.
 2. Use `.spursEnv/bin/python pipeline.py --team SAS --season 2026 --refresh`
    for the next postgame update. `--refresh` here is incremental ingestion;
    `fetch.py --refresh` performs a full replacement fetch.
@@ -69,7 +115,9 @@ can change. No active feature work depends on restoring it.
    upstream changes rather than reverting newer source/design decisions.
 4. Commit and push the approved site update. Verify deployment separately if needed.
 
-No additional feature work was requested at session close. Known operational
+The November 3 data-refresh session closed without additional feature requests;
+the November 4 growth initiative above supersedes that work-priority checkpoint.
+Known operational
 limitations: scheduled master-pipeline runs rebuild caches without fetching;
 legacy `refresh.yml` still builds SAS/2025; validation does not enforce full schema
 types and the pipeline can report success after ingestion falls back to old caches.

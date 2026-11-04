@@ -1,0 +1,4 @@
+period,start_date,end_date,analytics_status,provider,visitors,sessions,pageviews,social_attributed_sessions,primary_posts,visual_posts,weekly_analyses,qualified_prospects,initial_approaches,positive_replies,meetings_booked,proposals_requested,cash_collected_usd,evidence_ref,notes
+baseline,,,unverified,,,,,,,,,,,,,,,,"Historical window and production coverage to verify; blanks are unknown"
+week_1,2026-11-05,2026-11-11,pending,,,,,,,,,,,,,,,,"Template; populate after review"
+sprint,2026-11-05,2026-11-18,pending,,,,,,,,,,,,,,,,"Template; do not add overlapping week and sprint totals"

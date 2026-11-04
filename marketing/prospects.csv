@@ -1,0 +1,11 @@
+prospect_id,business,priority,status,fit_hypothesis,target_role,public_route,source_url,last_verified,next_action,due_date
+P01,Ledger,parallel_reach,research,"Spurs fans plus technology and original analysis",Brand partnerships or sports marketing,,https://www.ledger.com/ledger-and-san-antonio-spurs-partnership,2026-11-04,Verify publisher partnership contact route,2026-11-08
+P02,H-E-B,later,research,"Local identity and game-day audience",Local marketing or sponsorships,,https://newsroom.heb.com/h-e-b-and-san-antonio-spurs-tip-off-season-with-new-commercials-in-store-surprises-and-exclusive-merch/,2026-11-04,Verify independent media buying route and fit,2026-11-08
+P03,Frost,later,research,"San Antonio community readership",Community marketing or brand partnerships,,https://www.nba.com/spurs/news/spurs-give-frost-bank-to-grant-local-organizations-up-to-100000-through-operation-renovation,2026-11-04,Identify media sponsorship route distinct from community grant applications,2026-11-08
+P04,Whataburger,later,research,"Game-day habits and local fan culture",Regional marketing or sponsorships,,https://www.nba.com/spurs/whataburgerlookbook,2026-11-04,Verify independent publisher opportunity,2026-11-08
+P05,Meter,later,research,"Technology story; consumer audience fit unproven",Brand marketing,,https://www.nba.com/spurs/news/san-antonio-spurs-announce-official-partnership-with-meter-as-new-network-infrastructure-provider,2026-11-04,Qualify audience fit before any approach,2026-11-08
+P06,Local watch-party venue A,first_pilot,placeholder,"Local attendance and measurable offer",Owner or general manager,,,,Replace with named business and verified route,2026-11-08
+P07,Local restaurant B,first_pilot,placeholder,"Game-day dining audience",Owner or marketing manager,,,,Replace with named business and verified route,2026-11-08
+P08,Local coffee shop C,first_pilot,placeholder,"Local repeat readers",Owner,,,,Replace with named business and verified route,2026-11-08
+P09,Local sports retailer D,first_pilot,placeholder,"Basketball audience",Owner or marketing manager,,,,Replace with named business and verified route,2026-11-08
+P10,Local service business E,first_pilot,placeholder,"Owner connection to Spurs community",Owner,,,,Replace with named business and verified route,2026-11-08

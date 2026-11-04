@@ -1,5 +1,12 @@
 # 🏀 Project Blueprint: San Antonio Spurs Analytics Suite (`spurs_tracker`)
 
+> Historical technical blueprint. Current implementation and operations live in
+> [README.md](README.md), [CONFIGURE.md](CONFIGURE.md), and [handoff.md](handoff.md).
+> The active November 2026 audience-growth and sponsorship initiative is tracked
+> in [marketing/README.md](marketing/README.md), with a
+> [November 5–18 task plan](marketing/sprint-2026-11-05.md). Older feature lists,
+> brand names, and integration proposals below are not evidence of live features.
+
 > **Handoff Document for Future Agent Implementation**  
 > *Target Team*: San Antonio Spurs (`TEAM_ID = 1610612759`, `TEAM_ABBR = "SAS"`)  
 > *Inspiration*: Boston Red Sox Analytics Suite (`sox_tracker` / *Dirty Water*)  

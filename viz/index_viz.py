@@ -398,6 +398,7 @@ def build_index_page(
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>La Tabla Spurs — San Antonio Spurs Analytics</title>
+  {theme.FAVICON_LINK}
   {theme.share_meta("La Tabla Spurs — San Antonio Spurs Analytics", description, "site")}
   {theme.FONTS_LINK}
   <style>

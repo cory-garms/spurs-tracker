@@ -2,6 +2,22 @@
 
 La Tabla Spurs is a San Antonio Spurs analytics site at [porvida.corygarms.com](https://porvida.corygarms.com). Python fetches NBA statistics, caches Parquet snapshots, computes analytics, and generates HTML, JSON, and social preview images without an application server.
 
+## Current initiative: audience growth and sponsorship
+
+The November 5–18, 2026 sprint combines systematic social distribution with
+preparation for a paid sponsorship pilot this season. Start with
+[the actionable two-week plan](marketing/sprint-2026-11-05.md) and
+[the daily social calendar](marketing/social-calendar.md). Cory owns publishing,
+Vercel analytics verification, and outreach; plans and drafts are not sent posts
+or signed partnerships.
+
+[The marketing workspace](marketing/README.md) contains the measurement guide,
+scorecard, prospect tracker, media kit, outreach drafts, and brand reference.
+Production analytics coverage is unverified: confirm Vercel measures the actual
+GitHub Pages domain before citing audience or campaign results. Private contact
+notes and exports belong in ignored `marketing/private/`, not this public repo.
+No sponsorship or new analytics integration is live as part of this planning work.
+
 ## Setup
 
 Use Python 3.10+ in an isolated environment:
@@ -57,6 +73,7 @@ The site includes a landing page, season dashboard, roster and individual player
 | `analysis/` | Records, offense/defense, players, predictions, Four Factors, clutch, lineups, Spurs metrics |
 | `viz/` | Plotly charts, HTML builders, theme, avatars, share images |
 | `blog/`, `posts/` | Generated analytical essays and editorial source material |
+| `marketing/` | Audience-growth sprint, social calendar, measurement, sponsor prospects and pitch drafts |
 | `assets/` | Fonts and supporting visual assets |
 | `docs/` | Generated static website, images, and JSON |
 | `tests/` | Analysis, navigation, theme, pages, images, and schedule coverage |
@@ -90,6 +107,12 @@ existing `scripts/prep_art.py` handles asset preparation. Preserve player slugs
 when replacing art so existing player-page links keep working.
 
 ## Automation and publishing
+
+The landing page uses the transparent GSG card logo above its title. Default
+social previews use the GSG banner on a dark 1200 × 630 canvas. Published assets,
+typography, and rebuild guidance are in [the brand reference](marketing/brand.md).
+Game-specific previews remain available, but page metadata defaults to the site
+banner. Edit source templates before rebuilding generated output.
 
 A local build updates `docs/`; publishing depends on committing/pushing output and the repository's static-hosting configuration.
 

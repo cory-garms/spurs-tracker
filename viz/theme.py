@@ -86,6 +86,8 @@ ALERT = FIESTA_ORANGE
 # ---------------------------------------------------------------------------
 # Typography
 # ---------------------------------------------------------------------------
+FAVICON_LINK = '<link rel="icon" type="image/png" href="favicon.png?v=gsg1">'
+
 FONTS_LINK = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
@@ -509,6 +511,7 @@ def page_html(
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title} — San Antonio Spurs Analytics</title>
+  {FAVICON_LINK}
   {share}
   {FONTS_LINK}
   <style>
