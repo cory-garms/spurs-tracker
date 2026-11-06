@@ -221,19 +221,6 @@
       "tier": "\ud83d\udd28 Decisive Beatdown"
     },
     {
-      "opponent": "BKN",
-      "name": "Brooklyn Nets",
-      "conf": "East",
-      "proj_spurs": 114.8,
-      "proj_opp": 104.9,
-      "proj_margin": 9.9,
-      "win_prob": 80.6,
-      "double_digit_pct": 51.5,
-      "blowout_pct": 34.6,
-      "h2h_record": "0-0",
-      "tier": "\ud83d\udd28 Decisive Beatdown"
-    },
-    {
       "opponent": "LAC",
       "name": "LA Clippers",
       "conf": "West",
@@ -243,6 +230,19 @@
       "win_prob": 80.5,
       "double_digit_pct": 51.4,
       "blowout_pct": 34.5,
+      "h2h_record": "0-0",
+      "tier": "\ud83d\udd28 Decisive Beatdown"
+    },
+    {
+      "opponent": "BKN",
+      "name": "Brooklyn Nets",
+      "conf": "East",
+      "proj_spurs": 114.8,
+      "proj_opp": 104.9,
+      "proj_margin": 9.9,
+      "win_prob": 80.6,
+      "double_digit_pct": 51.5,
+      "blowout_pct": 34.6,
       "h2h_record": "0-0",
       "tier": "\ud83d\udd28 Decisive Beatdown"
     },
@@ -286,19 +286,6 @@
       "tier": "\ud83d\udd28 Decisive Beatdown"
     },
     {
-      "opponent": "WAS",
-      "name": "Washington Wizards",
-      "conf": "East",
-      "proj_spurs": 113.5,
-      "proj_opp": 106.8,
-      "proj_margin": 6.7,
-      "win_prob": 71.9,
-      "double_digit_pct": 40.3,
-      "blowout_pct": 24.8,
-      "h2h_record": "0-0",
-      "tier": "\ud83d\udd28 Decisive Beatdown"
-    },
-    {
       "opponent": "DEN",
       "name": "Denver Nuggets",
       "conf": "West",
@@ -308,6 +295,19 @@
       "win_prob": 72.0,
       "double_digit_pct": 40.4,
       "blowout_pct": 24.9,
+      "h2h_record": "0-0",
+      "tier": "\ud83d\udd28 Decisive Beatdown"
+    },
+    {
+      "opponent": "WAS",
+      "name": "Washington Wizards",
+      "conf": "East",
+      "proj_spurs": 113.5,
+      "proj_opp": 106.8,
+      "proj_margin": 6.7,
+      "win_prob": 71.9,
+      "double_digit_pct": 40.3,
+      "blowout_pct": 24.8,
       "h2h_record": "0-0",
       "tier": "\ud83d\udd28 Decisive Beatdown"
     },

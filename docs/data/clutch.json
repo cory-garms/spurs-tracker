@@ -65,19 +65,6 @@
       "clutch_ft_pct": 1.0
     },
     {
-      "player_id": 1629640,
-      "player_name": "Keldon Johnson",
-      "clutch_games": 2,
-      "clutch_pts_pg": 6.0,
-      "clutch_reb_pg": 5.5,
-      "clutch_ast_pg": 1.5,
-      "clutch_plus_minus_pg": -9.5,
-      "clutch_ts_pct": 0.456,
-      "clutch_ftm": 2,
-      "clutch_fta": 2,
-      "clutch_ft_pct": 1.0
-    },
-    {
       "player_id": 1630170,
       "player_name": "Devin Vassell",
       "clutch_games": 2,
@@ -88,6 +75,19 @@
       "clutch_ts_pct": 0.338,
       "clutch_ftm": 4,
       "clutch_fta": 4,
+      "clutch_ft_pct": 1.0
+    },
+    {
+      "player_id": 1629640,
+      "player_name": "Keldon Johnson",
+      "clutch_games": 2,
+      "clutch_pts_pg": 6.0,
+      "clutch_reb_pg": 5.5,
+      "clutch_ast_pg": 1.5,
+      "clutch_plus_minus_pg": -9.5,
+      "clutch_ts_pct": 0.456,
+      "clutch_ftm": 2,
+      "clutch_fta": 2,
       "clutch_ft_pct": 1.0
     },
     {

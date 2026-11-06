@@ -111,21 +111,21 @@
     },
     {
       "player_1": "Devin Vassell",
-      "player_2": "Stephon Castle",
-      "pairing": "Vassell + Castle",
-      "games_together": 8,
-      "est_shared_min_pg": 29.3,
-      "net_pm_pg": 7.38,
-      "combined_pts_pg": 25.6
-    },
-    {
-      "player_1": "Devin Vassell",
       "player_2": "Tarris Reed Jr.",
       "pairing": "Vassell + Jr.",
       "games_together": 4,
       "est_shared_min_pg": 5.0,
       "net_pm_pg": 7.38,
       "combined_pts_pg": 13.2
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Stephon Castle",
+      "pairing": "Vassell + Castle",
+      "games_together": 8,
+      "est_shared_min_pg": 29.3,
+      "net_pm_pg": 7.38,
+      "combined_pts_pg": 25.6
     },
     {
       "player_1": "De'Aaron Fox",
@@ -156,21 +156,21 @@
     },
     {
       "player_1": "Dylan Harper",
-      "player_2": "Julian Champagnie",
-      "pairing": "Harper + Champagnie",
-      "games_together": 8,
-      "est_shared_min_pg": 26.7,
-      "net_pm_pg": 6.38,
-      "combined_pts_pg": 28.4
-    },
-    {
-      "player_1": "Dylan Harper",
       "player_2": "Tarris Reed Jr.",
       "pairing": "Harper + Jr.",
       "games_together": 4,
       "est_shared_min_pg": 5.0,
       "net_pm_pg": 6.38,
       "combined_pts_pg": 20.0
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Julian Champagnie",
+      "pairing": "Harper + Champagnie",
+      "games_together": 8,
+      "est_shared_min_pg": 26.7,
+      "net_pm_pg": 6.38,
+      "combined_pts_pg": 28.4
     },
     {
       "player_1": "Stephon Castle",
