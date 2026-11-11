@@ -143,6 +143,18 @@ PLOTLY_CONFIG = {
 }
 
 
+# Each chart is drawn as soon as its own div is parsed, so a chart that opens a
+# two-column grid is sized before its neighbour exists and spills past its card.
+# Responsive mode only reacts to window resizes, so refit every chart once the
+# page has finished loading.
+CHART_RESIZE_SCRIPT = """<script>
+  window.addEventListener("load", function () {
+    if (!window.Plotly) return;
+    document.querySelectorAll(".plotly-graph-div").forEach(function (el) { window.Plotly.Plots.resize(el); });
+  });
+</script>"""
+
+
 def chart_html(fig, div_id: str, include_plotlyjs: bool | str = False) -> str:
     """
     Embed a themed figure in a page. The surrounding section heading names the
@@ -546,6 +558,7 @@ def page_html(
   </main>
   {page_footer()}
   </div>
+  {CHART_RESIZE_SCRIPT}
 </body>
 </html>
 """

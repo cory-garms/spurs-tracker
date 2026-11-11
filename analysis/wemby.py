@@ -229,8 +229,9 @@ def offensive_gravity_summary(wemby_logs: pd.DataFrame) -> dict:
     total_fg3a = int(wemby_logs["fg3a"].sum())
     total_fta = int(wemby_logs["fta"].sum())
 
-    ts = round(float(wemby_logs["ts_pct"].mean()), 3) if "ts_pct" in wemby_logs.columns else 0.0
-    efg = round(float(wemby_logs["efg_pct"].mean()), 3) if "efg_pct" in wemby_logs.columns else 0.0
+    # Shooting percentages pool every shot, so a 25-shot night outweighs a 9-shot one
+    shooting = pooled_shooting(wemby_logs)
+    ts, efg = round(shooting["ts_pct"], 3), round(shooting["efg_pct"], 3)
     usg = round(float(wemby_logs["usg_pct"].mean()), 3) if "usg_pct" in wemby_logs.columns else 0.0
 
     three_point_rate = round(total_fg3a / total_fga, 3) if total_fga > 0 else 0.0
@@ -245,6 +246,173 @@ def offensive_gravity_summary(wemby_logs: pd.DataFrame) -> dict:
         "avg_usage_pct": usg,
         "three_point_attempt_rate": three_point_rate,
         "free_throw_rate": ft_rate,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Heat Check: recent form, the blowout minutes tax, best stretches
+# ---------------------------------------------------------------------------
+
+HEAT_WINDOW = 5          # games in a "stretch"
+CLOSE_GAME_MARGIN = 10   # games decided by this many points or fewer count as competitive
+MIN_CLOSE_GAMES = 3      # competitive games needed before their minutes set the projection
+
+
+def pooled_shooting(logs: pd.DataFrame) -> dict:
+    """True shooting and effective FG% over all shots in `logs`, not an average of per-game rates."""
+    if logs.empty:
+        return {"ts_pct": 0.0, "efg_pct": 0.0}
+    pts, fga, fta = logs["pts"].fillna(0).sum(), logs["fga"].fillna(0).sum(), logs["fta"].fillna(0).sum()
+    fgm, fg3m = logs["fgm"].fillna(0).sum(), logs["fg3m"].fillna(0).sum()
+    ts_denom = 2 * (fga + 0.44 * fta)
+    return {
+        "ts_pct": float(pts / ts_denom) if ts_denom > 0 else 0.0,
+        "efg_pct": float((fgm + 0.5 * fg3m) / fga) if fga > 0 else 0.0,
+    }
+
+
+def _played(logs: pd.DataFrame) -> pd.DataFrame:
+    if logs.empty:
+        return logs
+    return logs[logs["min"].fillna(0) > 0].sort_values("game_date").reset_index(drop=True)
+
+
+def _comparable_game_score(logs: pd.DataFrame) -> pd.Series:
+    """Game Score on total rebounds only, so seasons cached without the OREB/DREB split compare fairly."""
+    from analysis.performers import game_score
+    return game_score(logs.drop(columns=["oreb", "dreb"], errors="ignore"))
+
+
+def stretch_line(logs: pd.DataFrame) -> dict:
+    """Per-game averages, pooled shooting and per-36 scoring for a set of games."""
+    if logs.empty:
+        return {}
+    minutes = float(logs["min"].sum())
+    return {
+        "games": len(logs),
+        "start": pd.Timestamp(logs["game_date"].min()),
+        "end": pd.Timestamp(logs["game_date"].max()),
+        "pts": float(logs["pts"].mean()),
+        "reb": float(logs["reb"].mean()),
+        "blk": float(logs["blk"].mean()),
+        "stl": float(logs["stl"].mean()),
+        "min": float(logs["min"].mean()),
+        "ts_pct": pooled_shooting(logs)["ts_pct"],
+        "pts_per_36": float(logs["pts"].sum() / minutes * 36) if minutes > 0 else 0.0,
+        "game_score": float(_comparable_game_score(logs).mean()),
+    }
+
+
+def heat_check(wemby_logs: pd.DataFrame, games: pd.DataFrame, prev_logs: pd.DataFrame,
+               window: int = HEAT_WINDOW) -> dict:
+    """
+    The last `window` games against the rest of this season and last season,
+    plus what the recent per-minute rates come to at competitive-game minutes.
+
+    Competitive minutes are his average in games decided by CLOSE_GAME_MARGIN
+    or fewer this season; with too few of those, last season's average.
+    """
+    played = _played(wemby_logs)
+    if len(played) < window:
+        return {}
+    margins = games.set_index("game_id")["margin"] if not games.empty else pd.Series(dtype=float)
+    played = played.assign(margin=played["game_id"].map(margins))
+    last, before = played.tail(window), played.iloc[:-window]
+    prev = _played(prev_logs)
+
+    close = played[played["margin"].abs() <= CLOSE_GAME_MARGIN]
+    if len(close) >= MIN_CLOSE_GAMES:
+        target, target_basis = float(close["min"].mean()), f"his average in {len(close)} games decided by {CLOSE_GAME_MARGIN} or fewer"
+    elif not prev.empty:
+        target, target_basis = float(prev["min"].mean()), "his average last season"
+    else:
+        target, target_basis = None, ""
+
+    minutes = float(last["min"].sum())
+    projected = ({stat: float(last[stat].sum() / minutes * target) for stat in ("pts", "reb", "blk")}
+                 if target and minutes > 0 else {})
+    return {
+        "window": window,
+        "last": stretch_line(last),
+        "before": stretch_line(before) if len(before) >= 3 else {},
+        "prev": stretch_line(prev),
+        "prev_season": str(prev["season"].iloc[0]) if not prev.empty and "season" in prev.columns else "",
+        "last_margins": [int(m) for m in last["margin"].dropna()],
+        "target_minutes": target,
+        "target_basis": target_basis,
+        "projected": projected,
+    }
+
+
+def rolling_form(wemby_logs: pd.DataFrame, games: pd.DataFrame, window: int = HEAT_WINDOW,
+                 min_periods: int = 3) -> pd.DataFrame:
+    """Per-game line with pooled rolling TS% and points per 36 over the last `window` games."""
+    played = _played(wemby_logs)
+    if played.empty:
+        return pd.DataFrame()
+    ctx = games.set_index("game_id")[["opponent_abbr", "home_away", "margin"]] if not games.empty else None
+    out = played[["game_id", "game_date", "min", "pts", "reb", "blk", "fga", "fta"]].copy()
+    if ctx is not None:
+        out = out.join(ctx, on="game_id")
+    out["ts_pct"] = out["pts"] / (2 * (out["fga"] + 0.44 * out["fta"])).replace(0, np.nan)
+    roll = out[["pts", "fga", "fta", "min"]].rolling(window, min_periods=min_periods).sum()
+    out["roll_ts_pct"] = roll["pts"] / (2 * (roll["fga"] + 0.44 * roll["fta"])).replace(0, np.nan)
+    out["roll_pts_per_36"] = roll["pts"] / roll["min"].replace(0, np.nan) * 36
+    return out
+
+
+def best_stretches(seasons: dict[str, pd.DataFrame], current_season: str, window: int = HEAT_WINDOW,
+                   top: int = 5) -> dict:
+    """
+    Rank every `window`-game stretch inside each season by average Game Score.
+
+    Returns the current stretch's rank among all stretches, how many stretches
+    outside the current run beat it (overlapping windows from the same hot run
+    don't count), and the best non-overlapping stretches. Rows that overlap the
+    current stretch are flagged as part of the current run; if none made the
+    list, the current stretch is appended so the run always appears.
+    """
+    windows = []
+    for label, logs in seasons.items():
+        played = _played(logs)
+        if len(played) < window:
+            continue
+        gmsc = _comparable_game_score(played)
+        for i in range(len(played) - window + 1):
+            line = stretch_line(played.iloc[i:i + window])
+            line["game_score"] = float(gmsc.iloc[i:i + window].mean())
+            windows.append({**line, "season": label, "first": i, "last_idx": i + window - 1})
+    if not windows:
+        return {}
+    windows.sort(key=lambda w: w["game_score"], reverse=True)
+    for w in windows:   # ties share a rank: 1 + the number of strictly better stretches
+        w["rank"] = 1 + sum(1 for o in windows if o["game_score"] > w["game_score"] + 1e-9)
+
+    current = None
+    if current_season in seasons:
+        n_cur = len(_played(seasons[current_season]))
+        current = next((w for w in windows if w["season"] == current_season and w["last_idx"] == n_cur - 1), None)
+
+    def overlaps(a, b):
+        return a["season"] == b["season"] and a["first"] <= b["last_idx"] and b["first"] <= a["last_idx"]
+
+    chosen: list[dict] = []
+    for w in windows:
+        if len(chosen) >= top:
+            break
+        if not any(overlaps(w, c) for c in chosen):
+            chosen.append(w)
+    for w in chosen:
+        w["current_run"] = current is not None and overlaps(w, current)
+    if current is not None and not any(w["current_run"] for w in chosen):
+        chosen.append({**current, "current_run": True})
+    return {
+        "current_rank": current["rank"] if current else None,
+        "better_outside_run": (sum(1 for w in windows if w["rank"] < current["rank"] and not overlaps(w, current))
+                               if current else None),
+        "total": len(windows),
+        "seasons": sorted({w["season"] for w in windows}),
+        "rows": chosen,
     }
 
 

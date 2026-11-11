@@ -330,5 +330,11 @@
     </footer>
     
   </div>
+  <script>
+  window.addEventListener("load", function () {
+    if (!window.Plotly) return;
+    document.querySelectorAll(".plotly-graph-div").forEach(function (el) { window.Plotly.Plots.resize(el); });
+  });
+</script>
 </body>
 </html>
