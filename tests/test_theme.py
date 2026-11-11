@@ -69,3 +69,11 @@ def test_font_constants_are_safe_inside_style_attributes():
     for name in dir(theme):
         if name.startswith("FONT_") and name != "FONTS_LINK":
             assert '"' not in getattr(theme, name), name
+
+
+def test_early_season_note_retires_when_trend_charts_appear():
+    assert "Early season" in theme.early_season_note(theme.MIN_TREND_GAMES - 1)
+    assert theme.early_season_note(theme.MIN_TREND_GAMES) == ""
+    assert theme.early_season_note(theme.MIN_TREND_GAMES + 1) == ""
+    page = theme.page_html("T", "S", "<p>x</p>", games_played=theme.MIN_TREND_GAMES)
+    assert 'class="early-season"' not in page

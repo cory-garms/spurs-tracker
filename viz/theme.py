@@ -194,8 +194,12 @@ def small_sample_badge(text: str) -> str:
 
 
 def early_season_note(games_played: int) -> str:
-    """Page-level notice shown until the sample is large enough to trust rates and trends."""
-    if games_played >= SMALL_SAMPLE_GAMES:
+    """Page-level notice shown until trend charts appear.
+
+    Individual rates keep their own small-sample badges up to SMALL_SAMPLE_GAMES;
+    the page-wide banner retires once there are enough games to chart a trend.
+    """
+    if games_played >= MIN_TREND_GAMES:
         return ""
     return (
         f'<div class="early-season" role="note"><strong>Early season:</strong> {games_played} '
