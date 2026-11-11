@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Player Props — San Antonio Spurs Analytics</title>
   <link rel="icon" type="image/png" href="favicon.png?v=gsg2">
-  <meta name="description" content="How often players have cleared common prop lines this season. For fun and analysis, not betting advice.">
+  <meta name="description" content="Tonight&#x27;s lines in context, and who is beating last season. For fun and analysis, not betting advice.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="La Tabla Spurs">
   <meta property="og:title" content="Player Props · La Tabla Spurs">
-  <meta property="og:description" content="How often players have cleared common prop lines this season. For fun and analysis, not betting advice.">
+  <meta property="og:description" content="Tonight&#x27;s lines in context, and who is beating last season. For fun and analysis, not betting advice.">
   <meta name="twitter:title" content="Player Props · La Tabla Spurs">
-  <meta name="twitter:description" content="How often players have cleared common prop lines this season. For fun and analysis, not betting advice.">
+  <meta name="twitter:description" content="Tonight&#x27;s lines in context, and who is beating last season. For fun and analysis, not betting advice.">
   <meta property="og:image" content="https://porvida.corygarms.com/img/la_tabla_gsg_logo_with_banner.png?v=c6112c38">
   <meta property="og:image:width" content="669">
   <meta property="og:image:height" content="373">
@@ -247,174 +247,318 @@
         <span>The Alamo City &bull; Mission San Antonio</span>
       </div>
       <h1><span class="title-text">Player Props</span> <span class="badge">2026-27 Props</span></h1>
-      <p>How often players have cleared common prop lines this season. For fun and analysis, not betting advice.</p>
+      <p>Tonight's lines in context, and who is beating last season. For fun and analysis, not betting advice.</p>
     </header>
   </div>
   <main>
     
     
+    <style>
+      .pb-when { color: #C4CED4; margin: -4px 0 16px; font-size: 0.95rem; }
+      .pb-chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+      .pb-chip { background: #1D232A; border: 1px solid #28313A; padding: 12px 14px; }
+      .pb-chip .lbl { font-family: 'Teko', sans-serif; font-size: 1.05rem; letter-spacing: 0.08em; text-transform: uppercase;
+                       color: #C4CED4; }
+      .pb-chip .val { font-family: 'VT323', monospace; font-size: 2rem; color: #F6F8FA; line-height: 1.1; }
+      .pb-chip .val .chg { font-size: 1.3rem; color: #FF8200; margin-left: 6px; }
+      .pb-chip .sub { color: #9DA7B0; font-size: 0.8rem; line-height: 1.4; }
+      .pb-how { color: #9DA7B0; font-size: 0.85rem; line-height: 1.5; margin-top: 12px; }
+      .pb-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+      .pb-table th, .pb-table td { padding: 9px 10px; border-bottom: 1px solid #28313A; }
+      .pb-table th { font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; color: #C4CED4;
+                      border-bottom-width: 2px; white-space: nowrap; }
+      .pb-table td.num { font-family: 'Share Tech Mono', monospace; white-space: nowrap; }
+      .pb-table td.line { font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200; white-space: nowrap; }
+      .pb-table .sub { display: block; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 400; font-size: 0.72rem; color: #9DA7B0; }
+      .pb-table td.stat { color: #C4CED4; }
+      .pb-table td.who { font-weight: 700; color: #F6F8FA; }
+      .pb-over { color: #00B2A9; font-weight: 700; }
+      .pb-under { color: #EF426F; font-weight: 700; }
+      .pb-close { color: #9DA7B0; }
+      .pb-rng { position: relative; display: inline-block; width: 110px; height: 10px; vertical-align: middle;
+                 background: #1D232A; border: 1px solid #28313A; margin-right: 8px; }
+      .pb-rng .band { position: absolute; top: 1px; bottom: 1px; opacity: 0.55; }
+      .pb-rng .mid { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: #C4CED4; }
+      .pb-rng .dot { position: absolute; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; }
+      .pb-note { color: #9DA7B0; font-size: 0.85rem; margin-top: 10px; }
+      .pb-short { display: none; }
+      .pb-nocase { text-transform: none; }
+      @media (max-width: 640px) {
+        .pb-table { font-size: 0.82rem; }
+        .pb-table th, .pb-table td { padding: 7px 5px; }
+        .pb-table .avatar, .pb-wide, .pb-long { display: none; }
+        .pb-short { display: inline; }
+        .pb-rng { width: 56px; margin-right: 4px; }
+      }
+    </style>
     <div class="card" style="border-top: 3px solid #FF8200; margin-bottom: 24px;">
       <h2 style="border-bottom: none; margin-bottom: 8px;">🎲 How to read this</h2>
       <p style="color: #C4CED4; font-size: 0.95rem; line-height: 1.6;">
-        The eight players getting the most minutes, each with points and their signature stat. Each reference line is
-        the player's <em>last-season</em> average rounded to the half point, so the hit rate shows who is playing above
-        last year's level (new players use this season's average). These are not sportsbook odds, and hit rates are
-        colored as a lean only after 15 games. For fun and analysis, not betting advice.
+        The eight players getting the most minutes, each with points and their most notable other stat. Every market
+        has two lines, both at the half point so there are no pushes. <strong>Tonight's Board</strong> sets its line
+        at the player's typical night this season and adjusts for the next opponent.
+        <strong>Ahead of Last Year?</strong> uses last season's average and shows how sure we can be about each hit
+        rate. These are not sportsbook odds. For fun and analysis, not betting advice.
       </p>
     </div>
-
+    
+    <section class="card" style="border-top: 3px solid #00B2A9;">
+      <h2>🎯 Tonight's Board &middot; @ CHI</h2>
+      <p class="pb-when">Wednesday, Nov 11 · 7:00 PM CT &middot; United Center, Chicago</p>
+      <div class="pb-chips">
+        <div class="pb-chip"><div class="lbl">Expected pace</div>
+          <div class="val">102.1<span class="chg">+2.7%</span></div>
+          <div class="sub">Spurs 99.4 &middot; Bulls 104.8 possessions per 48.
+            Scales every stat.</div></div>
+        <div class="pb-chip"><div class="lbl">Bulls defense</div>
+          <div class="val">117.8<span class="chg">+4.6%</span></div>
+          <div class="sub">123.6 allowed per 100 (30 of 30),
+            weighted toward league 112.6 over 9 games. Scales points.</div></div>
+        <div class="pb-chip"><div class="lbl">Rest</div>
+          <div class="val">1 day</div>
+          <div class="sub">Days off for the Spurs before tip. Bulls: 2 days.</div></div>
+        <div class="pb-chip"><div class="lbl">Venue</div>
+          <div class="val">Road</div>
+          <div class="sub">Spurs are 5-0 in road games. The Road column counts only those.</div></div></div>
+      <p class="pb-how">The line is the half point beside his season median that splits his games closest to 50/50. Tonight est. is that median scaled by the pace change and, for points, by the opponent's defense. Defense is pulled toward league average until about 10 games are in, as in the Next Game projection. Last 5 and Road count games over the line.</p>
+      <div style="overflow-x: auto; margin-top: 16px;">
+        <table class="pb-table">
+          <thead><tr><th>Player</th><th>Stat</th><th>Line</th><th><span class="pb-long">Tonight est.</span><span class="pb-short">Tonight</span></th>
+            <th>Last 5</th><th>Road</th></tr></thead>
+          <tbody>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><span><a class="player-link" href="player_harper.html">Dylan Harper</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">18.5<span class="sub">median 18</span></td>
+            <td class="num">19.3<span class="sub">+1.3<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">2/5</td>
+            <td class="num">2/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><span><a class="player-link" href="player_harper.html">Dylan Harper</a></span></span></td>
+            <td class="stat"><span class="pb-long">Assists</span><span class="pb-short">AST</span></td>
+            <td class="line">4.5<span class="sub">median 4</span></td>
+            <td class="num">4.1<span class="sub">+0.1<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">1/5</td>
+            <td class="num">1/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">11.5<span class="sub">median 11</span></td>
+            <td class="num">11.8<span class="sub">+0.8<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">2/5</td>
+            <td class="num">3/4</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a></span></span></td>
+            <td class="stat"><span class="pb-long">3-Pointers Made</span><span class="pb-short">3PM</span></td>
+            <td class="line">1.5<span class="sub">median 1</span></td>
+            <td class="num">1.0<span class="sub">+0.0<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">2/5</td>
+            <td class="num">2/4</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><span><a class="player-link" href="player_wembanyama.html">Victor Wembanyama</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">29.5<span class="sub">median 29</span></td>
+            <td class="num">31.2<span class="sub">+2.2<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">3/5</td>
+            <td class="num">3/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><span><a class="player-link" href="player_wembanyama.html">Victor Wembanyama</a></span></span></td>
+            <td class="stat"><span class="pb-long">Blocks</span><span class="pb-short">BLK</span></td>
+            <td class="line">4.5<span class="sub">median 4</span></td>
+            <td class="num">4.1<span class="sub">+0.1<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">2/5</td>
+            <td class="num">1/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">13.5<span class="sub">median 14</span></td>
+            <td class="num">15.0<span class="sub">+1.0<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">1/5</td>
+            <td class="num">3/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a></span></span></td>
+            <td class="stat"><span class="pb-long">Assists</span><span class="pb-short">AST</span></td>
+            <td class="line">6.5<span class="sub">median 6</span></td>
+            <td class="num">6.2<span class="sub">+0.2<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">0/5</td>
+            <td class="num">1/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/castle.webp" alt="El Castillo emblem for Stephon Castle" title="El Castillo" loading="lazy" decoding="async"><span><a class="player-link" href="player_castle.html">Stephon Castle</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">15.5<span class="sub">median 15</span></td>
+            <td class="num">16.1<span class="sub">+1.1<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">3/5</td>
+            <td class="num">2/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/castle.webp" alt="El Castillo emblem for Stephon Castle" title="El Castillo" loading="lazy" decoding="async"><span><a class="player-link" href="player_castle.html">Stephon Castle</a></span></span></td>
+            <td class="stat"><span class="pb-long">3-Pointers Made</span><span class="pb-short">3PM</span></td>
+            <td class="line">2.5<span class="sub">median 2</span></td>
+            <td class="num">2.1<span class="sub">+0.1<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">0/5</td>
+            <td class="num">1/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/champagnie.webp" alt="La Botella emblem for Julian Champagnie" title="La Botella" loading="lazy" decoding="async"><span><a class="player-link" href="player_champagnie.html">Julian Champagnie</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">8.5<span class="sub">median 8</span></td>
+            <td class="num">8.6<span class="sub">+0.6<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">2/5</td>
+            <td class="num">3/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/champagnie.webp" alt="La Botella emblem for Julian Champagnie" title="La Botella" loading="lazy" decoding="async"><span><a class="player-link" href="player_champagnie.html">Julian Champagnie</a></span></span></td>
+            <td class="stat"><span class="pb-long">3-Pointers Made</span><span class="pb-short">3PM</span></td>
+            <td class="line">2.5<span class="sub">median 2</span></td>
+            <td class="num">2.1<span class="sub">+0.1<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">2/5</td>
+            <td class="num">3/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/johnson.webp" alt="El Mesteño emblem for Keldon Johnson" title="El Mesteño" loading="lazy" decoding="async"><span><a class="player-link" href="player_johnson.html">Keldon Johnson</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">8.5<span class="sub">median 8</span></td>
+            <td class="num">8.6<span class="sub">+0.6<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">2/5</td>
+            <td class="num">2/5</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/kornet.webp" alt="El Elotote emblem for Luke Kornet" title="El Elotote" loading="lazy" decoding="async"><span><a class="player-link" href="player_kornet.html">Luke Kornet</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">2.5<span class="sub">median 2</span></td>
+            <td class="num">2.1<span class="sub">+0.1<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">2/5</td>
+            <td class="num">1/5</td>
+          </tr></tbody>
+        </table>
+      </div>
+    </section>
+    
+    <section class="card">
+      <h2>📈 Ahead of Last Year?</h2>
+      <p class="pb-how" style="margin: -4px 0 14px;">How often each player has cleared last season's average this season.
+        The bar shows where his true hit rate plausibly sits given the games so far; the line through it is 50%.
+        A read of Over or Under needs the whole range on one side of 50%.</p>
+      
+      <div style="overflow-x: auto;">
+        <table class="pb-table">
+          <thead><tr><th>Player</th><th>Stat</th><th><span class="pb-long">Last-season line</span><span class="pb-short">Line</span></th><th class="pb-wide">This season &plusmn; 1<span class="pb-nocase">&sigma;</span></th>
+            <th>Over</th><th><span class="pb-long">95% range</span><span class="pb-short">Range</span></th><th>Read</th></tr></thead>
+          <tbody>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><span><a class="player-link" href="player_harper.html">Dylan Harper</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">11.5</td>
+            <td class="num pb-wide">18.0 &plusmn; 3.9</td>
+            <td class="num pb-over">11/11<span class="pb-long"> (100%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 74% to 100%"><span class="band" style="left:74.1%; width:25.9%; background:#00B2A9;"></span><span class="mid"></span><span class="dot" style="left:100.0%; background:#00B2A9;"></span></span><span class="pb-long">74%&ndash;100%</span></td>
+            <td class="pb-over">Over</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><span><a class="player-link" href="player_harper.html">Dylan Harper</a></span></span></td>
+            <td class="stat"><span class="pb-long">Assists</span><span class="pb-short">AST</span></td>
+            <td class="line">3.5</td>
+            <td class="num pb-wide">4.4 &plusmn; 2.5</td>
+            <td class="num pb-close">7/11<span class="pb-long"> (64%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 35% to 85%"><span class="band" style="left:35.4%; width:49.5%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:63.6%; background:#8A9399;"></span></span><span class="pb-long">35%&ndash;85%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">14.5</td>
+            <td class="num pb-wide">11.9 &plusmn; 5.6</td>
+            <td class="num pb-close">3/10<span class="pb-long"> (30%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 11% to 60%"><span class="band" style="left:10.8%; width:49.5%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:30.0%; background:#8A9399;"></span></span><span class="pb-long">11%&ndash;60%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a></span></span></td>
+            <td class="stat"><span class="pb-long">3-Pointers Made</span><span class="pb-short">3PM</span></td>
+            <td class="line">2.5</td>
+            <td class="num pb-wide">1.6 &plusmn; 1.7</td>
+            <td class="num pb-close">2/10<span class="pb-long"> (20%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 6% to 51%"><span class="band" style="left:5.7%; width:45.3%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:20.0%; background:#8A9399;"></span></span><span class="pb-long">6%&ndash;51%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><span><a class="player-link" href="player_wembanyama.html">Victor Wembanyama</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">24.5</td>
+            <td class="num pb-wide">30.1 &plusmn; 12.3</td>
+            <td class="num pb-close">8/11<span class="pb-long"> (73%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 43% to 90%"><span class="band" style="left:43.4%; width:46.8%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:72.7%; background:#8A9399;"></span></span><span class="pb-long">43%&ndash;90%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><span><a class="player-link" href="player_wembanyama.html">Victor Wembanyama</a></span></span></td>
+            <td class="stat"><span class="pb-long">Blocks</span><span class="pb-short">BLK</span></td>
+            <td class="line">3.5</td>
+            <td class="num pb-wide">4.4 &plusmn; 2.4</td>
+            <td class="num pb-close">6/11<span class="pb-long"> (55%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 28% to 79%"><span class="band" style="left:28.0%; width:50.7%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:54.5%; background:#8A9399;"></span></span><span class="pb-long">28%&ndash;79%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">18.5</td>
+            <td class="num pb-wide">13.9 &plusmn; 4.5</td>
+            <td class="num pb-close">3/11<span class="pb-long"> (27%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 10% to 57%"><span class="band" style="left:9.7%; width:46.8%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:27.3%; background:#8A9399;"></span></span><span class="pb-long">10%&ndash;57%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a></span></span></td>
+            <td class="stat"><span class="pb-long">Assists</span><span class="pb-short">AST</span></td>
+            <td class="line">6.5</td>
+            <td class="num pb-wide">5.9 &plusmn; 2.0</td>
+            <td class="num pb-close">4/11<span class="pb-long"> (36%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 15% to 65%"><span class="band" style="left:15.2%; width:49.5%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:36.4%; background:#8A9399;"></span></span><span class="pb-long">15%&ndash;65%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/castle.webp" alt="El Castillo emblem for Stephon Castle" title="El Castillo" loading="lazy" decoding="async"><span><a class="player-link" href="player_castle.html">Stephon Castle</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">16.5</td>
+            <td class="num pb-wide">14.3 &plusmn; 6.8</td>
+            <td class="num pb-close">4/11<span class="pb-long"> (36%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 15% to 65%"><span class="band" style="left:15.2%; width:49.5%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:36.4%; background:#8A9399;"></span></span><span class="pb-long">15%&ndash;65%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/castle.webp" alt="El Castillo emblem for Stephon Castle" title="El Castillo" loading="lazy" decoding="async"><span><a class="player-link" href="player_castle.html">Stephon Castle</a></span></span></td>
+            <td class="stat"><span class="pb-long">3-Pointers Made</span><span class="pb-short">3PM</span></td>
+            <td class="line">1.5</td>
+            <td class="num pb-wide">2.0 &plusmn; 1.5</td>
+            <td class="num pb-close">7/11<span class="pb-long"> (64%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 35% to 85%"><span class="band" style="left:35.4%; width:49.5%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:63.6%; background:#8A9399;"></span></span><span class="pb-long">35%&ndash;85%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/champagnie.webp" alt="La Botella emblem for Julian Champagnie" title="La Botella" loading="lazy" decoding="async"><span><a class="player-link" href="player_champagnie.html">Julian Champagnie</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">11.5</td>
+            <td class="num pb-wide">10.1 &plusmn; 6.5</td>
+            <td class="num pb-close">4/11<span class="pb-long"> (36%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 15% to 65%"><span class="band" style="left:15.2%; width:49.5%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:36.4%; background:#8A9399;"></span></span><span class="pb-long">15%&ndash;65%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/champagnie.webp" alt="La Botella emblem for Julian Champagnie" title="La Botella" loading="lazy" decoding="async"><span><a class="player-link" href="player_champagnie.html">Julian Champagnie</a></span></span></td>
+            <td class="stat"><span class="pb-long">3-Pointers Made</span><span class="pb-short">3PM</span></td>
+            <td class="line">2.5</td>
+            <td class="num pb-wide">2.8 &plusmn; 2.0</td>
+            <td class="num pb-close">5/11<span class="pb-long"> (45%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 21% to 72%"><span class="band" style="left:21.3%; width:50.7%; background:#8A9399;"></span><span class="mid"></span><span class="dot" style="left:45.5%; background:#8A9399;"></span></span><span class="pb-long">21%&ndash;72%</span></td>
+            <td class="pb-close">Too close</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/johnson.webp" alt="El Mesteño emblem for Keldon Johnson" title="El Mesteño" loading="lazy" decoding="async"><span><a class="player-link" href="player_johnson.html">Keldon Johnson</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">12.5</td>
+            <td class="num pb-wide">7.8 &plusmn; 4.3</td>
+            <td class="num pb-under">2/11<span class="pb-long"> (18%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 5% to 48%"><span class="band" style="left:5.1%; width:42.6%; background:#EF426F;"></span><span class="mid"></span><span class="dot" style="left:18.2%; background:#EF426F;"></span></span><span class="pb-long">5%&ndash;48%</span></td>
+            <td class="pb-under">Under</td>
+          </tr>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/kornet.webp" alt="El Elotote emblem for Luke Kornet" title="El Elotote" loading="lazy" decoding="async"><span><a class="player-link" href="player_kornet.html">Luke Kornet</a></span></span></td>
+            <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
+            <td class="line">6.5</td>
+            <td class="num pb-wide">3.1 &plusmn; 2.8</td>
+            <td class="num pb-under">2/11<span class="pb-long"> (18%)</span></td>
+            <td class="num"><span class="pb-rng" role="img" aria-label="95% range 5% to 48%"><span class="band" style="left:5.1%; width:42.6%; background:#EF426F;"></span><span class="mid"></span><span class="dot" style="left:18.2%; background:#EF426F;"></span></span><span class="pb-long">5%&ndash;48%</span></td>
+            <td class="pb-under">Under</td>
+          </tr></tbody>
+        </table>
+      </div>
+    </section>
     <section class="chart-section">
       <h2 class="chart-title">👽 Wemby Blocks per Game</h2>
       <div style="height:400px; width:100%;">                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="props_blocks_dist" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("props_blocks_dist")) {                    Plotly.newPlot(                        "props_blocks_dist",                        [{"hovertemplate":"%{x} blocks: %{y} game(s)\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00B2A9"},"text":["","","4 games","1 game","1 game","1 game","2 games","","2 games"],"textposition":"outside","x":[0,1,2,3,4,5,6,7,8],"y":{"dtype":"i1","bdata":"AAAEAQEBAgAC"},"type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05}}},"shapes":[{"line":{"color":"#FF8200","dash":"dot"},"type":"line","x0":3.5,"x1":3.5,"xref":"x","y0":0,"y1":1,"yref":"y domain"}],"annotations":[{"showarrow":false,"text":"Reference line: 3.5","x":3.5,"xanchor":"left","xref":"x","y":1,"yanchor":"top","yref":"y domain"}],"font":{"color":"#F6F8FA","family":"Share Tech Mono, monospace","size":12},"title":{},"xaxis":{"gridcolor":"#28313A","zerolinecolor":"#28313A","title":{"text":"Blocks in a game"},"dtick":1,"automargin":true},"yaxis":{"gridcolor":"#28313A","zerolinecolor":"#28313A","title":{"text":"Games"},"dtick":1,"range":[0,6.0],"automargin":true},"margin":{"l":60,"r":30,"t":24,"b":50},"legend":{"font":{"family":"Teko, sans-serif","size":16},"bgcolor":"rgba(0,0,0,0)","bordercolor":"#28313A"},"paper_bgcolor":"#161A1F","plot_bgcolor":"#0B0E11","autosize":true,"height":400},                        {"responsive": true, "displaylogo": false, "displayModeBar": false, "scrollZoom": false}                    )                };            </script>        </div>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="props_blocks_dist" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("props_blocks_dist")) {                    Plotly.newPlot(                        "props_blocks_dist",                        [{"hovertemplate":"%{x} blocks: %{y} game(s)\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00B2A9"},"text":["","","4 games","1 game","1 game","1 game","2 games","","2 games"],"textposition":"outside","x":[0,1,2,3,4,5,6,7,8],"y":{"dtype":"i1","bdata":"AAAEAQEBAgAC"},"type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05}}},"shapes":[{"line":{"color":"#FF8200","dash":"dot"},"type":"line","x0":4.5,"x1":4.5,"xref":"x","y0":0,"y1":1,"yref":"y domain"},{"line":{"color":"#C4CED4","dash":"dash"},"type":"line","x0":3.5,"x1":3.5,"xref":"x","y0":0,"y1":1,"yref":"y domain"}],"annotations":[{"showarrow":false,"text":"This season 4.5","x":4.5,"xanchor":"left","xref":"x","y":1,"yanchor":"top","yref":"y domain"},{"showarrow":false,"text":"Last season 3.5","x":3.5,"xanchor":"right","xref":"x","y":1,"yanchor":"top","yref":"y domain"}],"font":{"color":"#F6F8FA","family":"Share Tech Mono, monospace","size":12},"title":{},"xaxis":{"gridcolor":"#28313A","zerolinecolor":"#28313A","title":{"text":"Blocks in a game"},"dtick":1,"automargin":true},"yaxis":{"gridcolor":"#28313A","zerolinecolor":"#28313A","title":{"text":"Games"},"dtick":1,"range":[0,6.0],"automargin":true},"margin":{"l":60,"r":30,"t":24,"b":50},"legend":{"font":{"family":"Teko, sans-serif","size":16},"bgcolor":"rgba(0,0,0,0)","bordercolor":"#28313A"},"paper_bgcolor":"#161A1F","plot_bgcolor":"#0B0E11","autosize":true,"height":400},                        {"responsive": true, "displaylogo": false, "displayModeBar": false, "scrollZoom": false}                    )                };            </script>        </div>
     </section>
-
-    <div class="card">
-      <h2>📊 Prop Hit Rates</h2>
-      <div style="overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
-          <thead>
-            <tr style="border-bottom: 2px solid #28313A; color: #C4CED4; font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase;">
-              <th style="padding: 10px 12px;">Player</th>
-              <th style="padding: 10px 12px;">Stat</th>
-              <th style="padding: 10px 12px;">Reference Line</th>
-              <th style="padding: 10px 12px;">Season Mean &plusmn; 1&sigma;</th>
-              <th style="padding: 10px 12px;">L5 Games</th>
-              <th style="padding: 10px 12px;">Season Hit Rate (Over)</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><span><a class="player-link" href="player_harper.html">Dylan Harper</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">11.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">18.0 &plusmn; 3.9</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">5/5 (100%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">11/11 (100.0%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><span><a class="player-link" href="player_harper.html">Dylan Harper</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Assists</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">3.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">4.4 &plusmn; 2.5</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">3/5 (60%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">7/11 (63.6%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">14.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">11.9 &plusmn; 5.6</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">2/5 (40%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">3/10 (30.0%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">3-Pointers Made</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">2.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">1.6 &plusmn; 1.7</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">1/5 (20%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">2/10 (20.0%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><span><a class="player-link" href="player_wembanyama.html">Victor Wembanyama</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">24.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">30.1 &plusmn; 12.3</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">4/5 (80%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">8/11 (72.7%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><span><a class="player-link" href="player_wembanyama.html">Victor Wembanyama</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Blocks</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">3.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">4.4 &plusmn; 2.4</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">2/5 (40%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">6/11 (54.5%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">18.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">13.9 &plusmn; 4.5</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">0/5 (0%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">3/11 (27.3%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Assists</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">6.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">5.9 &plusmn; 2.0</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">0/5 (0%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">4/11 (36.4%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/castle.webp" alt="El Castillo emblem for Stephon Castle" title="El Castillo" loading="lazy" decoding="async"><span><a class="player-link" href="player_castle.html">Stephon Castle</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">16.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">14.3 &plusmn; 6.8</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">2/5 (40%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">4/11 (36.4%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/castle.webp" alt="El Castillo emblem for Stephon Castle" title="El Castillo" loading="lazy" decoding="async"><span><a class="player-link" href="player_castle.html">Stephon Castle</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">3-Pointers Made</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">1.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">2.0 &plusmn; 1.5</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">3/5 (60%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">7/11 (63.6%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/champagnie.webp" alt="La Botella emblem for Julian Champagnie" title="La Botella" loading="lazy" decoding="async"><span><a class="player-link" href="player_champagnie.html">Julian Champagnie</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">11.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">10.1 &plusmn; 6.5</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">1/5 (20%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">4/11 (36.4%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/champagnie.webp" alt="La Botella emblem for Julian Champagnie" title="La Botella" loading="lazy" decoding="async"><span><a class="player-link" href="player_champagnie.html">Julian Champagnie</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">3-Pointers Made</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">2.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">2.8 &plusmn; 2.0</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">2/5 (40%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">5/11 (45.5%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/johnson.webp" alt="El Mesteño emblem for Keldon Johnson" title="El Mesteño" loading="lazy" decoding="async"><span><a class="player-link" href="player_johnson.html">Keldon Johnson</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">12.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">7.8 &plusmn; 4.3</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">1/5 (20%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">2/11 (18.2%)</td>
-        </tr>
-        
-        <tr style="border-bottom: 1px solid #28313A;">
-          <td style="padding: 8px 12px; font-weight: 700; color: #F6F8FA;"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/kornet.webp" alt="El Elotote emblem for Luke Kornet" title="El Elotote" loading="lazy" decoding="async"><span><a class="player-link" href="player_kornet.html">Luke Kornet</a></span></span></td>
-          <td style="padding: 10px 12px; color: #C4CED4;">Points</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #FF8200;">6.5 <span style="font-weight: 400; font-size: 0.75rem; color: #9DA7B0;">last season</span></td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">3.1 &plusmn; 2.8</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace;">1/5 (20%)</td>
-          <td style="padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-weight: 700; color: #F6F8FA;">2/11 (18.2%)</td>
-        </tr>
-        
-          </tbody>
-        </table>
-      </div>
-    </div>
     
   </main>
   
