@@ -182,6 +182,13 @@
     .early-season strong { color: #F2C14E; font-family: 'Teko', sans-serif; font-size: 1.15rem;
       font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 4px; }
     .badge.orange { background: rgba(255, 130, 0, 0.15); border-color: #FF8200; color: #FF8200; }
+    .availability-teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; }
+    .availability-teams h3 { font-family: 'Teko', sans-serif; color: #C4CED4; font-size: 1.3rem; margin: 14px 0 8px; }
+    .availability-teams ul { list-style: none; padding: 0; }
+    .availability-teams li { padding: 10px 0; border-bottom: 1px solid #28313A; }
+    .availability-teams small { display: block; color: #9DA7B0; margin-top: 4px; }
+    .availability-source { color: #9DA7B0; font-size: 0.85rem; margin-top: 12px; line-height: 1.5; }
+    .availability-source a { color: #F2C14E; text-underline-offset: 3px; }
 
     /* ---- Footer ---- */
     footer {
@@ -301,26 +308,33 @@
         rate. These are not sportsbook odds. For fun and analysis, not betting advice.
       </p>
     </div>
+    <section class="card game-availability" aria-label="Player availability">
+      <h2>Availability</h2>
+      <p class="availability-source">NBA injury report as of <time datetime="2026-11-13T17:45:00-05:00">Nov 13, 2026 · 4:45 PM CT</time>.
+        <a href="https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-13_05_45PM.pdf" target="_blank" rel="noopener">Official report</a></p>
+      <div class="availability-teams"><div><h3>Golden State Warriors</h3><ul><li><strong>Charles Bassey</strong> <span class="badge orange">Probable</span><small>Left toe soreness</small></li><li><strong>Jimmy Butler III</strong> <span class="badge fuschia">Out</span><small>Right ACL repair / surgery</small></li><li><strong>Stephen Curry</strong> <span class="badge fuschia">Out</span><small>Right oblique tear</small></li><li><strong>Moses Moody</strong> <span class="badge fuschia">Out</span><small>Left patellar tendon repair / surgery</small></li><li><strong>Kristaps Porzingis</strong> <span class="badge fuschia">Out</span><small>Not with team</small></li><li><strong>Brandon Williams</strong> <span class="badge fuschia">Out</span><small>Left hamstring strain</small></li></ul></div><div><h3>San Antonio Spurs</h3><ul><li><strong>De&#x27;Aaron Fox</strong> <span class="badge orange">Questionable</span><small>Left hip soreness</small></li><li><strong>Tobias Harris</strong> <span class="badge fuschia">Out</span><small>Left calf strain</small></li><li><strong>Jayden Quaintance</strong> <span class="badge fuschia">Out</span><small>Right knee surgery</small></li><li><strong>Devin Vassell</strong> <span class="badge orange">Questionable</span><small>Left adductor tightness</small></li></ul></div></div>
+      <p class="availability-source">Report snapshot; statuses may change before tipoff.</p>
+    </section>
     
     <section class="card" style="border-top: 3px solid #00B2A9;">
       <h2>🎯 Tonight's Board &middot; vs. GSW</h2>
       <p class="pb-when">Friday, Nov 13 · 8:30 PM CT &middot; Frost Bank Center, San Antonio</p>
       <div class="pb-chips">
         <div class="pb-chip"><div class="lbl">Expected pace</div>
-          <div class="val">99.5<span class="chg">+0.5%</span></div>
-          <div class="sub">Spurs 99.0 &middot; Warriors 100.0 possessions per 48.
+          <div class="val">99.4<span class="chg">+0.4%</span></div>
+          <div class="sub">Spurs 99.0 &middot; Warriors 99.8 possessions per 48.
             Scales every stat.</div></div>
         <div class="pb-chip"><div class="lbl">Warriors defense</div>
-          <div class="val">111.4<span class="chg">-1.1%</span></div>
-          <div class="sub">110.3 allowed per 100 (11 of 30),
-            weighted toward league 112.7 over 11 games. Scales points.</div></div>
+          <div class="val">111.8<span class="chg">-1.0%</span></div>
+          <div class="sub">110.9 allowed per 100 (10 of 30),
+            weighted toward league 113.0 over 12 games. Scales points.</div></div>
         <div class="pb-chip"><div class="lbl">Rest</div>
           <div class="val">1 day</div>
-          <div class="sub">Days off for the Spurs before tip. Warriors: 3 days.</div></div>
+          <div class="sub">Days off for the Spurs before tip. Warriors: 1 day.</div></div>
         <div class="pb-chip"><div class="lbl">Venue</div>
           <div class="val">Home</div>
           <div class="sub">Spurs are 4-2 in home games. The Home column counts only those.</div></div></div>
-      <p class="pb-how">The line is the half point beside his season median that splits his games closest to 50/50. Tonight est. is that median scaled by the pace change and, for points, by the opponent's defense. Defense is pulled toward league average until about 10 games are in, as in the Next Game projection. Last 5 and Home count games over the line.</p>
+      <p class="pb-how">The line is the half point beside his season median that splits his games closest to 50/50. Tonight est. is that median scaled by the pace change and, for points, by the opponent's defense. Defense is pulled toward league average until about 10 games are in, as in the Next Game projection. Last 5 and Home count games over the line. Estimates assume the player plays and do not adjust for injuries or lineup changes.</p>
       <div style="overflow-x: auto; margin-top: 16px;">
         <table class="pb-table">
           <thead><tr><th>Player</th><th>Stat</th><th>Line</th><th><span class="pb-long">Tonight est.</span><span class="pb-short">Tonight</span></th>
@@ -354,28 +368,28 @@
             <td class="num">3/5</td>
             <td class="num">4/6</td>
           </tr>
-          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a></span></span></td>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a> <span class="badge orange">Questionable</span></span></span></td>
             <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
             <td class="line">11.5<span class="sub">median 11</span></td>
             <td class="num">10.9<span class="sub">-0.1<span class="pb-long"> from matchup</span></span></td>
             <td class="num">2/5</td>
             <td class="num">1/6</td>
           </tr>
-          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a></span></span></td>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/vassell.webp" alt="El Hechicero emblem for Devin Vassell" title="El Hechicero" loading="lazy" decoding="async"><span><a class="player-link" href="player_vassell.html">Devin Vassell</a> <span class="badge orange">Questionable</span></span></span></td>
             <td class="stat"><span class="pb-long">3-Pointers Made</span><span class="pb-short">3PM</span></td>
             <td class="line">1.5<span class="sub">median 1</span></td>
             <td class="num">1.0<span class="sub">+0.0<span class="pb-long"> from matchup</span></span></td>
             <td class="num">2/5</td>
             <td class="num">2/6</td>
           </tr>
-          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a></span></span></td>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a> <span class="badge orange">Questionable</span></span></span></td>
             <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
             <td class="line">14.5<span class="sub">median 14</span></td>
             <td class="num">13.9<span class="sub">-0.1<span class="pb-long"> from matchup</span></span></td>
             <td class="num">2/5</td>
             <td class="num">2/6</td>
           </tr>
-          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a></span></span></td>
+          <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><span><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a> <span class="badge orange">Questionable</span></span></span></td>
             <td class="stat"><span class="pb-long">Assists</span><span class="pb-short">AST</span></td>
             <td class="line">6.5<span class="sub">median 6</span></td>
             <td class="num">6.0<span class="sub">+0.0<span class="pb-long"> from matchup</span></span></td>
@@ -413,7 +427,7 @@
           <tr><td class="who"><span class="with-avatar"><img class="avatar avatar-sm" src="img/players/johnson.webp" alt="El Mesteño emblem for Keldon Johnson" title="El Mesteño" loading="lazy" decoding="async"><span><a class="player-link" href="player_johnson.html">Keldon Johnson</a></span></span></td>
             <td class="stat"><span class="pb-long">Points</span><span class="pb-short">PTS</span></td>
             <td class="line">8.5<span class="sub">median 8.5</span></td>
-            <td class="num">8.5<span class="sub">-0.0<span class="pb-long"> from matchup</span></span></td>
+            <td class="num">8.4<span class="sub">-0.1<span class="pb-long"> from matchup</span></span></td>
             <td class="num">2/5</td>
             <td class="num">3/6</td>
           </tr>

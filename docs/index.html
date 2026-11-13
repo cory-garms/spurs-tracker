@@ -182,6 +182,13 @@
     .early-season strong { color: #F2C14E; font-family: 'Teko', sans-serif; font-size: 1.15rem;
       font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 4px; }
     .badge.orange { background: rgba(255, 130, 0, 0.15); border-color: #FF8200; color: #FF8200; }
+    .availability-teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; }
+    .availability-teams h3 { font-family: 'Teko', sans-serif; color: #C4CED4; font-size: 1.3rem; margin: 14px 0 8px; }
+    .availability-teams ul { list-style: none; padding: 0; }
+    .availability-teams li { padding: 10px 0; border-bottom: 1px solid #28313A; }
+    .availability-teams small { display: block; color: #9DA7B0; margin-top: 4px; }
+    .availability-source { color: #9DA7B0; font-size: 0.85rem; margin-top: 12px; line-height: 1.5; }
+    .availability-source a { color: #F2C14E; text-underline-offset: 3px; }
 
     /* ---- Footer ---- */
     footer {
@@ -258,7 +265,7 @@
       display: grid; grid-template-columns: repeat(4, 1fr);
       background: #0B0E11; border: 4px solid #1B1712;
       outline: 3px solid #F4EAD5; outline-offset: -9px;
-      margin: 30px auto 40px; max-width: 980px; padding: 14px 10px;
+      margin: 30px auto 24px; max-width: 980px; padding: 14px 10px;
       box-shadow: 8px 8px 0 #1B1712;
     }
     .scoreboard > div { text-align: center; padding: 6px 8px; }
@@ -280,6 +287,18 @@
     .scoreboard .v.top a.player-link { border-bottom: none; }
     .scoreboard .sep { color: #28313A; margin: 0 0.25em; text-shadow: none; }
     .scoreboard .d { font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; color: #9DA7B0; }
+
+    .game-strip {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px;
+      max-width: 980px; margin: 0 auto 36px; padding: 14px 18px;
+      background: #F4EAD5; color: #1B1712; border: 3px solid #1B1712;
+      box-shadow: 5px 5px 0 #1B1712; text-decoration: none;
+      font-family: 'Courier Prime', monospace; font-size: 0.85rem;
+    }
+    .game-strip:hover, .game-strip:focus-visible { outline: 3px solid #F2C14E; outline-offset: 3px; }
+    .game-strip .game-label { background: #F2C14E; padding: 4px 8px; font-weight: 700; text-transform: uppercase; }
+    .game-strip .game-teams { font-family: 'Teko', sans-serif; font-size: 1.65rem; font-weight: 700; line-height: 1; }
+    .game-strip .game-link { margin-left: auto; font-weight: 700; white-space: nowrap; }
 
     .deck {
       display: grid; gap: clamp(16px, 2.4vw, 28px);
@@ -429,6 +448,12 @@
       <div><div class="k">El Valiente</div><div class="v top"><img class="avatar avatar-md" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><a class="player-link" href="player_wembanyama.html">Wembanyama</a></div><div class="d">32 PTS &middot; 9 REB &middot; 5 BLK</div></div>
     </section>
 
+    <a class="game-strip" href="matchup.html">
+      <span class="game-label">Tonight</span>
+      <span class="game-teams">GSW at SAS</span>
+      <span class="game-details"><time datetime="2026-11-13T20:30:00-06:00">8:30 PM CT</time> &middot; Prime Video</span>
+      <span class="game-link">Preview &rarr;</span>
+    </a>
     <main class="deck" style="--per-row:3;">
       
       <a class="loteria" href="dashboard.html" title="Results, four factors, best duos and close games" style="--c:#00B2A9; --ink:#F4EAD5; --sh:#1B1712;">

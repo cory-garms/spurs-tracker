@@ -1,0 +1,22 @@
+{
+  "0022600040": {
+    "reported_at": "2026-11-13T17:45:00-05:00",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-13_05_45PM.pdf",
+    "teams": {
+      "GSW": [
+        {"name": "Charles Bassey", "status": "Probable", "reason": "Left toe soreness"},
+        {"name": "Jimmy Butler III", "status": "Out", "reason": "Right ACL repair / surgery"},
+        {"name": "Stephen Curry", "status": "Out", "reason": "Right oblique tear"},
+        {"name": "Moses Moody", "status": "Out", "reason": "Left patellar tendon repair / surgery"},
+        {"name": "Kristaps Porzingis", "status": "Out", "reason": "Not with team"},
+        {"name": "Brandon Williams", "status": "Out", "reason": "Left hamstring strain"}
+      ],
+      "SAS": [
+        {"name": "De'Aaron Fox", "status": "Questionable", "reason": "Left hip soreness"},
+        {"name": "Tobias Harris", "status": "Out", "reason": "Left calf strain"},
+        {"name": "Jayden Quaintance", "status": "Out", "reason": "Right knee surgery"},
+        {"name": "Devin Vassell", "status": "Questionable", "reason": "Left adductor tightness"}
+      ]
+    }
+  }
+}

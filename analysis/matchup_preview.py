@@ -14,6 +14,7 @@ around that estimate is taken as ~12 points, which sets the win probability.
 
 from __future__ import annotations
 
+from collections.abc import Collection
 from math import erf, sqrt
 
 import pandas as pd
@@ -84,14 +85,15 @@ def projection(standings: pd.DataFrame, team: str, opponent: str, is_home: bool)
     }
 
 
-def players_to_watch(players: pd.DataFrame, n: int = 3, min_games: int = 1) -> list[dict]:
+def players_to_watch(players: pd.DataFrame, n: int = 3, min_games: int = 1,
+                     excluded_players: Collection[str] = ()) -> list[dict]:
     """
     Top `n` by average Game Score from per-game season averages. Game Score is
     linear, so the Game Score of the averages equals the average Game Score.
     """
     if players.empty:
         return []
-    p = players[players["gp"] >= min_games].copy()
+    p = players[(players["gp"] >= min_games) & ~players["player_name"].isin(excluded_players)].copy()
     if p.empty:
         return []
     p["gmsc"] = game_score(p)

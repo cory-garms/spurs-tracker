@@ -428,6 +428,13 @@ def page_css() -> str:
     .early-season strong {{ color: {MARIGOLD}; font-family: {FONT_HEADING}; font-size: 1.15rem;
       font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 4px; }}
     .badge.orange {{ background: rgba(255, 130, 0, 0.15); border-color: {FIESTA_ORANGE}; color: {FIESTA_ORANGE}; }}
+    .availability-teams {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; }}
+    .availability-teams h3 {{ font-family: {FONT_HEADING}; color: {SPURS_SILVER}; font-size: 1.3rem; margin: 14px 0 8px; }}
+    .availability-teams ul {{ list-style: none; padding: 0; }}
+    .availability-teams li {{ padding: 10px 0; border-bottom: 1px solid {COURT_LINE}; }}
+    .availability-teams small {{ display: block; color: {TEXT_MUTED}; margin-top: 4px; }}
+    .availability-source {{ color: {TEXT_MUTED}; font-size: 0.85rem; margin-top: 12px; line-height: 1.5; }}
+    .availability-source a {{ color: {MARIGOLD}; text-underline-offset: 3px; }}
 
     /* ---- Footer ---- */
     footer {{

@@ -18,6 +18,7 @@ import config
 from config import TEAM_ABBR, SEASON, season_str
 from viz import theme
 from viz.avatars import avatar_html, player_link
+from viz.availability import availability_html, status_badge
 from viz.matchup_viz import _short
 from analysis.matchup_preview import SHRINK_GAMES
 from analysis.props import (
@@ -25,6 +26,7 @@ from analysis.props import (
 )
 from analysis.wemby import get_wemby_logs
 from data.league import load_league_standings
+from data.availability import load_availability, player_statuses
 from data.schedule import load_schedule, next_game, now_utc
 
 
@@ -108,12 +110,12 @@ def _stat_cell(label: str) -> str:
             f'<span class="pb-short">{STAT_SHORT.get(label, label)}</span></td>')
 
 
-def _player_cell(name: str) -> str:
-    return f'<td class="who"><span class="with-avatar">{avatar_html(name, "sm")}<span>{player_link(name)}</span></span></td>'
+def _player_cell(name: str, status: str = "") -> str:
+    return f'<td class="who"><span class="with-avatar">{avatar_html(name, "sm")}<span>{player_link(name)}{status_badge(status)}</span></span></td>'
 
 
 def _tonight_section(nxt: dict, factors: dict, rows: list[dict], games: pd.DataFrame,
-                     schedule: pd.DataFrame, team: str) -> str:
+                     schedule: pd.DataFrame, team: str, statuses: dict[str, str] | None = None) -> str:
     opp = nxt["opponent"]
     us, them = _short(team), _short(opp)
     venue_word = "Home" if nxt["is_home"] else "Road"
@@ -149,9 +151,12 @@ def _tonight_section(nxt: dict, factors: dict, rows: list[dict], games: pd.DataF
 
     body_rows = ""
     for r in rows:
+        status = (statuses or {}).get(r["player_name"], "")
+        if status == "Out":
+            continue
         venue_cell = f'{r["venue_hits"]}/{r["venue_n"]}' if r["venue_n"] else "&mdash;"
         body_rows += f"""
-          <tr>{_player_cell(r['player_name'])}
+          <tr>{_player_cell(r['player_name'], status)}
             {_stat_cell(r['stat'])}
             <td class="line">{r['current_line']:g}<span class="sub">median {r['median']:g}</span></td>
             <td class="num">{r['tonight']:.1f}<span class="sub">{r['tonight'] - r['median']:+.1f}<span class="pb-long"> from matchup</span></span></td>
@@ -164,7 +169,8 @@ def _tonight_section(nxt: dict, factors: dict, rows: list[dict], games: pd.DataF
         "Tonight est. is that median scaled by the pace change"
         + (" and, for points, by the opponent's defense" if factors["available"] else "")
         + f". Defense is pulled toward league average until about {SHRINK_GAMES} games are in, as in the "
-        f"Next Game projection. Last {RECENT_GAMES} and {venue_word} count games over the line."
+        f"Next Game projection. Last {RECENT_GAMES} and {venue_word} count games over the line. "
+        "Estimates assume the player plays and do not adjust for injuries or lineup changes."
     )
     if not factors["available"]:
         how += " League ratings aren't cached yet, so no matchup adjustment is applied."
@@ -271,6 +277,7 @@ def build_props_board_page(
     prev_logs = _previous_season_logs(team, season)
     schedule = load_schedule(season)
     nxt = next_game(schedule, team, now_utc())
+    availability = load_availability(nxt["game_id"], season) if nxt else {}
     factors = (matchup_factors(load_league_standings(season), team, nxt["opponent"])
                if nxt else {"pace_factor": 1.0, "points_factor": 1.0, "available": False})
     venue = ("H" if nxt["is_home"] else "A") if nxt else None
@@ -284,7 +291,8 @@ def build_props_board_page(
     fig_blocks.update_layout(height=400)
     div_blocks = theme.chart_html(fig_blocks, "props_blocks_dist", include_plotlyjs="cdn")
 
-    tonight_html = (_tonight_section(nxt, factors, rows, games, schedule, team) if nxt and rows else
+    tonight_html = (_tonight_section(nxt, factors, rows, games, schedule, team,
+                                    player_statuses(availability, team)) if nxt and rows else
                     '<section class="card"><h2>🎯 Tonight\'s Board</h2>'
                     '<p class="pb-note">No upcoming game on the schedule.</p></section>')
 
@@ -299,6 +307,7 @@ def build_props_board_page(
         rate. These are not sportsbook odds. For fun and analysis, not betting advice.
       </p>
     </div>
+    {availability_html(availability)}
     {tonight_html}
     {_last_year_section(rows)}
     <section class="chart-section">

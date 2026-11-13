@@ -471,8 +471,7 @@ def build_wemby_lab_page(
           <td style="padding: 10px 12px;">{blk_s} {stl_s}</td>
           <td style="padding: 10px 12px; font-family: {theme.FONT_MONO};">{pts_reb}</td>
           <td style="padding: 10px 12px; font-family: {theme.FONT_MONO};">{pm_s}</td>
-        </tr>
-        """
+        </tr>"""
 
     table_section = f"""
     <div class="card">

@@ -78,3 +78,5 @@ def test_players_to_watch_ranked_by_game_score():
          "tov": 3, "pf": 3, "fgm": 8, "fga": 13, "ftm": 3, "fta": 4},
     ])
     assert players_to_watch(players)[0]["player_name"] == "Big"
+    assert players_to_watch(players, n=1, excluded_players=["Big"])[0]["player_name"] == "Scorer"
+    assert players_to_watch(players, excluded_players=["Big", "Scorer"]) == []

@@ -16,6 +16,8 @@ import config
 from config import TEAM_ABBR, SEASON, TEAMS, season_str
 from viz import theme
 from viz.avatars import avatar_html, player_link
+from viz.availability import availability_html, status_badge
+from data.availability import load_availability, player_statuses
 from analysis.matchup_preview import (
     HOME_COURT_PTS, SHRINK_GAMES, last_season_series, players_to_watch, projection,
     spurs_players_from_logs, tale_of_the_tape,
@@ -87,12 +89,12 @@ def _results_list(items: list[dict], empty: str) -> str:
     return f'<ul class="ng-list">{lis}</ul>'
 
 
-def _players_list(items: list[dict], empty: str) -> str:
+def _players_list(items: list[dict], empty: str, statuses: dict[str, str] | None = None) -> str:
     if not items:
         return f'<p class="ng-empty">{empty}</p>'
     lis = "".join(
         f'<li class="ng-player with-avatar">{avatar_html(p["player_name"], "md")}'
-        f'<div><div class="who">{player_link(p["player_name"])}</div>'
+        f'<div><div class="who">{player_link(p["player_name"])}{status_badge((statuses or {}).get(p["player_name"], ""))}</div>'
         f'<div class="line">{p["line"]}</div></div>'
         f'<span class="sub">GmSc {p["game_score"]}</span></li>'
         for p in items
@@ -130,6 +132,9 @@ def build_matchup_page(
     opp = nxt["opponent"]
     us, them = _short(team), _short(opp)
     home, away = (team, opp) if nxt["is_home"] else (opp, team)
+    availability = load_availability(nxt["game_id"], season)
+    us_statuses = player_statuses(availability, team)
+    them_statuses = player_statuses(availability, opp)
 
     # ---- Matchup header + projection ----
     proj = projection(standings, team, opp, nxt["is_home"])
@@ -140,9 +145,10 @@ def build_matchup_page(
                  if proj["games"] < theme.SMALL_SAMPLE_GAMES else "")
         proj_html = f"""
         <div class="ng-proj">
-          <div class="big">Projection: {fav} by {pts:.1f} &middot; {win:.0%} win chance</div>
-          <p class="how">From each team's net rating, pulled toward league average until about {SHRINK_GAMES} games are in,
-            converted to points at the two teams' pace, plus {HOME_COURT_PTS:.0f} points for home court.</p>
+          <div class="big">Season baseline: {fav} by {pts:.1f} &middot; {win:.0%} win chance</div>
+          <p class="how">Season ratings without injury or lineup adjustments. Each team's net rating is weighted
+            by games played / (games played + {SHRINK_GAMES}), converted to points at the two teams' pace,
+            plus {HOME_COURT_PTS:.0f} points for home court.</p>
           {early}
         </div>"""
     else:
@@ -202,13 +208,19 @@ def build_matchup_page(
 
     # ---- Players to watch ----
     opp_players = load_team_players(TEAMS[opp]["id"], season)
+    our_watch = players_to_watch(spurs_players_from_logs(player_logs),
+                                excluded_players=[name for name, status in us_statuses.items() if status == "Out"])
+    their_watch = players_to_watch(opp_players,
+                                  excluded_players=[name for name, status in them_statuses.items() if status == "Out"])
+    watch_note = (" Confirmed absences excluded; other reported statuses are shown." if availability else
+                  " Availability has not been checked for this game.")
     watch_html = f"""
     <section class="card">
       <h2>Players to Watch</h2>
-      <p class="ng-empty" style="margin: -6px 0 12px;">Top three on each side by average Game Score this season.</p>
+      <p class="ng-empty" style="margin: -6px 0 12px;">Top three on each side by average Game Score this season.{watch_note}</p>
       <div class="ng-cols">
-        <div><h3>{us}</h3>{_players_list(players_to_watch(spurs_players_from_logs(player_logs)), "No games yet.")}</div>
-        <div><h3>{them}</h3>{_players_list(players_to_watch(opp_players), "Player stats not fetched yet.")}</div>
+        <div><h3>{us}</h3>{_players_list(our_watch, "No players to show.", us_statuses)}</div>
+        <div><h3>{them}</h3>{_players_list(their_watch, "Player stats not fetched yet.", them_statuses)}</div>
       </div>
     </section>"""
 
@@ -230,7 +242,7 @@ def build_matchup_page(
     html = theme.page_html(
         title="Next Game",
         subtitle=subtitle,
-        body_content=_css() + header + tape_html + form_html + watch_html + h2h_html,
+        body_content=_css() + header + availability_html(availability) + tape_html + form_html + watch_html + h2h_html,
         current_slug="matchup",
         badge=f"vs. {opp}" if nxt["is_home"] else f"@ {opp}",
         games_played=games_played,

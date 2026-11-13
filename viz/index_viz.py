@@ -20,7 +20,7 @@ from analysis.standings import season_record
 from analysis.wemby import get_wemby_logs, stocks_distribution
 from analysis.rodeo import segment_rodeo_games, rodeo_split_metrics
 from analysis.performers import season_game_honors
-from data.schedule import load_schedule, next_game, now_utc
+from data.schedule import LOCAL_TZ, load_schedule, next_game, now_utc
 from viz.avatars import avatar_html, avatar_src, player_link
 
 
@@ -155,7 +155,7 @@ def _index_css() -> str:
       display: grid; grid-template-columns: repeat(4, 1fr);
       background: {t.FROST_BANK_FLOOR}; border: 4px solid {t.LOTERIA_INK};
       outline: 3px solid {t.LOTERIA_CREAM}; outline-offset: -9px;
-      margin: 30px auto 40px; max-width: 980px; padding: 14px 10px;
+      margin: 30px auto 24px; max-width: 980px; padding: 14px 10px;
       box-shadow: 8px 8px 0 {t.LOTERIA_INK};
     }}
     .scoreboard > div {{ text-align: center; padding: 6px 8px; }}
@@ -177,6 +177,18 @@ def _index_css() -> str:
     .scoreboard .v.top a.player-link {{ border-bottom: none; }}
     .scoreboard .sep {{ color: {t.COURT_LINE}; margin: 0 0.25em; text-shadow: none; }}
     .scoreboard .d {{ font-family: {t.FONT_MONO}; font-size: 0.78rem; color: {t.TEXT_MUTED}; }}
+
+    .game-strip {{
+      display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px;
+      max-width: 980px; margin: 0 auto 36px; padding: 14px 18px;
+      background: {t.LOTERIA_CREAM}; color: {t.LOTERIA_INK}; border: 3px solid {t.LOTERIA_INK};
+      box-shadow: 5px 5px 0 {t.LOTERIA_INK}; text-decoration: none;
+      font-family: {t.FONT_TYPE}; font-size: 0.85rem;
+    }}
+    .game-strip:hover, .game-strip:focus-visible {{ outline: 3px solid {t.MARIGOLD}; outline-offset: 3px; }}
+    .game-strip .game-label {{ background: {t.MARIGOLD}; padding: 4px 8px; font-weight: 700; text-transform: uppercase; }}
+    .game-strip .game-teams {{ font-family: {t.FONT_HEADING}; font-size: 1.65rem; font-weight: 700; line-height: 1; }}
+    .game-strip .game-link {{ margin-left: auto; font-weight: 700; white-space: nowrap; }}
 
     .deck {{
       display: grid; gap: clamp(16px, 2.4vw, 28px);
@@ -334,13 +346,28 @@ def build_index_page(
     wemby_rpg = f"{wemby['reb'].mean():.1f}" if not wemby.empty else "0.0"
     wemby_spg = f"{stocks.get('stocks_per_game', 0.0):.1f}"
 
-    nxt = next_game(load_schedule(season), team_abbr.upper(), now_utc())
+    current_time = now_utc()
+    nxt = next_game(load_schedule(season), team_abbr.upper(), current_time)
+    game_strip = ""
     if nxt:
         opp_name = TEAMS[nxt["opponent"]]["name"].split()[-1]
         duelo_stat = f'{"vs." if nxt["is_home"] else "@"} {nxt["opponent"]}'
         duelo_caption = f'{nxt["tipoff_local"]:%a} {nxt["tipoff_local"]:%-I:%M %p}'
         duelo_tag = f"Next up: {opp_name}"
         duelo_tip = f'{nxt["when"]}. Tale of the tape, form and players to watch.'
+        home, away = ((team_abbr.upper(), nxt["opponent"]) if nxt["is_home"] else
+                      (nxt["opponent"], team_abbr.upper()))
+        game_label = ("In progress" if nxt["status"] == 2 else
+                      "Tonight" if nxt["tipoff_local"].date() == current_time.astimezone(LOCAL_TZ).date() else "Next game")
+        game_details = f'{nxt["tipoff_local"]:%-I:%M %p} CT'
+        if game_label == "Next game":
+            game_details = f'{nxt["tipoff_local"]:%a, %b} {nxt["tipoff_local"].day} · {game_details}'
+        game_strip = f"""<a class="game-strip" href="{theme.PAGES['matchup'][0]}">
+      <span class="game-label">{game_label}</span>
+      <span class="game-teams">{away} at {home}</span>
+      <span class="game-details"><time datetime="{nxt['tipoff_local'].isoformat()}">{game_details}</time>{' &middot; ' + escape(nxt['tv']) if nxt['tv'] else ''}</span>
+      <span class="game-link">Preview &rarr;</span>
+    </a>"""
     else:
         duelo_stat, duelo_caption = "—", "Season complete"
         duelo_tag, duelo_tip = "Season complete", "Back with next season's schedule"
@@ -423,6 +450,7 @@ def build_index_page(
       <div><div class="k">El Valiente</div><div class="v top">{(avatar_html(potg["player_name"], "md") + player_link(potg["player_name"], potg["last_name"])) if potg else "—"}</div><div class="d">{potg["line"].replace(" · ", " &middot; ") if potg else "last game"}</div></div>
     </section>
 
+    {game_strip}
     <main class="deck" style="--per-row:{per_row};">
       {cards}
     </main>

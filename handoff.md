@@ -1,7 +1,34 @@
 # La Tabla Spurs — Current Handoff
 
-Updated November 4, 2026. Read the active initiative and checkpoint before the
+Updated November 13, 2026. Read the active initiative and checkpoint before the
 historical material below.
+
+## Pregame checkpoint — November 13 vs. Golden State
+
+Synced `origin/master` before applying the three approved pregame improvements.
+The Spurs remain **10–2, W10**, through the November 11 Chicago win. Refreshed the
+NBA schedule, league ratings, and Golden State player caches; the Warriors are
+**8–4**, their November 11 **108–115 loss at Houston** appears in Recent Form,
+and both teams have **one day off** before tonight's game.
+
+- Homepage: a responsive strip above the lotería deck shows the next matchup,
+  Central time, TV channel, and preview link. Its label follows the game date/status.
+- Matchup: the refreshed **Spurs by 3.9 / 63%** estimate is labeled **Season
+  baseline**, explicitly without injury or lineup adjustments.
+- Availability: `data/availability_2026.json` holds a reviewed snapshot for game
+  `0022600040`, sourced from the NBA's **November 13, 5:45 PM ET / 4:45 PM CT**
+  report. Curry is out; Fox and Vassell are questionable; Bassey is probable.
+  The complete report snapshot and source link appear on matchup and props pages.
+  Confirmed absences are excluded from Players to Watch and tonight's prop
+  estimates; uncertain statuses remain visible. Historical statistics are preserved.
+- Snapshots match an exact game ID and do not carry forward. They are **manual,
+  dated reports**, not live availability. Review the newest official report before
+  refreshing this game's snapshot; add a separate entry for later games.
+
+Validation: the complete pipeline rebuilt successfully, all **115 tests passed**,
+and `git diff --check` passed. Checked the new homepage strip on mobile and desktop
+and the matchup availability section on mobile. Browser review artifacts stay in
+ignored `marketing/private/site-review/`. No social publishing or outreach was done.
 
 ## Active initiative — audience growth and sponsorship
 

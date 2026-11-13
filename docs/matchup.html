@@ -182,6 +182,13 @@
     .early-season strong { color: #F2C14E; font-family: 'Teko', sans-serif; font-size: 1.15rem;
       font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 4px; }
     .badge.orange { background: rgba(255, 130, 0, 0.15); border-color: #FF8200; color: #FF8200; }
+    .availability-teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; }
+    .availability-teams h3 { font-family: 'Teko', sans-serif; color: #C4CED4; font-size: 1.3rem; margin: 14px 0 8px; }
+    .availability-teams ul { list-style: none; padding: 0; }
+    .availability-teams li { padding: 10px 0; border-bottom: 1px solid #28313A; }
+    .availability-teams small { display: block; color: #9DA7B0; margin-top: 4px; }
+    .availability-source { color: #9DA7B0; font-size: 0.85rem; margin-top: 12px; line-height: 1.5; }
+    .availability-source a { color: #F2C14E; text-underline-offset: 3px; }
 
     /* ---- Footer ---- */
     footer {
@@ -292,18 +299,25 @@
       <h2>Warriors at Spurs</h2>
       <div class="ng-teams">
         <div class="ng-team"><div class="abbr">GSW</div><div class="name">Warriors</div>
-          <div class="rec">8-3</div></div>
+          <div class="rec">8-4</div></div>
         <div class="ng-vs">@</div>
         <div class="ng-team"><div class="abbr">SAS</div><div class="name">Spurs</div>
           <div class="rec">10-2</div></div>
       </div>
       
         <div class="ng-proj">
-          <div class="big">Projection: Spurs by 3.4 &middot; 61% win chance</div>
-          <p class="how">From each team's net rating, pulled toward league average until about 10 games are in,
-            converted to points at the two teams' pace, plus 2 points for home court.</p>
-          <span class="badge small-sample" title="Small sample: expect this to move a lot">Only 11 games of data per team, so treat this loosely</span>
+          <div class="big">Season baseline: Spurs by 3.9 &middot; 63% win chance</div>
+          <p class="how">Season ratings without injury or lineup adjustments. Each team's net rating is weighted
+            by games played / (games played + 10), converted to points at the two teams' pace,
+            plus 2 points for home court.</p>
+          <span class="badge small-sample" title="Small sample: expect this to move a lot">Only 12 games of data per team, so treat this loosely</span>
         </div>
+    </section><section class="card game-availability" aria-label="Player availability">
+      <h2>Availability</h2>
+      <p class="availability-source">NBA injury report as of <time datetime="2026-11-13T17:45:00-05:00">Nov 13, 2026 · 4:45 PM CT</time>.
+        <a href="https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-13_05_45PM.pdf" target="_blank" rel="noopener">Official report</a></p>
+      <div class="availability-teams"><div><h3>Golden State Warriors</h3><ul><li><strong>Charles Bassey</strong> <span class="badge orange">Probable</span><small>Left toe soreness</small></li><li><strong>Jimmy Butler III</strong> <span class="badge fuschia">Out</span><small>Right ACL repair / surgery</small></li><li><strong>Stephen Curry</strong> <span class="badge fuschia">Out</span><small>Right oblique tear</small></li><li><strong>Moses Moody</strong> <span class="badge fuschia">Out</span><small>Left patellar tendon repair / surgery</small></li><li><strong>Kristaps Porzingis</strong> <span class="badge fuschia">Out</span><small>Not with team</small></li><li><strong>Brandon Williams</strong> <span class="badge fuschia">Out</span><small>Left hamstring strain</small></li></ul></div><div><h3>San Antonio Spurs</h3><ul><li><strong>De&#x27;Aaron Fox</strong> <span class="badge orange">Questionable</span><small>Left hip soreness</small></li><li><strong>Tobias Harris</strong> <span class="badge fuschia">Out</span><small>Left calf strain</small></li><li><strong>Jayden Quaintance</strong> <span class="badge fuschia">Out</span><small>Right knee surgery</small></li><li><strong>Devin Vassell</strong> <span class="badge orange">Questionable</span><small>Left adductor tightness</small></li></ul></div></div>
+      <p class="availability-source">Report snapshot; statuses may change before tipoff.</p>
     </section>
     <section class="card">
       <h2>Tale of the Tape</h2>
@@ -312,7 +326,7 @@
       <div style="overflow-x: auto;">
         <table class="ng-table">
           <thead><tr><th></th><th style="text-align:center;">Spurs</th><th style="text-align:center;">Warriors</th></tr></thead>
-          <tbody><tr><td>Net rating</td><td class="num edge">+11.0<span class="rk">#3</span></td><td class="num">+8.7<span class="rk">#5</span></td></tr><tr><td>Offensive rating</td><td class="num edge">119.3<span class="rk">#2</span></td><td class="num">119.0<span class="rk">#3</span></td></tr><tr><td>Defensive rating</td><td class="num edge">108.3<span class="rk">#5</span></td><td class="num">110.3<span class="rk">#11</span></td></tr><tr><td>Pace</td><td class="num">99.0</td><td class="num">100.0</td></tr><tr><td>Effective FG%</td><td class="num">53.2%<span class="rk">#17</span></td><td class="num edge them">57.2%<span class="rk">#2</span></td></tr><tr><td>Turnover %</td><td class="num edge">12.4%<span class="rk">#1</span></td><td class="num">16.3%<span class="rk">#21</span></td></tr><tr><td>Off. rebound %</td><td class="num edge">33.9%<span class="rk">#7</span></td><td class="num">33.3%<span class="rk">#10</span></td></tr><tr><td>Free throw rate</td><td class="num">0.292<span class="rk">#11</span></td><td class="num edge them">0.304<span class="rk">#7</span></td></tr><tr><td>Opp. effective FG%</td><td class="num edge">51.1%<span class="rk">#5</span></td><td class="num">52.7%<span class="rk">#15</span></td></tr></tbody>
+          <tbody><tr><td>Net rating</td><td class="num edge">+11.0<span class="rk">#3</span></td><td class="num">+7.5<span class="rk">#6</span></td></tr><tr><td>Offensive rating</td><td class="num edge">119.3<span class="rk">#2</span></td><td class="num">118.4<span class="rk">#5</span></td></tr><tr><td>Defensive rating</td><td class="num edge">108.3<span class="rk">#4</span></td><td class="num">110.9<span class="rk">#10</span></td></tr><tr><td>Pace</td><td class="num">99.0</td><td class="num">99.8</td></tr><tr><td>Effective FG%</td><td class="num">53.2%<span class="rk">#17</span></td><td class="num edge them">56.6%<span class="rk">#2</span></td></tr><tr><td>Turnover %</td><td class="num edge">12.4%<span class="rk">#1</span></td><td class="num">16.0%<span class="rk">#19</span></td></tr><tr><td>Off. rebound %</td><td class="num edge">33.9%<span class="rk">#6</span></td><td class="num">33.5%<span class="rk">#10</span></td></tr><tr><td>Free throw rate</td><td class="num">0.292<span class="rk">#12</span></td><td class="num edge them">0.303<span class="rk">#6</span></td></tr><tr><td>Opp. effective FG%</td><td class="num edge">51.1%<span class="rk">#6</span></td><td class="num">53.1%<span class="rk">#15</span></td></tr></tbody>
         </table>
       </div>
     </section>
@@ -320,15 +334,15 @@
       <h2>Recent Form</h2>
       <div class="ng-cols">
         <div><h3>Spurs</h3><ul class="ng-list"><li><span class="wl W">W</span><span class="main">124-119 @ CHI</span><span class="sub">Nov 11</span></li><li><span class="wl W">W</span><span class="main">122-96 @ PHX</span><span class="sub">Nov 9</span></li><li><span class="wl W">W</span><span class="main">125-103 @ POR</span><span class="sub">Nov 7</span></li><li><span class="wl W">W</span><span class="main">124-109 @ SAC</span><span class="sub">Nov 6</span></li><li><span class="wl W">W</span><span class="main">112-111 vs. DAL</span><span class="sub">Nov 4</span></li></ul></div>
-        <div><h3>Warriors</h3><ul class="ng-list"><li><span class="wl W">W</span><span class="main">138-87 vs. NOP</span><span class="sub">Nov 9</span></li><li><span class="wl W">W</span><span class="main">126-119 vs. ORL</span><span class="sub">Nov 7</span></li><li><span class="wl W">W</span><span class="main">120-100 vs. MIA</span><span class="sub">Nov 5</span></li><li><span class="wl W">W</span><span class="main">116-113 vs. PHX</span><span class="sub">Nov 2</span></li><li><span class="wl W">W</span><span class="main">124-112 vs. LAC</span><span class="sub">Nov 1</span></li></ul></div>
+        <div><h3>Warriors</h3><ul class="ng-list"><li><span class="wl L">L</span><span class="main">108-115 @ HOU</span><span class="sub">Nov 11</span></li><li><span class="wl W">W</span><span class="main">138-87 vs. NOP</span><span class="sub">Nov 9</span></li><li><span class="wl W">W</span><span class="main">126-119 vs. ORL</span><span class="sub">Nov 7</span></li><li><span class="wl W">W</span><span class="main">120-100 vs. MIA</span><span class="sub">Nov 5</span></li><li><span class="wl W">W</span><span class="main">116-113 vs. PHX</span><span class="sub">Nov 2</span></li></ul></div>
       </div>
     </section>
     <section class="card">
       <h2>Players to Watch</h2>
-      <p class="ng-empty" style="margin: -6px 0 12px;">Top three on each side by average Game Score this season.</p>
+      <p class="ng-empty" style="margin: -6px 0 12px;">Top three on each side by average Game Score this season. Confirmed absences excluded; other reported statuses are shown.</p>
       <div class="ng-cols">
-        <div><h3>Spurs</h3><ul class="ng-list"><li class="ng-player with-avatar"><img class="avatar avatar-md" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><div><div class="who"><a class="player-link" href="player_wembanyama.html">Victor Wembanyama</a></div><div class="line">30.2 PTS · 11.7 REB · 2.8 AST</div></div><span class="sub">GmSc 27.7</span></li><li class="ng-player with-avatar"><img class="avatar avatar-md" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><div><div class="who"><a class="player-link" href="player_harper.html">Dylan Harper</a></div><div class="line">18.0 PTS · 5.4 REB · 4.8 AST</div></div><span class="sub">GmSc 15.0</span></li><li class="ng-player with-avatar"><img class="avatar avatar-md" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><div><div class="who"><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a></div><div class="line">14.2 PTS · 4.3 REB · 6.2 AST</div></div><span class="sub">GmSc 13.6</span></li></ul></div>
-        <div><h3>Warriors</h3><ul class="ng-list"><li class="ng-player with-avatar"><span class="avatar avatar-md avatar-initials" style="--av:#00B2A9;" title="Stephen Curry" aria-hidden="true">SC</span><div><div class="who">Stephen Curry</div><div class="line">30.6 PTS · 4.1 REB · 4.3 AST</div></div><span class="sub">GmSc 25.0</span></li><li class="ng-player with-avatar"><span class="avatar avatar-md avatar-initials" style="--av:#00B2A9;" title="Yaxel Lendeborg" aria-hidden="true">YL</span><div><div class="who">Yaxel Lendeborg</div><div class="line">21.4 PTS · 7.2 REB · 4.0 AST</div></div><span class="sub">GmSc 16.9</span></li><li class="ng-player with-avatar"><span class="avatar avatar-md avatar-initials" style="--av:#F2C14E;" title="Brandin Podziemski" aria-hidden="true">BP</span><div><div class="who">Brandin Podziemski</div><div class="line">16.8 PTS · 5.0 REB · 4.2 AST</div></div><span class="sub">GmSc 14.3</span></li></ul></div>
+        <div><h3>Spurs</h3><ul class="ng-list"><li class="ng-player with-avatar"><img class="avatar avatar-md" src="img/players/wembanyama.webp" alt="El Alien emblem for Victor Wembanyama" title="El Alien" loading="lazy" decoding="async"><div><div class="who"><a class="player-link" href="player_wembanyama.html">Victor Wembanyama</a></div><div class="line">30.2 PTS · 11.7 REB · 2.8 AST</div></div><span class="sub">GmSc 27.7</span></li><li class="ng-player with-avatar"><img class="avatar avatar-md" src="img/players/harper.webp" alt="El Arpa emblem for Dylan Harper" title="El Arpa" loading="lazy" decoding="async"><div><div class="who"><a class="player-link" href="player_harper.html">Dylan Harper</a></div><div class="line">18.0 PTS · 5.4 REB · 4.8 AST</div></div><span class="sub">GmSc 15.0</span></li><li class="ng-player with-avatar"><img class="avatar avatar-md" src="img/players/fox.webp" alt="El Zorro emblem for De&#x27;Aaron Fox" title="El Zorro" loading="lazy" decoding="async"><div><div class="who"><a class="player-link" href="player_fox.html">De&#x27;Aaron Fox</a> <span class="badge orange">Questionable</span></div><div class="line">14.2 PTS · 4.3 REB · 6.2 AST</div></div><span class="sub">GmSc 13.6</span></li></ul></div>
+        <div><h3>Warriors</h3><ul class="ng-list"><li class="ng-player with-avatar"><span class="avatar avatar-md avatar-initials" style="--av:#00B2A9;" title="Yaxel Lendeborg" aria-hidden="true">YL</span><div><div class="who">Yaxel Lendeborg</div><div class="line">21.7 PTS · 7.4 REB · 3.7 AST</div></div><span class="sub">GmSc 16.9</span></li><li class="ng-player with-avatar"><span class="avatar avatar-md avatar-initials" style="--av:#F2C14E;" title="Brandin Podziemski" aria-hidden="true">BP</span><div><div class="who">Brandin Podziemski</div><div class="line">17.3 PTS · 5.1 REB · 4.2 AST</div></div><span class="sub">GmSc 14.7</span></li><li class="ng-player with-avatar"><span class="avatar avatar-md avatar-initials" style="--av:#EF426F;" title="De&#x27;Anthony Melton" aria-hidden="true">DM</span><div><div class="who">De&#x27;Anthony Melton</div><div class="line">10.1 PTS · 4.3 REB · 2.3 AST</div></div><span class="sub">GmSc 8.5</span></li></ul></div>
       </div>
     </section>
     <section class="card">

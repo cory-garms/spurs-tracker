@@ -86,6 +86,16 @@ Stats come from `stats.nba.com`; schedules come from `cdn.nba.com`. No API key i
 
 All 30 teams are registered for ingestion and basic reporting. Several specialized pages and JSON fields remain Spurs-specific. Current configured pages use stable filenames; historical or alternate-team registered pages receive team/season suffixes. See [CONFIGURE.md](CONFIGURE.md).
 
+The homepage features the next game above the lotería cards, using the cached
+schedule for the matchup, Central time, and TV channel. Matchup projections are
+season-rating baselines without injury or lineup adjustments. Reviewed NBA injury
+report snapshots live in `data/availability_{season}.json`, keyed by the exact
+game ID with a report timestamp, source URL, and team/player statuses. Matchup and
+props pages display that dated snapshot; confirmed absences are excluded from
+players to watch and tonight's prop estimates. Questionable players keep their
+status badges. Update snapshots from the official report before rebuilding;
+they are not live feeds and cannot carry over to a different game.
+
 ## Game honors
 
 The **Player Spotlight** awards **El Valiente** (Player of the Game) to the highest
