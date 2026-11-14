@@ -110,15 +110,6 @@
       "combined_pts_pg": 33.9
     },
     {
-      "player_1": "Dylan Harper",
-      "player_2": "Julian Champagnie",
-      "pairing": "Harper + Champagnie",
-      "games_together": 12,
-      "est_shared_min_pg": 26.5,
-      "net_pm_pg": 10.21,
-      "combined_pts_pg": 28.2
-    },
-    {
       "player_1": "Jordan McLaughlin",
       "player_2": "Victor Wembanyama",
       "pairing": "McLaughlin + Wembanyama",
@@ -126,6 +117,15 @@
       "est_shared_min_pg": 7.4,
       "net_pm_pg": 10.21,
       "combined_pts_pg": 29.7
+    },
+    {
+      "player_1": "Dylan Harper",
+      "player_2": "Julian Champagnie",
+      "pairing": "Harper + Champagnie",
+      "games_together": 12,
+      "est_shared_min_pg": 26.5,
+      "net_pm_pg": 10.21,
+      "combined_pts_pg": 28.2
     },
     {
       "player_1": "De'Aaron Fox",
