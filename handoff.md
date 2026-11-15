@@ -1,7 +1,28 @@
 # La Tabla Spurs — Current Handoff
 
-Updated November 13, 2026. Read the active initiative and checkpoint before the
+Updated November 15, 2026. Read the active initiative and checkpoint before the
 historical material below.
+
+## Postgame refresh and Utah pregame — November 15
+
+Fetched and fast-forwarded to `e287bcb` before editing. Refreshed official NBA
+caches through the November 13 **123–85 win over Golden State**: **11–2, W11**.
+Castle is El Valiente with 32 PTS, 6 AST and 5 REB. Rebuilt all current pages,
+analytics JSON, player honors, and latest/next social preview images.
+
+Tonight: **at Utah, November 15 at 4:00 PM CT**, Delta Center; schedule lists
+KJZZ and DAZN-SAS. Refreshed Utah player stats and league ratings. The season
+baseline is Spurs by 11.7 / 84%, without injury adjustments.
+
+Added game `0022600239` availability from the official **12:45 PM ET / 11:45 AM CT**
+November 15 report. Spurs: Brown, Gillespie, Harris and Quaintance out; Utah:
+Alexander, Bufkin, Hayes, Ingram, Jackson Jr., Markkanen and Nurkic out.
+Fox and Vassell are not listed in this snapshot. Friday's entry is preserved
+under its own game ID. Availability remains a dated snapshot, not live status.
+
+Validation: full refresh and rebuild passed, all **115 tests passed**, and
+`git diff --check` passed. Browser preview tools were unavailable this session;
+verified generated content directly. No social posts or outreach were sent.
 
 ## Pregame checkpoint — November 13 vs. Golden State
 
