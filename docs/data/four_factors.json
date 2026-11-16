@@ -1,54 +1,54 @@
 {
   "season": "2026-27",
   "summary": {
-    "games_analyzed": 13,
-    "efg_pct": 0.534,
-    "ts_pct": 0.576,
-    "tov_pct": 0.101,
-    "oreb_pct": 0.285,
-    "ftr": 0.288,
-    "efg_delta_vs_league": -1.1,
-    "tov_delta_vs_league": -2.9,
-    "oreb_delta_vs_league": 4.0,
-    "ftr_delta_vs_league": 4.3,
-    "l10_efg_pct": 0.544,
-    "l10_tov_pct": 0.097,
+    "games_analyzed": 14,
+    "efg_pct": 0.535,
+    "ts_pct": 0.577,
+    "tov_pct": 0.102,
+    "oreb_pct": 0.28,
+    "ftr": 0.284,
+    "efg_delta_vs_league": -1.0,
+    "tov_delta_vs_league": -2.8,
+    "oreb_delta_vs_league": 3.5,
+    "ftr_delta_vs_league": 3.9,
+    "l10_efg_pct": 0.534,
+    "l10_tov_pct": 0.096,
     "l10_oreb_pct": 0.294,
-    "l10_ftr": 0.309,
+    "l10_ftr": 0.311,
     "home_efg_pct": 0.522,
-    "road_efg_pct": 0.551
+    "road_efg_pct": 0.549
   },
   "diagnostic_table": [
     {
       "factor": "Effective FG% (eFG%)",
       "weight": "40%",
-      "spurs_stat": "53.4%",
+      "spurs_stat": "53.5%",
       "league_avg": "54.5%",
-      "delta": "-1.1%",
-      "grade": "C"
+      "delta": "-1.0%",
+      "grade": "B"
     },
     {
       "factor": "Turnover % (TOV%)",
       "weight": "25%",
-      "spurs_stat": "10.1%",
+      "spurs_stat": "10.2%",
       "league_avg": "13.0%",
-      "delta": "-2.9%",
+      "delta": "-2.8%",
       "grade": "A+"
     },
     {
       "factor": "Offensive Rebound % (OREB%)",
       "weight": "20%",
-      "spurs_stat": "28.5%",
+      "spurs_stat": "28.0%",
       "league_avg": "24.5%",
-      "delta": "+4.0%",
+      "delta": "+3.5%",
       "grade": "A+"
     },
     {
       "factor": "Free Throw Rate (FTR)",
       "weight": "15%",
-      "spurs_stat": "0.288",
+      "spurs_stat": "0.284",
       "league_avg": "0.245",
-      "delta": "+4.3%",
+      "delta": "+3.9%",
       "grade": "A+"
     }
   ]

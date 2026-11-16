@@ -307,7 +307,7 @@ def build_props_board_page(
         rate. These are not sportsbook odds. For fun and analysis, not betting advice.
       </p>
     </div>
-    {availability_html(availability)}
+{availability_html(availability)}
     {tonight_html}
     {_last_year_section(rows)}
     <section class="chart-section">

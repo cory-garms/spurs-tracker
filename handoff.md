@@ -3,6 +3,23 @@
 Updated November 15, 2026. Read the active initiative and checkpoint before the
 historical material below.
 
+## Utah postgame refresh — November 15
+
+Synced the repository and refreshed official NBA data after the **110–102 win
+at Utah**, game `0022600239`. Spurs are **12–2, W12**, and **7–0 on the road**.
+Wembanyama is El Valiente: **26 PTS, 10 REB, 5 BLK**. Updated all current
+pages, player honors, analytics JSON and latest/next social images.
+
+Next: **Detroit at San Antonio, Tuesday November 17, 7:00 PM CT**, Frost Bank
+Center, NBC / Peacock. Refreshed Detroit player stats and league ratings;
+season baseline is Spurs by 6.6 / 71%, without injury adjustments. Utah's dated
+availability remains archived and does not carry over to Detroit. Review a
+new official report before adding Detroit availability.
+
+Validation: complete refresh/build and all **115 tests passed**. Removed
+whitespace from the empty availability placeholder in the props template.
+Generated content checked directly; browser visual review unavailable.
+
 ## Postgame refresh and Utah pregame — November 15
 
 Fetched and fast-forwarded to `e287bcb` before editing. Refreshed official NBA
