@@ -1,7 +1,26 @@
 # La Tabla Spurs — Current Handoff
 
-Updated November 15, 2026. Read the active initiative and checkpoint before the
+Updated November 16, 2026. Read the active initiative and checkpoint before the
 historical material below.
+
+## Postgame verification and league refresh — November 16
+
+Fast-forwarded to `abd7cc9`, which already contained the Utah postgame update,
+then reran the complete live refresh and build. Official NBA data still has
+**14 games, 12–2, W12**, through the November 15 **110–102 win at Utah**.
+All 14 player scoring totals reconcile with the team results, and game and
+player/game keys are unique. The public homepage was verified with the current
+record, result, Wembanyama spotlight, and November 17 Detroit game strip.
+
+Refreshed the league schedule, ratings, Detroit player cache, matchup rankings,
+and analytical exports with the latest league context. Detroit's net-rating
+rank is now **10th**; the Spurs–Detroit baseline remains Spurs by **6.6 / 71%**.
+El Valiente remains **Victor Wembanyama** (Game Score 24.6); El Compinche /
+Wingman is **Dylan Harper** (23.2). No Detroit availability snapshot has been
+added; previous game reports remain scoped to their original games.
+
+Validation: all pipeline stages passed with live ingestion, **115 tests passed**,
+and `git diff --check` passed. No layout changes or social publishing.
 
 ## Utah postgame refresh — November 15
 
