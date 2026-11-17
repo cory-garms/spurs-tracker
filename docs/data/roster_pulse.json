@@ -569,15 +569,6 @@
       "combined_pts_pg": 7.4
     },
     {
-      "player_1": "Jordan McLaughlin",
-      "player_2": "Tarris Reed Jr.",
-      "pairing": "McLaughlin + Jr.",
-      "games_together": 8,
-      "est_shared_min_pg": 6.1,
-      "net_pm_pg": -3.94,
-      "combined_pts_pg": 4.4
-    },
-    {
       "player_1": "Carter Bryant",
       "player_2": "Jordan McLaughlin",
       "pairing": "Bryant + McLaughlin",
@@ -585,6 +576,15 @@
       "est_shared_min_pg": 7.3,
       "net_pm_pg": -3.94,
       "combined_pts_pg": 7.4
+    },
+    {
+      "player_1": "Jordan McLaughlin",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "McLaughlin + Jr.",
+      "games_together": 8,
+      "est_shared_min_pg": 6.1,
+      "net_pm_pg": -3.94,
+      "combined_pts_pg": 4.4
     },
     {
       "player_1": "Carter Bryant",

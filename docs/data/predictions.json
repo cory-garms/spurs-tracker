@@ -364,19 +364,6 @@
       "tier": "\ud83d\udd28 Decisive Beatdown"
     },
     {
-      "opponent": "DEN",
-      "name": "Denver Nuggets",
-      "conf": "West",
-      "proj_spurs": 116.3,
-      "proj_opp": 108.0,
-      "proj_margin": 8.3,
-      "win_prob": 76.6,
-      "double_digit_pct": 46.0,
-      "blowout_pct": 29.6,
-      "h2h_record": "0-0",
-      "tier": "\ud83d\udd28 Decisive Beatdown"
-    },
-    {
       "opponent": "CLE",
       "name": "Cleveland Cavaliers",
       "conf": "East",
@@ -385,6 +372,19 @@
       "proj_margin": 8.3,
       "win_prob": 76.5,
       "double_digit_pct": 45.9,
+      "blowout_pct": 29.6,
+      "h2h_record": "0-0",
+      "tier": "\ud83d\udd28 Decisive Beatdown"
+    },
+    {
+      "opponent": "DEN",
+      "name": "Denver Nuggets",
+      "conf": "West",
+      "proj_spurs": 116.3,
+      "proj_opp": 108.0,
+      "proj_margin": 8.3,
+      "win_prob": 76.6,
+      "double_digit_pct": 46.0,
       "blowout_pct": 29.6,
       "h2h_record": "0-0",
       "tier": "\ud83d\udd28 Decisive Beatdown"
