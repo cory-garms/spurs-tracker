@@ -2,12 +2,13 @@
 Next Game Visualizer — builds docs/matchup.html, a preview of the Spurs' next game.
 
 Tale of the tape, recent form, players to watch on both sides, head-to-head and
-one transparent projection. Everything is computed from the cached schedule,
-league ratings and box scores at build time.
+one transparent projection use cached schedule, ratings and box scores.
+Reviewed availability and optional editorial notes stay scoped to one game.
 """
 
 from __future__ import annotations
 
+from html import escape
 from pathlib import Path
 
 import pandas as pd
@@ -18,6 +19,7 @@ from viz import theme
 from viz.avatars import avatar_html, player_link
 from viz.availability import availability_html, status_badge
 from data.availability import load_availability, player_statuses
+from data.pregame import load_pregame_briefing
 from analysis.matchup_preview import (
     HOME_COURT_PTS, SHRINK_GAMES, last_season_series, players_to_watch, projection,
     spurs_players_from_logs, tale_of_the_tape,
@@ -73,6 +75,9 @@ def _css() -> str:
       .ng-player .who {{ font-weight: 700; }}
       .ng-player .line {{ font-family: {t.FONT_MONO}; font-size: 0.85rem; color: {t.SPURS_SILVER}; }}
       .ng-empty {{ color: {t.TEXT_MUTED}; font-size: 0.9rem; }}
+      .ng-focus {{ list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 18px; }}
+      .ng-focus h3 {{ font-family: {t.FONT_HEADING}; font-size: 1.25rem; color: {t.SPURS_SILVER}; margin-bottom: 8px; }}
+      .ng-focus p {{ font-size: 0.95rem; line-height: 1.6; }}
       @media (max-width: 640px) {{ .ng-table {{ font-size: 0.85rem; }} .ng-table th, .ng-table td {{ padding: 7px 5px; }} }}
     </style>"""
 
@@ -100,6 +105,21 @@ def _players_list(items: list[dict], empty: str, statuses: dict[str, str] | None
         for p in items
     )
     return f'<ul class="ng-list">{lis}</ul>'
+
+
+def _briefing_html(briefing: dict, team: str) -> str:
+    points = briefing.get("what_to_watch", [])
+    if briefing.get("team") != team or not points:
+        return ""
+    items = "".join(
+        f'<li><h3>{escape(point["title"])}</h3><p>{escape(point["text"])}</p></li>'
+        for point in points
+    )
+    return f"""<section class="card" aria-label="Pregame talking points">
+      <h2>What to Watch</h2>
+      <p class="ng-empty" style="margin: -6px 0 12px;">Editorial storylines for this matchup.</p>
+      <ul class="ng-focus">{items}</ul>
+    </section>"""
 
 
 def build_matchup_page(
@@ -135,6 +155,7 @@ def build_matchup_page(
     availability = load_availability(nxt["game_id"], season)
     us_statuses = player_statuses(availability, team)
     them_statuses = player_statuses(availability, opp)
+    briefing_html = _briefing_html(load_pregame_briefing(nxt["game_id"], season), team)
 
     # ---- Matchup header + projection ----
     proj = projection(standings, team, opp, nxt["is_home"])
@@ -242,7 +263,7 @@ def build_matchup_page(
     html = theme.page_html(
         title="Next Game",
         subtitle=subtitle,
-        body_content=_css() + header + availability_html(availability) + tape_html + form_html + watch_html + h2h_html,
+        body_content=_css() + header + availability_html(availability) + briefing_html + tape_html + form_html + watch_html + h2h_html,
         current_slug="matchup",
         badge=f"vs. {opp}" if nxt["is_home"] else f"@ {opp}",
         games_played=games_played,

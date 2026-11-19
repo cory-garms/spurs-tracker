@@ -1,7 +1,58 @@
 # La Tabla Spurs — Current Handoff
 
-Updated November 16, 2026. Read the active initiative and checkpoint before the
+Updated November 19, 2026. Read the active initiative and checkpoint before the
 historical material below.
+
+## Detroit postgame refresh and Clippers preview — November 19
+
+Synced through `33eb3ae`, preserving the pending pregame additions in a named
+stash, then rebuilt overlapping generated pages from official NBA data. The
+November 17 **93–105 home loss to Detroit**, game `0022600255`, is now cached:
+**12–3, L1**, home **5–3**, road **7–0**. The 12-game winning streak is over.
+
+- El Valiente: **Victor Wembanyama**, 25 PTS, 18 REB, 4 AST; Game Score **21.8**.
+- El Compinche / Wingman: **Dylan Harper**, 20 PTS, 4 REB, 2 AST; **14.4**.
+- Next: **Clippers at San Antonio, tonight November 19, 7:00 PM CT**, Frost
+  Bank Center. Schedule lists DAZN-SAS and KTLA. Refreshed Clippers player stats,
+  league ratings and schedule; season baseline is Spurs by **11.7 / 84%**,
+  without injury or lineup adjustments.
+- Added game `0022600273` availability from the official **November 19,
+  11:15 AM ET / 10:15 AM CT** report. Spurs: Brown, Gillespie, **Harper** (left
+  hip soreness), Harris and Quaintance out. Clippers: Beal, Ingram, Martinelli
+  and Miller out. Confirmed absences are excluded from tonight's watch list and
+  prop estimates, while historical stats and honors remain intact.
+- Completed the pending What to Watch feature with new Clippers-specific notes
+  on creation without Harper, Garland, and Wembanyama's interior contribution.
+  Detroit's notes and injury snapshot remain archived under their own game ID.
+  No confirmed starting lineup is claimed.
+
+Validation: live ingestion and complete build passed; all **116 tests passed**.
+Checked all 15 player scoring totals against team scores, unique game/player
+keys, the 12–3 JSON record, honors, the next-game time, Harper's exclusions,
+and the absence of stale Detroit content and merge markers. `git diff --check`
+passed. The temporary stash named **Preserve Detroit pregame additions before
+November 19 refresh** remains as a backup; its generated pages are superseded
+by this refresh and should not be reapplied.
+
+## Detroit pregame additions — prepared November 17
+
+Added availability for game `0022600255` from the official NBA **November 17,
+4:45 PM ET / 3:45 PM CT** report. Detroit: Duren, Holland II, Joe, Okorie,
+Onyenso, Prince and Robinson out. Spurs: Brown, Gillespie, Harris and Quaintance
+out. The dated report appears on matchup and props pages. Players to Watch now
+excludes Duren and Robinson; Detroit's remaining top three by Game Score are
+Cunningham, Jenkins and Thompson. The **Spurs by 6.6 / 71%** projection remains
+explicitly a season baseline without injury or lineup adjustments.
+
+The matchup page adds three editorial What to Watch notes: Wembanyama's paint
+and rebounding opportunities with Duren out, containing Cunningham, and pursuing
+a 13th consecutive win. Source notes live in `data/pregame_2026.json`; the loader
+and renderer require the exact game, season and team, so they cannot carry into
+another matchup. No starting five was published without official confirmation.
+Rebuilt the complete site from existing caches; the homepage strip says Tonight.
+
+Validation: all build stages passed, **116 tests passed**, generated report dates
+and watch-list exclusions checked, and `git diff --check` passed.
 
 ## Postgame verification and league refresh — November 16
 

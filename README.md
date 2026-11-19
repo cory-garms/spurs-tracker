@@ -96,6 +96,12 @@ players to watch and tonight's prop estimates. Questionable players keep their
 status badges. Update snapshots from the official report before rebuilding;
 they are not live feeds and cannot carry over to a different game.
 
+Optional editorial "What to Watch" notes live in `data/pregame_{season}.json`.
+Each entry is keyed by the exact game ID and names its team, so a matchup's
+storylines do not carry into the next game or another team's preview. Keep these
+notes separate from official availability reports. Starting fives should appear
+only after confirmation; Players to Watch is a statistical ranking, not a lineup.
+
 ## Game honors
 
 The **Player Spotlight** awards **El Valiente** (Player of the Game) to the highest

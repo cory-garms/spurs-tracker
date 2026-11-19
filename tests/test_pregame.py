@@ -8,6 +8,7 @@ import pytest
 
 import config
 from data.availability import load_availability, player_statuses
+from data.pregame import load_pregame_briefing
 from data.schedule import next_game
 from viz import index_viz, matchup_viz, props_viz
 from viz.availability import availability_html
@@ -55,6 +56,20 @@ def test_availability_cannot_carry_to_a_different_game(tmp_path, monkeypatch, sn
     assert load_availability("tonight", 2025) == {}
     html = availability_html(snapshot)
     assert "4:45 PM CT" in html and 'href="https://example.com/report.pdf"' in html
+
+
+def test_editorial_briefing_cannot_carry_to_a_different_game_or_team(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "BASE_DIR", tmp_path)
+    (tmp_path / "data").mkdir()
+    briefing = {"team": "SAS", "what_to_watch": [
+        {"title": "Attack the paint", "text": "Watch the Spurs' interior touches."},
+    ]}
+    (tmp_path / "data/pregame_2026.json").write_text(json.dumps({"tonight": briefing}))
+    current = load_pregame_briefing("tonight", 2026)
+    assert "Attack the paint" in matchup_viz._briefing_html(current, "SAS")
+    assert matchup_viz._briefing_html(current, "GSW") == ""
+    assert matchup_viz._briefing_html(load_pregame_briefing("next-game", 2026), "SAS") == ""
+    assert matchup_viz._briefing_html(load_pregame_briefing("tonight", 2025), "SAS") == ""
 
 
 def test_preview_excludes_absences_but_labels_uncertain_players(tmp_path, monkeypatch, snapshot, schedule, logs):
