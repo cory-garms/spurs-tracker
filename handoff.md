@@ -1,7 +1,33 @@
 # La Tabla Spurs — Current Handoff
 
-Updated November 19, 2026. Read the active initiative and checkpoint before the
+Updated November 20, 2026. Read the active initiative and checkpoint before the
 historical material below.
+
+## Clippers postgame refresh and Pelicans preview — November 20
+
+Synced through `6b82216`, then refreshed official NBA data after the November 19
+**124–112 home win over the Clippers**, game `0022600273`. Spurs are **13–3,
+W1**, home **6–3**, road **7–0**. Rebuilt current pages, player honors, analytical
+JSON, and latest/next share images.
+
+- El Valiente: **Victor Wembanyama**, 32 PTS, 11 REB, 3 AST; Game Score **23.1**.
+- El Compinche / Wingman: **Stephon Castle**, 21 PTS, 12 AST, 4 STL; **21.6**.
+- Next: **New Orleans at San Antonio, Saturday November 21, 7:00 PM CT**,
+  Frost Bank Center. Schedule lists DAZN-SAS and GCSEN. Refreshed Pelicans player
+  stats, league ratings and schedule; season baseline is Spurs by **13.3 / 87%**,
+  without injury or lineup adjustments.
+- Added game-scoped What to Watch notes on Castle's creation and turnovers,
+  Wembanyama's touches, and protecting the paint against New Orleans.
+- The official **November 20, 12:30 PM ET** report lists **both teams not yet
+  submitted for NOP@SAS**. No Saturday availability snapshot or confirmed lineup
+  is claimed. Thursday's Harper status and Clippers notes stay archived under
+  their original game ID and do not carry into this preview.
+
+Validation: live ingestion and full build passed with all **14 caches valid**;
+all **116 tests passed**. Checked all 16 player scoring totals against team
+scores, unique game/player keys, the 13–3 JSON record, honors, the next-game
+time, Pelicans storylines, and the absence of carried-over injury reports.
+`git diff --check` passed.
 
 ## Detroit postgame refresh and Clippers preview — November 19
 

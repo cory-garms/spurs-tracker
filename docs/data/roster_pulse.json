@@ -14,10 +14,10 @@
       "player_1": "De'Aaron Fox",
       "player_2": "Victor Wembanyama",
       "pairing": "Fox + Wembanyama",
-      "games_together": 14,
-      "est_shared_min_pg": 28.5,
-      "net_pm_pg": 15.32,
-      "combined_pts_pg": 41.6
+      "games_together": 15,
+      "est_shared_min_pg": 28.8,
+      "net_pm_pg": 14.8,
+      "combined_pts_pg": 41.7
     },
     {
       "player_1": "De'Aaron Fox",
@@ -29,22 +29,22 @@
       "combined_pts_pg": 30.6
     },
     {
-      "player_1": "Devin Vassell",
-      "player_2": "Victor Wembanyama",
-      "pairing": "Vassell + Wembanyama",
-      "games_together": 13,
-      "est_shared_min_pg": 29.2,
-      "net_pm_pg": 13.58,
-      "combined_pts_pg": 38.3
-    },
-    {
       "player_1": "Stephon Castle",
       "player_2": "Victor Wembanyama",
       "pairing": "Castle + Wembanyama",
-      "games_together": 15,
-      "est_shared_min_pg": 28.4,
-      "net_pm_pg": 13.1,
-      "combined_pts_pg": 43.7
+      "games_together": 16,
+      "est_shared_min_pg": 28.7,
+      "net_pm_pg": 12.47,
+      "combined_pts_pg": 44.3
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Vassell + Wembanyama",
+      "games_together": 14,
+      "est_shared_min_pg": 29.4,
+      "net_pm_pg": 12.46,
+      "combined_pts_pg": 38.9
     },
     {
       "player_1": "Devin Vassell",
@@ -65,58 +65,49 @@
       "combined_pts_pg": 33.7
     },
     {
-      "player_1": "De'Aaron Fox",
-      "player_2": "Devin Vassell",
-      "pairing": "Fox + Vassell",
-      "games_together": 12,
-      "est_shared_min_pg": 28.3,
-      "net_pm_pg": 11.12,
-      "combined_pts_pg": 24.1
+      "player_1": "Keldon Johnson",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Johnson + Wembanyama",
+      "games_together": 16,
+      "est_shared_min_pg": 23.4,
+      "net_pm_pg": 10.88,
+      "combined_pts_pg": 37.3
     },
     {
       "player_1": "Julian Champagnie",
       "player_2": "Victor Wembanyama",
       "pairing": "Champagnie + Wembanyama",
-      "games_together": 15,
-      "est_shared_min_pg": 25.9,
-      "net_pm_pg": 10.9,
-      "combined_pts_pg": 38.3
+      "games_together": 16,
+      "est_shared_min_pg": 26.1,
+      "net_pm_pg": 10.44,
+      "combined_pts_pg": 39.1
     },
     {
-      "player_1": "Keldon Johnson",
-      "player_2": "Victor Wembanyama",
-      "pairing": "Johnson + Wembanyama",
-      "games_together": 15,
-      "est_shared_min_pg": 23.2,
-      "net_pm_pg": 10.7,
-      "combined_pts_pg": 37.0
+      "player_1": "De'Aaron Fox",
+      "player_2": "Devin Vassell",
+      "pairing": "Fox + Vassell",
+      "games_together": 13,
+      "est_shared_min_pg": 28.6,
+      "net_pm_pg": 10.31,
+      "combined_pts_pg": 24.2
     },
     {
       "player_1": "De'Aaron Fox",
       "player_2": "Stephon Castle",
       "pairing": "Fox + Castle",
-      "games_together": 14,
-      "est_shared_min_pg": 27.4,
-      "net_pm_pg": 10.61,
-      "combined_pts_pg": 28.1
+      "games_together": 15,
+      "est_shared_min_pg": 27.7,
+      "net_pm_pg": 10.27,
+      "combined_pts_pg": 28.3
     },
     {
       "player_1": "Jordan McLaughlin",
       "player_2": "Victor Wembanyama",
       "pairing": "McLaughlin + Wembanyama",
-      "games_together": 9,
-      "est_shared_min_pg": 9.4,
-      "net_pm_pg": 9.72,
-      "combined_pts_pg": 28.9
-    },
-    {
-      "player_1": "Devin Vassell",
-      "player_2": "Stephon Castle",
-      "pairing": "Vassell + Castle",
-      "games_together": 13,
-      "est_shared_min_pg": 28.3,
-      "net_pm_pg": 9.62,
-      "combined_pts_pg": 27.6
+      "games_together": 10,
+      "est_shared_min_pg": 9.6,
+      "net_pm_pg": 9.8,
+      "combined_pts_pg": 29.2
     },
     {
       "player_1": "Dylan Harper",
@@ -146,15 +137,6 @@
       "combined_pts_pg": 27.0
     },
     {
-      "player_1": "Harrison Barnes",
-      "player_2": "Victor Wembanyama",
-      "pairing": "Barnes + Wembanyama",
-      "games_together": 13,
-      "est_shared_min_pg": 14.0,
-      "net_pm_pg": 9.19,
-      "combined_pts_pg": 31.8
-    },
-    {
       "player_1": "Dylan Harper",
       "player_2": "Jordan McLaughlin",
       "pairing": "Harper + McLaughlin",
@@ -164,13 +146,31 @@
       "combined_pts_pg": 20.7
     },
     {
+      "player_1": "Harrison Barnes",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Barnes + Wembanyama",
+      "games_together": 14,
+      "est_shared_min_pg": 14.1,
+      "net_pm_pg": 8.89,
+      "combined_pts_pg": 32.4
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Stephon Castle",
+      "pairing": "Vassell + Castle",
+      "games_together": 14,
+      "est_shared_min_pg": 28.6,
+      "net_pm_pg": 8.64,
+      "combined_pts_pg": 28.2
+    },
+    {
       "player_1": "De'Aaron Fox",
       "player_2": "Julian Champagnie",
       "pairing": "Fox + Champagnie",
-      "games_together": 14,
-      "est_shared_min_pg": 25.7,
-      "net_pm_pg": 8.82,
-      "combined_pts_pg": 23.4
+      "games_together": 15,
+      "est_shared_min_pg": 26.0,
+      "net_pm_pg": 8.63,
+      "combined_pts_pg": 23.8
     },
     {
       "player_1": "Dylan Harper",
@@ -180,6 +180,15 @@
       "est_shared_min_pg": 6.0,
       "net_pm_pg": 8.44,
       "combined_pts_pg": 18.2
+    },
+    {
+      "player_1": "De'Aaron Fox",
+      "player_2": "Keldon Johnson",
+      "pairing": "Fox + Johnson",
+      "games_together": 15,
+      "est_shared_min_pg": 22.4,
+      "net_pm_pg": 8.23,
+      "combined_pts_pg": 21.4
     },
     {
       "player_1": "Dylan Harper",
@@ -192,39 +201,30 @@
     },
     {
       "player_1": "De'Aaron Fox",
-      "player_2": "Keldon Johnson",
-      "pairing": "Fox + Johnson",
-      "games_together": 14,
-      "est_shared_min_pg": 22.1,
-      "net_pm_pg": 7.68,
-      "combined_pts_pg": 21.5
+      "player_2": "Jordan McLaughlin",
+      "pairing": "Fox + McLaughlin",
+      "games_together": 9,
+      "est_shared_min_pg": 8.5,
+      "net_pm_pg": 8.06,
+      "combined_pts_pg": 13.9
     },
     {
       "player_1": "Devin Vassell",
-      "player_2": "Julian Champagnie",
-      "pairing": "Vassell + Champagnie",
-      "games_together": 13,
-      "est_shared_min_pg": 25.5,
-      "net_pm_pg": 7.58,
-      "combined_pts_pg": 20.7
-    },
-    {
-      "player_1": "De'Aaron Fox",
       "player_2": "Jordan McLaughlin",
-      "pairing": "Fox + McLaughlin",
+      "pairing": "Vassell + McLaughlin",
       "games_together": 8,
-      "est_shared_min_pg": 8.2,
-      "net_pm_pg": 7.44,
-      "combined_pts_pg": 14.4
+      "est_shared_min_pg": 10.3,
+      "net_pm_pg": 7.5,
+      "combined_pts_pg": 14.6
     },
     {
       "player_1": "Devin Vassell",
       "player_2": "Keldon Johnson",
       "pairing": "Vassell + Johnson",
-      "games_together": 13,
-      "est_shared_min_pg": 22.6,
-      "net_pm_pg": 7.08,
-      "combined_pts_pg": 19.9
+      "games_together": 14,
+      "est_shared_min_pg": 22.9,
+      "net_pm_pg": 7.04,
+      "combined_pts_pg": 20.3
     },
     {
       "player_1": "De'Aaron Fox",
@@ -236,67 +236,67 @@
       "combined_pts_pg": 14.4
     },
     {
-      "player_1": "Luke Kornet",
-      "player_2": "Victor Wembanyama",
-      "pairing": "Kornet + Wembanyama",
-      "games_together": 15,
-      "est_shared_min_pg": 14.8,
-      "net_pm_pg": 6.5,
-      "combined_pts_pg": 31.8
-    },
-    {
-      "player_1": "Julian Champagnie",
-      "player_2": "Stephon Castle",
-      "pairing": "Champagnie + Castle",
-      "games_together": 15,
-      "est_shared_min_pg": 25.5,
-      "net_pm_pg": 6.47,
-      "combined_pts_pg": 25.2
-    },
-    {
-      "player_1": "Carter Bryant",
-      "player_2": "Victor Wembanyama",
-      "pairing": "Bryant + Wembanyama",
+      "player_1": "Devin Vassell",
+      "player_2": "Julian Champagnie",
+      "pairing": "Vassell + Champagnie",
       "games_together": 14,
-      "est_shared_min_pg": 10.4,
-      "net_pm_pg": 6.43,
-      "combined_pts_pg": 30.2
+      "est_shared_min_pg": 25.8,
+      "net_pm_pg": 6.79,
+      "combined_pts_pg": 21.7
     },
     {
       "player_1": "Keldon Johnson",
       "player_2": "Stephon Castle",
       "pairing": "Johnson + Castle",
-      "games_together": 15,
-      "est_shared_min_pg": 23.5,
-      "net_pm_pg": 6.27,
-      "combined_pts_pg": 23.9
+      "games_together": 16,
+      "est_shared_min_pg": 23.7,
+      "net_pm_pg": 6.59,
+      "combined_pts_pg": 24.4
+    },
+    {
+      "player_1": "Luke Kornet",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Kornet + Wembanyama",
+      "games_together": 16,
+      "est_shared_min_pg": 14.9,
+      "net_pm_pg": 6.47,
+      "combined_pts_pg": 32.1
     },
     {
       "player_1": "De'Aaron Fox",
       "player_2": "Harrison Barnes",
       "pairing": "Fox + Barnes",
-      "games_together": 12,
-      "est_shared_min_pg": 13.6,
-      "net_pm_pg": 6.25,
+      "games_together": 13,
+      "est_shared_min_pg": 13.8,
+      "net_pm_pg": 6.35,
       "combined_pts_pg": 17.8
     },
     {
-      "player_1": "Devin Vassell",
-      "player_2": "Harrison Barnes",
-      "pairing": "Vassell + Barnes",
-      "games_together": 11,
-      "est_shared_min_pg": 13.5,
-      "net_pm_pg": 5.91,
-      "combined_pts_pg": 15.1
+      "player_1": "Carter Bryant",
+      "player_2": "Victor Wembanyama",
+      "pairing": "Bryant + Wembanyama",
+      "games_together": 15,
+      "est_shared_min_pg": 10.6,
+      "net_pm_pg": 6.2,
+      "combined_pts_pg": 30.5
+    },
+    {
+      "player_1": "Julian Champagnie",
+      "player_2": "Stephon Castle",
+      "pairing": "Champagnie + Castle",
+      "games_together": 16,
+      "est_shared_min_pg": 25.8,
+      "net_pm_pg": 6.16,
+      "combined_pts_pg": 26.2
     },
     {
       "player_1": "Jordan McLaughlin",
       "player_2": "Stephon Castle",
       "pairing": "McLaughlin + Castle",
-      "games_together": 9,
-      "est_shared_min_pg": 9.4,
-      "net_pm_pg": 5.78,
-      "combined_pts_pg": 19.7
+      "games_together": 10,
+      "est_shared_min_pg": 9.6,
+      "net_pm_pg": 6.05,
+      "combined_pts_pg": 19.8
     },
     {
       "player_1": "Stephon Castle",
@@ -317,6 +317,24 @@
       "combined_pts_pg": 21.7
     },
     {
+      "player_1": "Devin Vassell",
+      "player_2": "Harrison Barnes",
+      "pairing": "Vassell + Barnes",
+      "games_together": 12,
+      "est_shared_min_pg": 13.6,
+      "net_pm_pg": 5.25,
+      "combined_pts_pg": 15.8
+    },
+    {
+      "player_1": "Jordan McLaughlin",
+      "player_2": "Keldon Johnson",
+      "pairing": "McLaughlin + Johnson",
+      "games_together": 10,
+      "est_shared_min_pg": 9.6,
+      "net_pm_pg": 5.15,
+      "combined_pts_pg": 12.9
+    },
+    {
       "player_1": "Dylan Harper",
       "player_2": "Luke Kornet",
       "pairing": "Harper + Kornet",
@@ -329,73 +347,73 @@
       "player_1": "Harrison Barnes",
       "player_2": "Stephon Castle",
       "pairing": "Barnes + Castle",
-      "games_together": 13,
-      "est_shared_min_pg": 14.0,
-      "net_pm_pg": 5.0,
-      "combined_pts_pg": 21.7
-    },
-    {
-      "player_1": "Carter Bryant",
-      "player_2": "Devin Vassell",
-      "pairing": "Bryant + Vassell",
-      "games_together": 12,
-      "est_shared_min_pg": 9.7,
-      "net_pm_pg": 4.38,
-      "combined_pts_pg": 14.4
+      "games_together": 14,
+      "est_shared_min_pg": 14.1,
+      "net_pm_pg": 4.86,
+      "combined_pts_pg": 22.3
     },
     {
       "player_1": "Julian Champagnie",
       "player_2": "Keldon Johnson",
       "pairing": "Champagnie + Johnson",
-      "games_together": 15,
-      "est_shared_min_pg": 22.4,
-      "net_pm_pg": 4.07,
-      "combined_pts_pg": 18.5
-    },
-    {
-      "player_1": "Carter Bryant",
-      "player_2": "De'Aaron Fox",
-      "pairing": "Bryant + Fox",
-      "games_together": 13,
-      "est_shared_min_pg": 10.7,
-      "net_pm_pg": 3.81,
-      "combined_pts_pg": 17.1
+      "games_together": 16,
+      "est_shared_min_pg": 22.7,
+      "net_pm_pg": 4.56,
+      "combined_pts_pg": 19.2
     },
     {
       "player_1": "De'Aaron Fox",
       "player_2": "Luke Kornet",
       "pairing": "Fox + Kornet",
-      "games_together": 14,
+      "games_together": 15,
       "est_shared_min_pg": 15.0,
-      "net_pm_pg": 3.71,
-      "combined_pts_pg": 16.6
-    },
-    {
-      "player_1": "Devin Vassell",
-      "player_2": "Luke Kornet",
-      "pairing": "Vassell + Kornet",
-      "games_together": 13,
-      "est_shared_min_pg": 15.0,
-      "net_pm_pg": 3.62,
-      "combined_pts_pg": 14.3
-    },
-    {
-      "player_1": "Jordan McLaughlin",
-      "player_2": "Keldon Johnson",
-      "pairing": "McLaughlin + Johnson",
-      "games_together": 9,
-      "est_shared_min_pg": 9.4,
-      "net_pm_pg": 3.61,
-      "combined_pts_pg": 13.2
+      "net_pm_pg": 4.03,
+      "combined_pts_pg": 16.4
     },
     {
       "player_1": "Jordan McLaughlin",
       "player_2": "Julian Champagnie",
       "pairing": "McLaughlin + Champagnie",
-      "games_together": 9,
-      "est_shared_min_pg": 9.4,
-      "net_pm_pg": 3.39,
-      "combined_pts_pg": 14.3
+      "games_together": 10,
+      "est_shared_min_pg": 9.6,
+      "net_pm_pg": 3.95,
+      "combined_pts_pg": 14.9
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "De'Aaron Fox",
+      "pairing": "Bryant + Fox",
+      "games_together": 14,
+      "est_shared_min_pg": 10.8,
+      "net_pm_pg": 3.93,
+      "combined_pts_pg": 16.8
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Devin Vassell",
+      "pairing": "Bryant + Vassell",
+      "games_together": 13,
+      "est_shared_min_pg": 9.9,
+      "net_pm_pg": 3.73,
+      "combined_pts_pg": 14.7
+    },
+    {
+      "player_1": "Devin Vassell",
+      "player_2": "Luke Kornet",
+      "pairing": "Vassell + Kornet",
+      "games_together": 14,
+      "est_shared_min_pg": 15.0,
+      "net_pm_pg": 3.29,
+      "combined_pts_pg": 14.6
+    },
+    {
+      "player_1": "Harrison Barnes",
+      "player_2": "Keldon Johnson",
+      "pairing": "Barnes + Johnson",
+      "games_together": 14,
+      "est_shared_min_pg": 14.1,
+      "net_pm_pg": 2.79,
+      "combined_pts_pg": 14.5
     },
     {
       "player_1": "Julian Champagnie",
@@ -410,19 +428,19 @@
       "player_1": "Carter Bryant",
       "player_2": "Stephon Castle",
       "pairing": "Bryant + Castle",
-      "games_together": 14,
-      "est_shared_min_pg": 10.4,
-      "net_pm_pg": 2.46,
-      "combined_pts_pg": 18.7
+      "games_together": 15,
+      "est_shared_min_pg": 10.6,
+      "net_pm_pg": 2.37,
+      "combined_pts_pg": 19.1
     },
     {
       "player_1": "Harrison Barnes",
       "player_2": "Julian Champagnie",
       "pairing": "Barnes + Champagnie",
-      "games_together": 13,
-      "est_shared_min_pg": 14.0,
-      "net_pm_pg": 2.23,
-      "combined_pts_pg": 15.1
+      "games_together": 14,
+      "est_shared_min_pg": 14.1,
+      "net_pm_pg": 2.32,
+      "combined_pts_pg": 16.1
     },
     {
       "player_1": "Keldon Johnson",
@@ -437,55 +455,64 @@
       "player_1": "Luke Kornet",
       "player_2": "Stephon Castle",
       "pairing": "Kornet + Castle",
-      "games_together": 15,
-      "est_shared_min_pg": 14.8,
-      "net_pm_pg": 2.07,
-      "combined_pts_pg": 18.7
-    },
-    {
-      "player_1": "Harrison Barnes",
-      "player_2": "Keldon Johnson",
-      "pairing": "Barnes + Johnson",
-      "games_together": 13,
-      "est_shared_min_pg": 14.0,
-      "net_pm_pg": 1.96,
-      "combined_pts_pg": 14.2
+      "games_together": 16,
+      "est_shared_min_pg": 14.9,
+      "net_pm_pg": 2.19,
+      "combined_pts_pg": 19.1
     },
     {
       "player_1": "Carter Bryant",
       "player_2": "Keldon Johnson",
       "pairing": "Bryant + Johnson",
-      "games_together": 14,
-      "est_shared_min_pg": 10.4,
-      "net_pm_pg": 0.39,
-      "combined_pts_pg": 12.4
-    },
-    {
-      "player_1": "Carter Bryant",
-      "player_2": "Julian Champagnie",
-      "pairing": "Bryant + Champagnie",
-      "games_together": 14,
-      "est_shared_min_pg": 10.4,
-      "net_pm_pg": 0.29,
-      "combined_pts_pg": 14.1
-    },
-    {
-      "player_1": "Julian Champagnie",
-      "player_2": "Luke Kornet",
-      "pairing": "Champagnie + Kornet",
       "games_together": 15,
-      "est_shared_min_pg": 14.8,
-      "net_pm_pg": -0.13,
-      "combined_pts_pg": 13.3
+      "est_shared_min_pg": 10.6,
+      "net_pm_pg": 1.13,
+      "combined_pts_pg": 12.5
     },
     {
       "player_1": "Keldon Johnson",
       "player_2": "Luke Kornet",
       "pairing": "Johnson + Kornet",
+      "games_together": 16,
+      "est_shared_min_pg": 14.9,
+      "net_pm_pg": 0.59,
+      "combined_pts_pg": 12.1
+    },
+    {
+      "player_1": "Carter Bryant",
+      "player_2": "Julian Champagnie",
+      "pairing": "Bryant + Champagnie",
       "games_together": 15,
-      "est_shared_min_pg": 14.8,
-      "net_pm_pg": -0.33,
-      "combined_pts_pg": 12.0
+      "est_shared_min_pg": 10.6,
+      "net_pm_pg": 0.37,
+      "combined_pts_pg": 14.7
+    },
+    {
+      "player_1": "Julian Champagnie",
+      "player_2": "Luke Kornet",
+      "pairing": "Champagnie + Kornet",
+      "games_together": 16,
+      "est_shared_min_pg": 14.9,
+      "net_pm_pg": 0.16,
+      "combined_pts_pg": 13.9
+    },
+    {
+      "player_1": "Harrison Barnes",
+      "player_2": "Jordan McLaughlin",
+      "pairing": "Barnes + McLaughlin",
+      "games_together": 10,
+      "est_shared_min_pg": 9.1,
+      "net_pm_pg": -0.25,
+      "combined_pts_pg": 9.5
+    },
+    {
+      "player_1": "Jordan McLaughlin",
+      "player_2": "Luke Kornet",
+      "pairing": "McLaughlin + Kornet",
+      "games_together": 10,
+      "est_shared_min_pg": 9.0,
+      "net_pm_pg": -0.6,
+      "combined_pts_pg": 6.4
     },
     {
       "player_1": "Harrison Barnes",
@@ -498,39 +525,21 @@
     },
     {
       "player_1": "Harrison Barnes",
-      "player_2": "Jordan McLaughlin",
-      "pairing": "Barnes + McLaughlin",
-      "games_together": 9,
-      "est_shared_min_pg": 8.8,
-      "net_pm_pg": -1.44,
-      "combined_pts_pg": 9.6
-    },
-    {
-      "player_1": "Jordan McLaughlin",
-      "player_2": "Luke Kornet",
-      "pairing": "McLaughlin + Kornet",
-      "games_together": 9,
-      "est_shared_min_pg": 8.7,
-      "net_pm_pg": -1.94,
-      "combined_pts_pg": 6.7
-    },
-    {
-      "player_1": "Harrison Barnes",
       "player_2": "Luke Kornet",
       "pairing": "Barnes + Kornet",
-      "games_together": 13,
-      "est_shared_min_pg": 12.3,
-      "net_pm_pg": -2.23,
-      "combined_pts_pg": 8.8
+      "games_together": 14,
+      "est_shared_min_pg": 12.5,
+      "net_pm_pg": -1.64,
+      "combined_pts_pg": 9.1
     },
     {
       "player_1": "Carter Bryant",
       "player_2": "Harrison Barnes",
       "pairing": "Bryant + Barnes",
-      "games_together": 12,
-      "est_shared_min_pg": 9.8,
-      "net_pm_pg": -2.38,
-      "combined_pts_pg": 8.5
+      "games_together": 13,
+      "est_shared_min_pg": 10.0,
+      "net_pm_pg": -1.96,
+      "combined_pts_pg": 8.8
     },
     {
       "player_1": "Luke Kornet",
@@ -543,21 +552,21 @@
     },
     {
       "player_1": "Carter Bryant",
-      "player_2": "Luke Kornet",
-      "pairing": "Bryant + Kornet",
-      "games_together": 14,
-      "est_shared_min_pg": 9.9,
-      "net_pm_pg": -3.79,
+      "player_2": "Jordan McLaughlin",
+      "pairing": "Bryant + McLaughlin",
+      "games_together": 10,
+      "est_shared_min_pg": 7.7,
+      "net_pm_pg": -2.7,
       "combined_pts_pg": 7.0
     },
     {
       "player_1": "Carter Bryant",
-      "player_2": "Jordan McLaughlin",
-      "pairing": "Bryant + McLaughlin",
-      "games_together": 9,
-      "est_shared_min_pg": 7.3,
-      "net_pm_pg": -3.94,
-      "combined_pts_pg": 7.4
+      "player_2": "Luke Kornet",
+      "pairing": "Bryant + Kornet",
+      "games_together": 15,
+      "est_shared_min_pg": 10.1,
+      "net_pm_pg": -3.27,
+      "combined_pts_pg": 7.0
     },
     {
       "player_1": "Jordan McLaughlin",
@@ -598,13 +607,13 @@
       "Ja'Kobi Gillespie",
       "Maliq Brown"
     ],
-    "starter_avg_pts": 83.9,
-    "bench_avg_pts": 33.1,
-    "starter_avg_pm": 12.96,
-    "bench_avg_pm": -1.66,
-    "starter_ts_pct": 0.564,
-    "bench_ts_pct": 0.427,
-    "starter_scoring_share_pct": 71.7,
-    "bench_scoring_share_pct": 28.3
+    "starter_avg_pts": 83.6,
+    "bench_avg_pts": 33.9,
+    "starter_avg_pm": 12.39,
+    "bench_avg_pm": -1.22,
+    "starter_ts_pct": 0.568,
+    "bench_ts_pct": 0.43,
+    "starter_scoring_share_pct": 71.1,
+    "bench_scoring_share_pct": 28.9
   }
 }
