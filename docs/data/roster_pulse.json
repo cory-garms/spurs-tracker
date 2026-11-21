@@ -299,15 +299,6 @@
       "combined_pts_pg": 19.8
     },
     {
-      "player_1": "Stephon Castle",
-      "player_2": "Tarris Reed Jr.",
-      "pairing": "Castle + Jr.",
-      "games_together": 9,
-      "est_shared_min_pg": 6.0,
-      "net_pm_pg": 5.5,
-      "combined_pts_pg": 19.1
-    },
-    {
       "player_1": "Carter Bryant",
       "player_2": "Dylan Harper",
       "pairing": "Bryant + Harper",
@@ -315,6 +306,15 @@
       "est_shared_min_pg": 10.4,
       "net_pm_pg": 5.5,
       "combined_pts_pg": 21.7
+    },
+    {
+      "player_1": "Stephon Castle",
+      "player_2": "Tarris Reed Jr.",
+      "pairing": "Castle + Jr.",
+      "games_together": 9,
+      "est_shared_min_pg": 6.0,
+      "net_pm_pg": 5.5,
+      "combined_pts_pg": 19.1
     },
     {
       "player_1": "Devin Vassell",
