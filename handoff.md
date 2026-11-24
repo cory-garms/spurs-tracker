@@ -1,7 +1,39 @@
 # La Tabla Spurs — Current Handoff
 
-Updated November 20, 2026. Read the active initiative and checkpoint before the
+Updated November 24, 2026. Read the active initiative and checkpoint before the
 historical material below.
+
+## Two-game catch-up and Portland preview — November 24
+
+Synced through `1692d89`, then refreshed official NBA data for both missed games:
+the November 21 **114–91 home win over New Orleans** (`0022600278`) and the
+November 23 **123–107 road win at Sacramento** (`0022600296`). Spurs are
+**15–3, W3**, home **7–3**, road **8–0**. Rebuilt current pages, player honors,
+analytical JSON and latest/next share images.
+
+- Sacramento El Valiente: **Stephon Castle**, 28 PTS, 11 AST, 8 REB;
+  Game Score **24.8**. El Compinche / Wingman: **Luke Kornet**, 18 PTS,
+  11 REB, 3 AST; **20.0**.
+- New Orleans El Valiente: **Victor Wembanyama**, 50 PTS, 18 REB, 5 BLK in
+  the refreshed box score; **47.9**. Wingman: **Stephon Castle**, 19 PTS,
+  6 AST, 3 REB; **15.7**. Both games appear in Season Honors.
+- Wembanyama, Fox and Harper did not play at Sacramento. Wembanyama's log has
+  **17 appearances across 18 team games**; the absence does not add a zero-point
+  game to his averages.
+- Next: **at Portland, Wednesday November 25, 9:00 PM CT**, Moda Center,
+  **ESPN**. Refreshed Portland player stats, league ratings and schedule;
+  season baseline is Spurs by **1.8 / 56%**, without injury or lineup adjustments.
+- Added Portland-specific What to Watch notes on Castle's playmaking, rebounding,
+  and checking the available rotation. The official **November 24, 10:00 AM ET**
+  report lists **both teams not yet submitted for SAS@POR**. No Portland
+  availability snapshot or confirmed starting lineup is claimed; historical
+  absences do not carry into the next game.
+
+Validation: live ingestion and the full build passed with all **15 caches valid**;
+all **116 tests passed**. Checked both missed results, all 18 player scoring
+totals against team scores, unique game/player keys, the 15–3/W3 record, both
+games' honors, Wembanyama's 17 appearances, the Portland game time and notes,
+and no carried-over availability or merge markers. `git diff --check` passed.
 
 ## Clippers postgame refresh and Pelicans preview — November 20
 
